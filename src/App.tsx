@@ -3,8 +3,15 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Concept from "./pages/Concept";
+import MenuPage from "./pages/Menu";
+import Gallery from "./pages/Gallery";
+import Votes from "./pages/Votes";
+import Reservations from "./pages/Reservations";
+import CorporateBookings from "./pages/CorporateBookings";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -14,9 +21,15 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Navbar />
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/" element={<Home />} />
+          <Route path="/concept" element={<Concept />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/votes" element={<Votes />} />
+          <Route path="/reservations" element={<Reservations />} />
+          <Route path="/corporate" element={<CorporateBookings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
