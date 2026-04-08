@@ -4,21 +4,37 @@ import { Card } from "@/components/ui/card";
 import { ChevronRight, Sparkles, Zap, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import tokyoNightImg from "@/assets/themes/tokyo-night.jpg";
+import aquariumImg from "@/assets/themes/aquarium.png";
+import jungleImg from "@/assets/themes/jungle.jpg";
+import sakuraFujiImg from "@/assets/themes/sakura-fuji.png";
+import galaxyImg from "@/assets/themes/galaxy.jpg";
+
 const themes = [
   {
     name: "Tokyo Night",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/led-cyberpunk-ambiance-Pmjk2Vv2XEBYxSjRsnzP2T.webp",
+    image: tokyoNightImg,
     description: "Cyberpunk futuriste avec néons violets et géométries brillantes",
   },
   {
     name: "Real Aquarium",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/led-nature-ambiance-8DApUHzhkmZmMUzJVqCJy3.webp",
-    description: "Environnement marin bioluminescent avec créatures abyssales",
+    image: aquariumImg,
+    description: "Environnement marin immersif avec requins et coraux tropicaux",
   },
   {
-    name: "Jungle",
-    image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/led-zen-ambiance-R25oCnv3uAycdAysQhbiLD.webp",
+    name: "Sakura & Mont Fuji",
+    image: sakuraFujiImg,
+    description: "Cerisiers en fleurs avec vue panoramique sur le Mont Fuji",
+  },
+  {
+    name: "Jungle Tropicale",
+    image: jungleImg,
     description: "Forêt luxuriante avec faune et flore tropicales",
+  },
+  {
+    name: "Galaxy",
+    image: galaxyImg,
+    description: "Voyage interstellaire dans l'espace profond",
   },
 ];
 
@@ -44,7 +60,7 @@ export default function Home() {
               className={`absolute inset-0 transition-opacity duration-1000 ${index === activeTheme ? "opacity-100" : "opacity-0"}`}
             >
               <img src={theme.image} alt={theme.name} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-black/50" />
+              <div className="absolute inset-0 bg-black/40" />
             </div>
           ))}
         </div>
