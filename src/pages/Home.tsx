@@ -54,24 +54,20 @@ export default function Home() {
             Chill & Vibes
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
-            The Immersive Digital Experience Hub
+            Le Sanctuaire Digital Immersif
           </h1>
           <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
-            Fusing 8K Visual Technology with Next-Generation Hospitality
+            Le premier espace « Phygital » de Sousse — où la technologie LED 8K fusionne avec la gastronomie japonaise premium dans un environnement qui se réinvente chaque jour.
           </p>
 
           <div className="mb-8 inline-block px-6 py-3 bg-primary-foreground/10 backdrop-blur-md rounded-full border border-primary-foreground/20">
             <p className="text-lg text-primary-foreground font-semibold">
-              Today's Theme: <span className="text-primary">{themes[activeTheme].name}</span>
+              Thème du jour : <span className="text-primary">{themes[activeTheme].name}</span>
             </p>
           </div>
 
-          <p className="text-base text-primary-foreground/70 mb-8 max-w-2xl mx-auto">
-            Découvrez le premier lounge immersif de Sousse avec murs LED 360° qui se transforment quotidiennement. Sushi premium, Matcha, et une expérience sans alcool.
-          </p>
-
           <div className="inline-block px-6 py-3 bg-secondary/20 backdrop-blur-md rounded-full border border-secondary/50 mb-10">
-            <p className="text-lg text-secondary font-semibold">🌟 Alcohol-Free Premium Experience</p>
+            <p className="text-lg text-secondary font-semibold">🌟 100% Sans Alcool · Premium · Halal</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
@@ -110,55 +106,84 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* The Problem vs Solution */}
       <section className="py-20 px-4 bg-led-dark border-t border-border">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4">Pourquoi Chill & Vibes?</h2>
+          <h2 className="text-4xl font-bold text-center mb-4">Pourquoi Chill & Vibes ?</h2>
           <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-            Une expérience unique en Afrique du Nord combinant technologie 8K et hospitalité premium
+            Nous résolvons le « Experience Gap » du marché loisir tunisien
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: "Infinite Environments", description: "Murs LED 360° (ISEMC P1.8) qui changent quotidiennement. Tokyo, Aquarium, Jungle. Jamais la même expérience deux fois.", icon: "✨", accent: "primary" },
-              { title: "Lean Cold Kitchen", description: "Sushi premium, Tapas, Matcha. Pas de gaz, assurance réduite, 30% moins de coûts énergétiques. Halal-certified.", icon: "🍣", accent: "secondary" },
-              { title: "Inclusive Luxury", description: "Expérience premium, family-friendly, sans alcool. Le premier lounge de ce type en Afrique du Nord.", icon: "👥", accent: "primary" },
+              {
+                title: "Environnements Infinis",
+                problem: "Les cafés traditionnels sont statiques — les clients s'ennuient après 3 visites.",
+                solution: "Murs LED 360° ISEMC qui changent le thème quotidiennement. Tokyo, Aquarium, Jungle — jamais la même expérience.",
+                icon: "✨",
+                accent: "primary",
+              },
+              {
+                title: "Cold Kitchen Premium",
+                problem: "Les cuisines chaudes nécessitent gaz, extraction et main-d'œuvre coûteuse.",
+                solution: "Sushi halal-certifiés, matcha cérémonial, pâtisserie japonaise. Zéro gaz, hygiène maximale.",
+                icon: "🍣",
+                accent: "secondary",
+              },
+              {
+                title: "Luxe Inclusif Sans Alcool",
+                problem: "Les lieux « premium » du soir à Sousse dépendent de l'alcool.",
+                solution: "Un lounge premium, familial et sans alcool. Le premier de ce type en Afrique du Nord.",
+                icon: "👥",
+                accent: "primary",
+              },
             ].map((feature, index) => (
               <Card key={index} className={`bg-card border-2 ${feature.accent === "primary" ? "border-primary" : "border-secondary"} p-8 hover:shadow-lg hover:shadow-primary/10 transition-all`}>
                 <div className="text-5xl mb-4">{feature.icon}</div>
-                <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground/70 mb-3 italic">« {feature.problem} »</p>
+                <p className="text-muted-foreground leading-relaxed">{feature.solution}</p>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Founder */}
+      {/* Target Audience */}
       <section className="py-20 px-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-t border-border">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Fondateur & Vision</h2>
-          <Card className="bg-card border-border p-12">
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-3xl font-bold mb-6 text-primary">Hafedh AJILI</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Fondateur de Chill & Vibes avec un profil unique combinant innovation, gouvernance financière et expertise opérationnelle.
-                </p>
-              </div>
-              <div className="space-y-4">
-                {[
-                  { icon: "🚀", label: "Innovation Authority", desc: "Master's en Entrepreneurship - modèle d'affaires lean et agile", color: "text-primary" },
-                  { icon: "💰", label: "Financial Governance", desc: "Auditeur Management - contrôles internes stricts et transparence fiscale", color: "text-secondary" },
-                  { icon: "⚙️", label: "Operational Mastery", desc: "Ex-Economat El Mouradi Palace - supply chain optimisée et rentable", color: "text-primary" },
-                ].map((item, i) => (
-                  <div key={i} className="p-4 bg-led-dark rounded-lg border border-border">
-                    <p className={`font-bold ${item.color} mb-2`}>{item.icon} {item.label}</p>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Card>
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-4">Pour Qui ?</h2>
+          <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
+            Trois communautés, une destination
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                emoji: "📱",
+                title: "Les Digital Natives",
+                age: "18–28 ans",
+                desc: "Étudiants et créateurs de contenu cherchant le spot le plus « Instagrammable » de Tunisie. Des fonds 360° parfaits pour TikTok et Instagram.",
+              },
+              {
+                emoji: "💼",
+                title: "Le Tier Corporate",
+                age: "Entreprises",
+                desc: "Réservations B2B haut de gamme pour lancements de produits et présentations « Phygitales » dans un cadre technologique unique.",
+              },
+              {
+                emoji: "🌍",
+                title: "L'Expérience Touriste",
+                age: "Visiteurs internationaux",
+                desc: "Un lounge japonais aux standards internationaux dans le Sahel tunisien. Fusion du Zen japonais et de l'hospitalité tunisienne.",
+              },
+            ].map((persona, i) => (
+              <Card key={i} className="bg-card border-border p-8 hover:border-primary/50 transition-all">
+                <div className="text-4xl mb-4">{persona.emoji}</div>
+                <h3 className="text-2xl font-bold mb-1">{persona.title}</h3>
+                <p className="text-sm text-primary font-semibold mb-4">{persona.age}</p>
+                <p className="text-muted-foreground leading-relaxed">{persona.desc}</p>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -167,14 +192,14 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4">Roadmap Stratégique</h2>
           <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-            Une croissance planifiée et durable jusqu'à 2029
+            Une croissance planifiée et durable
           </p>
           <div className="grid md:grid-cols-2 gap-8">
             {[
-              { phase: "Phase 1 (2026)", title: "Lancement Sousse", description: "360° Lounge experience avec Cold Kitchen (Sushi, Matcha)", target: "Juillet 2026", icon: "🎯" },
-              { phase: "Phase 2 (2027)", title: "Karaoke Suites", description: "Expansion avec suites karaoké privées et bars à ramen", target: "Juillet 2027", icon: "🎤" },
-              { phase: "Phase 3 (2028-2029)", title: "Expansion Régionale", description: "Deux branches satellites à Tunis et Hammamet", target: "2028-2029", icon: "🌍" },
-              { phase: "Objectif Financier", title: "51.2% IRR", description: "Retour sur investissement à travers F&B premium et location d'espaces", target: "Années 1-5", icon: "📈" },
+              { phase: "Phase 1 — Année 1", title: "Lancement Sousse", description: "360° Lounge immersif + Cold Kitchen (Sushi, Matcha, Pâtisserie Japonaise). Création du buzz et domination locale.", target: "Juillet 2026", icon: "🎯" },
+              { phase: "Phase 2 — Année 2", title: "Diversification", description: "Suites Karaoké privées et ateliers culturels japonais. Augmentation du panier moyen.", target: "2027", icon: "🎤" },
+              { phase: "Phase 3 — Années 3-4", title: "Expansion « World Edition »", description: "Flagship Tunis (Berges du Lac) avec thèmes culturels rotatifs internationaux.", target: "2028-2029", icon: "🌍" },
+              { phase: "Phase 4 — Année 5+", title: "Franchise & Scaling", description: "Playbook franchise pour Hammamet, Monastir et au-delà. Technologie VR et IA intégrées.", target: "2029+", icon: "🚀" },
             ].map((item, index) => (
               <Card key={index} className="bg-card border-border p-8 hover:border-primary transition-colors">
                 <div className="text-4xl mb-4">{item.icon}</div>
@@ -191,9 +216,9 @@ export default function Home() {
       {/* CTA */}
       <section className="py-20 px-4 bg-gradient-to-r from-primary/20 to-secondary/20 border-t border-border">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8">Prêt pour une Expérience Immersive?</h2>
+          <h2 className="text-4xl font-bold mb-8">Prêt pour une Expérience Immersive ?</h2>
           <p className="text-xl text-muted-foreground mb-12">
-            Rejoignez le lounge le plus innovant de Sousse. Réservez votre table ou explorez notre menu.
+            Rejoignez le premier sanctuaire digital de Sousse. Réservez votre table, explorez le menu ou découvrez nos thèmes LED.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center flex-wrap">
             <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6" onClick={() => navigate("/menu")}>
