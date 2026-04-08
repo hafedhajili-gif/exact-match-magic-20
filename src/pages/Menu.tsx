@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Leaf, UtensilsCrossed, Cake, QrCode } from "lucide-react";
+import { Leaf, UtensilsCrossed, Cake, QrCode, Coffee } from "lucide-react";
 
 interface MenuItem {
   id: number;
@@ -10,23 +10,44 @@ interface MenuItem {
   description: string;
   category: string;
   price: number;
-  imageUrl: string;
+  portion?: string;
 }
 
-const mockMenuItems: MenuItem[] = [
-  { id: 1, name: "Matcha Latte Premium", description: "Matcha biologique japonais grade ceremonial avec lait de coco frais", category: "matcha", price: 8500, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/matcha-latte-hero-EJRwPNmfaDE3daFnC9GsBQ.webp" },
-  { id: 2, name: "Yuzu Soda", description: "Soda artisanal au yuzu frais", category: "matcha", price: 6000, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/matcha-latte-hero-EJRwPNmfaDE3daFnC9GsBQ.webp" },
-  { id: 3, name: "Bubble Tea Matcha", description: "Bubble tea avec perles de tapioca", category: "bubble_tea", price: 7500, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/matcha-latte-hero-EJRwPNmfaDE3daFnC9GsBQ.webp" },
-  { id: 4, name: "Plateau Sushi Assortis Halal", description: "12 pièces de sushi premium halal-certifiés avec poisson frais importé", category: "sushi", price: 45000, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/sushi-platter-hero-SW2zvRL9ii6JGzzU6XEZYM.webp" },
-  { id: 5, name: "Nigiri Saumon", description: "Saumon frais sur riz vinaigré", category: "sushi", price: 4500, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/sushi-platter-hero-SW2zvRL9ii6JGzzU6XEZYM.webp" },
-  { id: 6, name: "Mochi Fraise", description: "Mochi japonais avec cœur fraise", category: "pastry", price: 5000, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/matcha-latte-hero-EJRwPNmfaDE3daFnC9GsBQ.webp" },
-  { id: 7, name: "Taiyaki Matcha", description: "Gâteau en forme de poisson avec crème matcha", category: "pastry", price: 6000, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/matcha-latte-hero-EJRwPNmfaDE3daFnC9GsBQ.webp" },
-  { id: 8, name: "Taro Bubble Tea", description: "Bubble tea saveur taro avec perles de tapioca", category: "bubble_tea", price: 7000, imageUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/matcha-latte-hero-EJRwPNmfaDE3daFnC9GsBQ.webp" },
+const menuItems: MenuItem[] = [
+  // Beverages – Japanese Rituals & Bubble Tea
+  { id: 1, name: "Matcha Latte", description: "Matcha cérémonial de qualité supérieure avec lait onctueux", category: "matcha", price: 11.0 },
+  { id: 2, name: "Hojicha Latte", description: "Thé vert torréfié avec lait crémeux, saveur douce et boisée", category: "matcha", price: 10.0 },
+  { id: 3, name: "Matcha Espresso Fusion", description: "Alliance unique du matcha et d'un shot espresso avec lait", category: "matcha", price: 12.0 },
+  { id: 4, name: "Yuzu Sparkling Soda", description: "Soda pétillant artisanal au jus de yuzu frais", category: "matcha", price: 9.5 },
+  { id: 5, name: "Sakura Lemonade", description: "Limonade délicate au sirop de fleur de cerisier", category: "matcha", price: 9.5 },
+  { id: 6, name: "Café de Spécialité", description: "Café premium préparé avec soin", category: "matcha", price: 6.5 },
+
+  // Bubble Tea
+  { id: 7, name: "Strawberry Milk Tea", description: "Thé noir au lait avec sirop fraise et perles de tapioca", category: "bubble_tea", price: 11.5 },
+  { id: 8, name: "Brown Sugar Boba", description: "Lait au sucre brun caramélisé avec perles de tapioca", category: "bubble_tea", price: 11.0 },
+  { id: 9, name: "Taro Bubble Tea", description: "Pâte de taro crémeuse avec lait et perles de tapioca", category: "bubble_tea", price: 11.5 },
+
+  // Sushi & Rolls (Halal Certified)
+  { id: 10, name: "Plateau Sushi Assortis", description: "12 pièces de sushi premium halal-certifiés avec poisson frais", category: "sushi", price: 45.0, portion: "12 pièces" },
+  { id: 11, name: "Nigiri Saumon", description: "Saumon frais sur riz vinaigré japonais", category: "sushi", price: 18.0, portion: "4 pièces" },
+  { id: 12, name: "California Roll", description: "Rouleau classique avocat, surimi et concombre", category: "sushi", price: 15.0, portion: "6 pièces" },
+  { id: 13, name: "Dragon Roll", description: "Rouleau premium garni d'anguille et avocat", category: "sushi", price: 22.0, portion: "8 pièces" },
+  { id: 14, name: "Sashimi Mix", description: "Assortiment de tranches de poisson frais halal-certifié", category: "sushi", price: 28.0, portion: "8 pièces" },
+
+  // Pâtisserie Japonaise
+  { id: 15, name: "Mochi", description: "Douceur japonaise en pâte de riz, garniture sucrée", category: "pastry", price: 9.0, portion: "3 pièces" },
+  { id: 16, name: "Dorayaki", description: "Pancake japonais fourré à la pâte de haricots rouges sucrée", category: "pastry", price: 10.0, portion: "2 pièces" },
+  { id: 17, name: "Matcha Cheesecake", description: "Cheesecake onctueux infusé au matcha", category: "pastry", price: 11.5, portion: "1 part" },
+  { id: 18, name: "Taiyaki", description: "Gâteau en forme de poisson garni de pâte de haricots sucrée", category: "pastry", price: 10.0, portion: "1 pièce" },
+  { id: 19, name: "Lava Cake", description: "Fondant au chocolat avec cœur coulant", category: "pastry", price: 14.0, portion: "1 pièce" },
+  { id: 20, name: "Soufflé Pancake", description: "Pancake japonais ultra-moelleux et aérien", category: "pastry", price: 13.0, portion: "1 pièce" },
+  { id: 21, name: "Fukuta Brûlé Crêpe", description: "Crêpe caramélisée garnie de crème pâtissière", category: "pastry", price: 12.0, portion: "1 pièce" },
+  { id: 22, name: "Mochi Gelato", description: "Glace artisanale enrobée de pâte de riz", category: "pastry", price: 10.0, portion: "1 portion" },
 ];
 
 const categories = [
-  { id: "matcha", label: "Matcha & Mixologie", icon: Leaf },
-  { id: "bubble_tea", label: "Bubble Tea", icon: Leaf },
+  { id: "matcha", label: "Matcha & Boissons", icon: Leaf },
+  { id: "bubble_tea", label: "Bubble Tea", icon: Coffee },
   { id: "sushi", label: "Sushi Bar Halal", icon: UtensilsCrossed },
   { id: "pastry", label: "Pâtisserie Japonaise", icon: Cake },
 ];
@@ -39,8 +60,8 @@ export default function MenuPage() {
       <div className="bg-led-dark py-16 px-4 border-b border-border">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-5xl font-bold mb-4">Menu Digital</h1>
-          <p className="text-xl text-muted-foreground">
-            Découvrez notre sélection premium de sushi halal-certifiés, matcha artisanal et pâtisserie japonaise.
+          <p className="text-xl text-muted-foreground max-w-3xl">
+            Notre cuisine froide « Lean & Luxury » : sushi halal-certifiés, matcha cérémonial, bubble tea artisanal et pâtisserie japonaise. 100% sans alcool, 100% premium.
           </p>
           <Button onClick={() => setShowQR(true)} variant="outline" className="mt-6 border-secondary text-secondary hover:bg-secondary/10">
             <QrCode className="w-4 h-4 mr-2" /> Générer QR Code
@@ -65,18 +86,21 @@ export default function MenuPage() {
           {categories.map((cat) => (
             <TabsContent key={cat.id} value={cat.id}>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {mockMenuItems
+                {menuItems
                   .filter((item) => item.category === cat.id)
                   .map((item) => (
                     <Card key={item.id} className="bg-card border-border overflow-hidden hover:border-primary/50 transition-all group">
-                      <div className="relative h-48 overflow-hidden">
-                        <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all" />
-                      </div>
                       <div className="p-6">
-                        <h3 className="text-lg font-bold mb-2">{item.name}</h3>
+                        <div className="flex justify-between items-start mb-3">
+                          <h3 className="text-lg font-bold">{item.name}</h3>
+                          {item.portion && (
+                            <span className="text-xs text-secondary bg-secondary/10 px-2 py-1 rounded-full whitespace-nowrap ml-2">
+                              {item.portion}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-sm text-muted-foreground mb-4">{item.description}</p>
-                        <span className="text-2xl font-bold text-primary">{(item.price / 1000).toFixed(1)} DT</span>
+                        <span className="text-2xl font-bold text-primary">{item.price.toFixed(1)} DT</span>
                       </div>
                     </Card>
                   ))}
