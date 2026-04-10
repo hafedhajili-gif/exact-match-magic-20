@@ -4,6 +4,10 @@ import { Card } from "@/components/ui/card";
 import { Music, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 
+import tokyoNightImg from "@/assets/themes/tokyo-night.jpg";
+import aquariumImg from "@/assets/themes/aquarium.png";
+import sunsetCoastImg from "@/assets/themes/sunset-coast.png";
+
 interface ThemeOption {
   id: string;
   name: string;
@@ -13,9 +17,9 @@ interface ThemeOption {
 }
 
 const themes: ThemeOption[] = [
-  { id: "tokyo_night", name: "Tokyo Night", description: "Cyberpunk futuriste avec néons violets et énergie urbaine", emoji: "🌃", image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/led-cyberpunk-ambiance-Pmjk2Vv2XEBYxSjRsnzP2T.webp" },
-  { id: "deep_ocean", name: "Deep Ocean", description: "Nature bioluminescente avec cascades et atmosphère zen", emoji: "🌊", image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/led-nature-ambiance-8DApUHzhkmZmMUzJVqCJy3.webp" },
-  { id: "saharian_sunset", name: "Saharian Sunset", description: "Jardin zen japonais avec bassin de koi et fleurs de cerisier", emoji: "🏜️", image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663505164248/8LpKNL7fKkZakyQhaA8Fdw/led-zen-ambiance-R25oCnv3uAycdAysQhbiLD.webp" },
+  { id: "tokyo_night", name: "Tokyo Night", description: "Cyberpunk futuriste avec néons violets et énergie urbaine", emoji: "🌃", image: tokyoNightImg },
+  { id: "deep_ocean", name: "Real Aquarium", description: "Plongez dans un océan immersif à 360° avec requins et coraux", emoji: "🌊", image: aquariumImg },
+  { id: "saharian_sunset", name: "Sunset Coast", description: "Côte paradisiaque au coucher du soleil avec cerisiers en fleurs", emoji: "🏜️", image: sunsetCoastImg },
 ];
 
 export default function Votes() {
