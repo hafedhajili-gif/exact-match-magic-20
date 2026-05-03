@@ -66,8 +66,8 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <div className="text-5xl md:text-7xl font-bold text-gradient-brand mb-6">
-            Chill & Vibes
+          <div className="text-5xl md:text-7xl font-bold text-gradient-brand mb-6 tracking-widest">
+            SORA
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
             Le Sanctuaire Digital Immersif
@@ -80,10 +80,6 @@ export default function Home() {
             <p className="text-lg text-primary-foreground font-semibold">
               Thème du jour : <span className="text-primary">{themes[activeTheme].name}</span>
             </p>
-          </div>
-
-          <div className="inline-block px-6 py-3 bg-secondary/20 backdrop-blur-md rounded-full border border-secondary/50 mb-10">
-            <p className="text-lg text-secondary font-semibold">🌟 100% Sans Alcool · Premium · Halal</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
@@ -125,7 +121,7 @@ export default function Home() {
       {/* The Problem vs Solution */}
       <section className="py-20 px-4 bg-led-dark border-t border-border">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4">Pourquoi Chill & Vibes ?</h2>
+          <h2 className="text-4xl font-bold text-center mb-4">Pourquoi SORA ?</h2>
           <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
             Nous résolvons le « Experience Gap » du marché loisir tunisien
           </p>
