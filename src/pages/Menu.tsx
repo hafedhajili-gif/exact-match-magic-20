@@ -18,8 +18,8 @@ import taroBubbleTeaImg from "@/assets/menu/taro-bubble-tea.jpg";
 import sushiPlatterImg from "@/assets/menu/sushi-platter.jpg";
 import nigiriSalmonImg from "@/assets/menu/nigiri-salmon.jpg";
 import californiaRollImg from "@/assets/menu/california-roll.jpg";
-import dragonRollImg from "@/assets/menu/dragon-roll.jpg";
-import sashimiMixImg from "@/assets/menu/sashimi-mix.jpg";
+import spicyTunaRollImg from "@/assets/menu/spicy-tuna-roll.jpg";
+import ebiTempuraRollImg from "@/assets/menu/ebi-tempura-roll.jpg";
 
 import mochiImg from "@/assets/menu/mochi.jpg";
 import dorayakiImg from "@/assets/menu/dorayaki.jpg";
@@ -55,11 +55,10 @@ const menuItems: MenuItem[] = [
   { id: 9, name: "Taro Bubble Tea", description: "Pâte de taro crémeuse avec lait et perles de tapioca", category: "bubble_tea", price: 11.5, image: taroBubbleTeaImg },
 
   // Sushi
-  { id: 10, name: "Plateau Sushi Assortis", description: "12 pièces de sushi premium halal-certifiés avec poisson frais", category: "sushi", price: 45.0, portion: "12 pièces", image: sushiPlatterImg },
-  { id: 11, name: "Nigiri Saumon", description: "Saumon frais sur riz vinaigré japonais", category: "sushi", price: 18.0, portion: "4 pièces", image: nigiriSalmonImg },
-  { id: 12, name: "California Roll", description: "Rouleau classique avocat, surimi et concombre", category: "sushi", price: 15.0, portion: "6 pièces", image: californiaRollImg },
-  { id: 13, name: "Dragon Roll", description: "Rouleau premium garni d'anguille et avocat", category: "sushi", price: 22.0, portion: "8 pièces", image: dragonRollImg },
-  { id: 14, name: "Sashimi Mix", description: "Assortiment de tranches de poisson frais halal-certifié", category: "sushi", price: 28.0, portion: "8 pièces", image: sashimiMixImg },
+  { id: 10, name: "California Roll", description: "Rouleau classique riz, nori, avocat et surimi halal", category: "sushi", price: 18.0, portion: "6 pièces", image: californiaRollImg },
+  { id: 11, name: "Spicy Tuna Roll", description: "Rouleau au thon halal et mayo épicée maison", category: "sushi", price: 19.5, portion: "6 pièces", image: spicyTunaRollImg },
+  { id: 12, name: "Salmon Nigiri", description: "Saumon halal frais posé sur riz vinaigré, wasabi", category: "sushi", price: 17.0, portion: "2 pièces", image: nigiriSalmonImg },
+  { id: 13, name: "Ebi Tempura Roll", description: "Crevette halal en tempura croustillante, avocat et nori", category: "sushi", price: 20.0, portion: "6 pièces", image: ebiTempuraRollImg },
 
   // Pastry
   { id: 15, name: "Mochi", description: "Douceur japonaise en pâte de riz, garniture sucrée", category: "pastry", price: 9.0, portion: "3 pièces", image: mochiImg },
@@ -88,7 +87,7 @@ export default function MenuPage() {
         <div className="max-w-6xl mx-auto">
           <h1 className="text-5xl font-bold mb-4">Menu Digital</h1>
           <p className="text-xl text-muted-foreground max-w-3xl">
-            Notre cuisine froide « Lean & Luxury » : sushi halal-certifiés, matcha cérémonial, bubble tea artisanal et pâtisserie japonaise. 100% sans alcool, 100% premium.
+            Notre cuisine froide « Lean & Luxury » : sushi halal-certifiés, matcha cérémonial, bubble tea artisanal et pâtisserie japonaise — directement issue du business plan SORA.
           </p>
           <Button onClick={() => setShowQR(true)} variant="outline" className="mt-6 border-secondary text-secondary hover:bg-secondary/10">
             <QrCode className="w-4 h-4 mr-2" /> Générer QR Code
