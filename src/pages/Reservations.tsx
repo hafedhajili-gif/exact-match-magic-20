@@ -58,7 +58,7 @@ export default function Reservations() {
       <div className="bg-led-dark py-16 px-4 border-b border-border">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-5xl font-bold mb-4">Réserver une Table</h1>
-          <p className="text-xl text-muted-foreground">Choisissez votre date, votre table et vivez l'expérience Chill & Vibes.</p>
+          <p className="text-xl text-muted-foreground">Choisissez votre date, votre table et vivez l'expérience SORA.</p>
         </div>
       </div>
 

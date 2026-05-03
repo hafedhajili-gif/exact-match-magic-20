@@ -51,7 +51,7 @@ export default function Concept() {
           <h1 className="text-5xl font-bold mb-4">Le Concept</h1>
           <p className="text-2xl text-primary font-semibold mb-4">Experience-as-a-Service (EaaS)</p>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Chez Chill & Vibes, vous ne payez pas simplement un produit — vous accédez à un sanctuaire digital qui se réinvente chaque jour grâce à la technologie Software-Defined Ambiance.
+            Chez SORA, vous ne payez pas simplement un produit — vous accédez à un sanctuaire digital qui se réinvente chaque jour grâce à la technologie Software-Defined Ambiance.
           </p>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function Concept() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                Chill & Vibes est un projet d'<span className="text-primary font-semibold">Infrastructure Technologique</span> conçu pour résoudre le « Experience Gap » du marché loisir tunisien. Tandis que Sousse a une forte densité de cafés traditionnels, il y a une absence totale d'espaces <span className="text-secondary font-semibold">Phygitaux</span> (Physical + Digital).
+                SORA est un projet d'<span className="text-primary font-semibold">Infrastructure Technologique</span> conçu pour résoudre le « Experience Gap » du marché loisir tunisien. Tandis que Sousse a une forte densité de cafés traditionnels, il y a une absence totale d'espaces <span className="text-secondary font-semibold">Phygitaux</span> (Physical + Digital).
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Notre ambition : devenir le leader nord-africain de l'<span className="text-primary font-semibold">Experience-as-a-Service</span>, utilisant la technologie ISEMC 8K pour créer un lieu qui se réinvente quotidiennement — sans coûts de rénovation physique.
