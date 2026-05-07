@@ -87,7 +87,7 @@ export default function MenuPage() {
         <div className="max-w-6xl mx-auto">
           <h1 className="text-5xl font-bold mb-4">Menu Digital</h1>
           <p className="text-xl text-muted-foreground max-w-3xl">
-            Notre cuisine froide « Lean & Luxury » : sushi halal-certifiés, matcha cérémonial, bubble tea artisanal et pâtisserie japonaise — directement issue du business plan SORA.
+            Notre cuisine froide « Lean & Luxury » : sushi halal-certifiés, matcha cérémonial, bubble tea artisanal et pâtisserie japonaise — directement issue du business plan YUME.
           </p>
           <Button onClick={() => setShowQR(true)} variant="outline" className="mt-6 border-secondary text-secondary hover:bg-secondary/10">
             <QrCode className="w-4 h-4 mr-2" /> Générer QR Code

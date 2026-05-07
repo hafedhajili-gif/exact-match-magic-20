@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import soraLogo from "@/assets/sora-logo.jpg";
+import yumeLogo from "@/assets/yume-logo.png";
 
 const navItems = [
   { label: "Accueil", path: "/" },
@@ -20,8 +20,8 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-gradient-brand">
-          <img src={soraLogo} alt="SORA logo" className="h-10 w-10 rounded-full object-cover ring-1 ring-primary/40" />
-          <span>SORA</span>
+          <img src={yumeLogo} alt="YUME logo" className="h-10 w-10 rounded-full object-cover ring-1 ring-primary/40" />
+          <span>YUME</span>
         </Link>
 
         {/* Desktop */}
