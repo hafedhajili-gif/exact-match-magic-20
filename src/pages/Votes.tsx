@@ -50,7 +50,7 @@ export default function Votes() {
             <Music className="w-10 h-10 text-primary" /> Votez pour le Thème
           </h1>
           <p className="text-xl text-muted-foreground">
-            Choisissez l'ambiance que vous voulez voir demain au SORA.
+            Choisissez l'ambiance que vous voulez voir demain au YUME.
           </p>
         </div>
       </div>

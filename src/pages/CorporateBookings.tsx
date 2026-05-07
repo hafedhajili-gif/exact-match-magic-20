@@ -41,7 +41,7 @@ export default function CorporateBookings() {
       <div className="max-w-6xl mx-auto px-4 py-20">
         {/* Why */}
         <section className="mb-20">
-          <h2 className="text-4xl font-bold mb-12 text-center">Pourquoi SORA pour vos événements?</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center">Pourquoi YUME pour vos événements?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { icon: "🎨", title: "Environnement Unique", description: "Trois ambiances LED différentes pour créer l'impression parfaite" },

@@ -81,7 +81,7 @@ export default function Gallery() {
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Galerie des Thèmes LED</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Découvrez les ambiances immersives 360° qui transforment SORA chaque jour — propulsées par la technologie ISEMC P1.8 en résolution 8K.
+            Découvrez les ambiances immersives 360° qui transforment YUME chaque jour — propulsées par la technologie ISEMC P1.8 en résolution 8K.
           </p>
         </div>
 

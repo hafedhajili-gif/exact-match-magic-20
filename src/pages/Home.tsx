@@ -67,7 +67,7 @@ export default function Home() {
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="text-5xl md:text-7xl font-bold text-gradient-brand mb-6 tracking-widest">
-            SORA
+            YUME
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
             Le Sanctuaire Digital Immersif
@@ -121,7 +121,7 @@ export default function Home() {
       {/* The Problem vs Solution */}
       <section className="py-20 px-4 bg-led-dark border-t border-border">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4">Pourquoi SORA ?</h2>
+          <h2 className="text-4xl font-bold text-center mb-4">Pourquoi YUME ?</h2>
           <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
             Nous résolvons le « Experience Gap » du marché loisir tunisien
           </p>
