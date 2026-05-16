@@ -70,10 +70,10 @@ export default function Home() {
             YUME
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
-            Le Sanctuaire Digital Immersif
+            Le Hub d'Expérience Digitale Immersive
           </h1>
           <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
-            Le premier espace « Phygital » de Sousse — où la technologie LED 8K fusionne avec la gastronomie japonaise premium dans un environnement qui se réinvente chaque jour.
+            Le premier espace « Phygital » de Tunisie — où la technologie ISEMC 8K fusionne avec une hospitalité nouvelle génération. Un environnement qui se réinvente chaque jour, sans rénovation physique.
           </p>
 
           <div className="mb-8 inline-block px-6 py-3 bg-primary-foreground/10 backdrop-blur-md rounded-full border border-primary-foreground/20">
@@ -123,28 +123,28 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4">Pourquoi YUME ?</h2>
           <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-            Nous résolvons le « Experience Gap » du marché loisir tunisien
+            Nous résolvons l'« Experience Gap » du marché loisir tunisien — leader nord-africain de l'« Experience-as-a-Service »
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: "Environnements Infinis",
+                title: "Hub 360° ISEMC 8K",
                 problem: "Les cafés traditionnels sont statiques — les clients s'ennuient après 3 visites.",
-                solution: "Murs LED 360° ISEMC qui changent le thème quotidiennement. Tokyo, Aquarium, Jungle — jamais la même expérience.",
+                solution: "Hub immersif de 55 m² avec murs LED 8K ISEMC pilotés par CCMS. Thèmes synchronisés changeant quotidiennement — jamais la même expérience.",
                 icon: "✨",
                 accent: "primary",
               },
               {
-                title: "Cold Kitchen Premium",
-                problem: "Les cuisines chaudes nécessitent gaz, extraction et main-d'œuvre coûteuse.",
-                solution: "Sushi halal-certifiés, matcha cérémonial, pâtisserie japonaise. Zéro gaz, hygiène maximale.",
+                title: "Matcha Lab Cold Kitchen",
+                problem: "Les cuisines chaudes exigent gaz, extraction et main-d'œuvre coûteuse — marges écrasées.",
+                solution: "Sushi halal-certifiés, matcha cérémonial, pâtisserie artisanale japonaise. Zéro gaz, 77 % de marge brute opérationnelle.",
                 icon: "🍣",
                 accent: "secondary",
               },
               {
-                title: "Luxe Inclusif Sans Alcool",
-                problem: "Les lieux « premium » du soir à Sousse dépendent de l'alcool.",
-                solution: "Un lounge premium, familial et sans alcool. Le premier de ce type en Afrique du Nord.",
+                title: "Luxe Inclusif & Phygital",
+                problem: "Les lieux premium du soir à Sousse dépendent de l'alcool et ignorent la Gen Z connectée.",
+                solution: "Un lounge premium, familial, accessible et 100 % shareable. Le premier espace Phygital d'Afrique du Nord.",
                 icon: "👥",
                 accent: "primary",
               },
@@ -208,10 +208,10 @@ export default function Home() {
           </p>
           <div className="grid md:grid-cols-2 gap-8">
             {[
-              { phase: "Phase 1 — Année 1", title: "Lancement Sousse", description: "360° Lounge immersif + Cold Kitchen (Sushi, Matcha, Pâtisserie Japonaise). Création du buzz et domination locale.", target: "Juillet 2026", icon: "🎯" },
-              { phase: "Phase 2 — Année 2", title: "Diversification", description: "Suites Karaoké privées et ateliers culturels japonais. Augmentation du panier moyen.", target: "2027", icon: "🎤" },
-              { phase: "Phase 3 — Années 3-4", title: "Expansion « World Edition »", description: "Flagship Tunis (Berges du Lac) avec thèmes culturels rotatifs internationaux.", target: "2028-2029", icon: "🌍" },
-              { phase: "Phase 4 — Année 5+", title: "Franchise & Scaling", description: "Playbook franchise pour Hammamet, Monastir et au-delà. Technologie VR et IA intégrées.", target: "2029+", icon: "🚀" },
+              { phase: "Phase 1 — Fondation", title: "Setup & Tech Procurement", description: "Incorporation légale, Pre-Label Startup Act, contrat direct ISEMC Shenzhen, fit-out 30 kW, recrutement et certification de l'équipe AV.", target: "Début 2026", icon: "🛠️" },
+              { phase: "Phase 2 — Flagship Launch", title: "Ouverture Hub Sousse", description: "Hub 55 m² + Matcha Lab + intégration CCMS et POS. Lancement de l'app YUME (vote des thèmes, menu digital, loyauté). Objectif : 11 500 visiteurs (32 clients/jour × 320 jours).", target: "Juillet 2026", icon: "🎯" },
+              { phase: "Phase 3 — Expansion", title: "Karaoké Numérique & B2B", description: "Activation des sessions soirée (18h–23h) sur l'infrastructure LED existante. 12 événements corporate, +85 000 DT de revenu. Approche fonds ANAVA pour Série A.", target: "2027", icon: "🎤" },
+              { phase: "Phase 4 — Global Hub", title: "Rotation Internationale Mensuelle", description: "Tokyo, Paris, New York, Séoul — un pays, un thème visuel et un menu chaque mois. Ajout d'un Ramen Bar. Sécurisation du site Tunis (Berges du Lac).", target: "2028", icon: "🌍" },
             ].map((item, index) => (
               <Card key={index} className="bg-card border-border p-8 hover:border-primary transition-colors">
                 <div className="text-4xl mb-4">{item.icon}</div>
