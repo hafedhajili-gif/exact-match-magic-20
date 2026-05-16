@@ -46,39 +46,48 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  // Beverages
+  // Beverages — Matcha Lab
   { id: 1, name: "Matcha Latte", description: "Matcha cérémonial de qualité supérieure avec lait onctueux", category: "matcha", price: 11.0, image: matchaLatteImg },
   { id: 2, name: "Hojicha Latte", description: "Thé vert torréfié avec lait crémeux, saveur douce et boisée", category: "matcha", price: 10.0, image: hojichaLatteImg },
   { id: 3, name: "Matcha Espresso Fusion", description: "Alliance unique du matcha et d'un shot espresso avec lait", category: "matcha", price: 12.0, image: matchaEspressoImg },
   { id: 4, name: "Yuzu Sparkling Soda", description: "Soda pétillant artisanal au jus de yuzu frais", category: "matcha", price: 9.5, image: yuzuSodaImg },
   { id: 5, name: "Sakura Lemonade", description: "Limonade délicate au sirop de fleur de cerisier", category: "matcha", price: 9.5, image: sakuraLemonadeImg },
-  { id: 6, name: "Café de Spécialité", description: "Café premium préparé avec soin", category: "matcha", price: 6.5, image: specialtyCoffeeImg },
+  { id: 6, name: "Café de Spécialité", description: "Café premium single origin préparé avec soin", category: "matcha", price: 6.5, image: specialtyCoffeeImg },
 
   // Bubble Tea
   { id: 7, name: "Strawberry Milk Tea", description: "Thé noir au lait avec sirop fraise et perles de tapioca", category: "bubble_tea", price: 11.5, image: strawberryMilkTeaImg },
   { id: 8, name: "Brown Sugar Boba", description: "Lait au sucre brun caramélisé avec perles de tapioca", category: "bubble_tea", price: 11.0, image: brownSugarBobaImg },
   { id: 9, name: "Taro Bubble Tea", description: "Pâte de taro crémeuse avec lait et perles de tapioca", category: "bubble_tea", price: 11.5, image: taroBubbleTeaImg },
 
-  // Sushi
-  { id: 10, name: "California Roll", description: "Rouleau classique riz, nori, avocat et surimi halal", category: "sushi", price: 18.0, portion: "6 pièces", image: californiaRollImg },
-  { id: 11, name: "Spicy Tuna Roll", description: "Rouleau au thon halal et mayo épicée maison", category: "sushi", price: 19.5, portion: "6 pièces", image: spicyTunaRollImg },
-  { id: 12, name: "Salmon Nigiri", description: "Saumon halal frais posé sur riz vinaigré, wasabi", category: "sushi", price: 17.0, portion: "2 pièces", image: nigiriSalmonImg },
-  { id: 13, name: "Ebi Tempura Roll", description: "Crevette halal en tempura croustillante, avocat et nori", category: "sushi", price: 20.0, portion: "6 pièces", image: ebiTempuraRollImg },
+  // Mocktails Premium
+  { id: 10, name: "Neon SakuraGlow", description: "Mocktail hibiscus, litchi et eau de rose pétillante — visuel néon", category: "mocktail", price: 13.0, image: neonSakuraglowImg },
+  { id: 11, name: "Lychee Yuzu Sparkler", description: "Pétillant rafraîchissant au litchi et yuzu", category: "mocktail", price: 12.5, image: lycheeYuzuSparklerImg },
+  { id: 12, name: "Matcha Mojito", description: "Mojito sans alcool au matcha, citron vert et menthe fraîche", category: "mocktail", price: 12.0, image: matchaMojitoImg },
+  { id: 13, name: "Virgin Tokyo Mule", description: "Ginger beer, yuzu et concombre — twist sans alcool du Moscou", category: "mocktail", price: 12.0, image: virginTokyoMuleImg },
 
-  // Pastry
-  { id: 15, name: "Mochi", description: "Douceur japonaise en pâte de riz, garniture sucrée", category: "pastry", price: 9.0, portion: "3 pièces", image: mochiImg },
-  { id: 16, name: "Dorayaki", description: "Pancake japonais fourré à la pâte de haricots rouges sucrée", category: "pastry", price: 10.0, portion: "2 pièces", image: dorayakiImg },
-  { id: 17, name: "Matcha Cheesecake", description: "Cheesecake onctueux infusé au matcha", category: "pastry", price: 11.5, portion: "1 part", image: matchaCheesecakeImg },
-  { id: 18, name: "Taiyaki", description: "Gâteau en forme de poisson garni de pâte de haricots sucrée", category: "pastry", price: 10.0, portion: "1 pièce", image: taiyakiImg },
-  { id: 19, name: "Lava Cake", description: "Fondant au chocolat avec cœur coulant", category: "pastry", price: 14.0, portion: "1 pièce", image: lavaCakeImg },
-  { id: 20, name: "Soufflé Pancake", description: "Pancake japonais ultra-moelleux et aérien", category: "pastry", price: 13.0, portion: "1 pièce", image: soufflePancakeImg },
-  { id: 21, name: "Fukuta Brûlé Crêpe", description: "Crêpe caramélisée garnie de crème pâtissière", category: "pastry", price: 12.0, portion: "1 pièce", image: bruleCrepeImg },
-  { id: 22, name: "Mochi Gelato", description: "Glace artisanale enrobée de pâte de riz", category: "pastry", price: 10.0, portion: "1 portion", image: mochiGelatoImg },
+  // Sushi — Halal Certified
+  { id: 14, name: "California Roll", description: "Rouleau classique riz, nori, avocat et surimi halal", category: "sushi", price: 18.0, portion: "6 pièces", image: californiaRollImg },
+  { id: 15, name: "Spicy Tuna Roll", description: "Rouleau au thon halal et mayo épicée maison", category: "sushi", price: 19.5, portion: "6 pièces", image: spicyTunaRollImg },
+  { id: 16, name: "Salmon Nigiri", description: "Saumon halal frais posé sur riz vinaigré, wasabi", category: "sushi", price: 17.0, portion: "2 pièces", image: nigiriSalmonImg },
+  { id: 17, name: "Ebi Tempura Roll", description: "Crevette halal en tempura croustillante, avocat et nori", category: "sushi", price: 20.0, portion: "6 pièces", image: ebiTempuraRollImg },
+  { id: 18, name: "Dragon Roll", description: "Rouleau avec avocat, concombre, sauce anguille et graines de sésame", category: "sushi", price: 21.0, portion: "6 pièces", image: dragonRollImg },
+  { id: 19, name: "Vegetarian Roll", description: "Rouleau frais concombre, avocat, carotte et daikon", category: "sushi", price: 14.0, portion: "6 pièces", image: vegetarianRollImg },
+
+  // Patisserie Japonaise
+  { id: 20, name: "Mochi", description: "Douceur japonaise en pâte de riz, garniture sucrée", category: "pastry", price: 9.0, portion: "3 pièces", image: mochiImg },
+  { id: 21, name: "Dorayaki", description: "Pancake japonais fourré à la pâte de haricots rouges sucrée", category: "pastry", price: 10.0, portion: "2 pièces", image: dorayakiImg },
+  { id: 22, name: "Matcha Cheesecake", description: "Cheesecake onctueux infusé au matcha", category: "pastry", price: 11.5, portion: "1 part", image: matchaCheesecakeImg },
+  { id: 23, name: "Taiyaki", description: "Gâteau en forme de poisson garni de pâte de haricots sucrée", category: "pastry", price: 10.0, portion: "1 pièce", image: taiyakiImg },
+  { id: 24, name: "Lava Cake", description: "Fondant au chocolat avec cœur coulant", category: "pastry", price: 14.0, portion: "1 pièce", image: lavaCakeImg },
+  { id: 25, name: "Soufflé Pancake", description: "Pancake japonais ultra-moelleux et aérien", category: "pastry", price: 13.0, portion: "1 pièce", image: soufflePancakeImg },
+  { id: 26, name: "Fukuta Brûlé Crêpe", description: "Crêpe caramélisée garnie de crème pâtissière", category: "pastry", price: 12.0, portion: "1 pièce", image: bruleCrepeImg },
+  { id: 27, name: "Mochi Gelato", description: "Glace artisanale enrobée de pâte de riz", category: "pastry", price: 10.0, portion: "1 portion", image: mochiGelatoImg },
 ];
 
 const categories = [
   { id: "matcha", label: "Matcha & Boissons", icon: Leaf },
   { id: "bubble_tea", label: "Bubble Tea", icon: Coffee },
+  { id: "mocktail", label: "Mocktails Premium", icon: Wine },
   { id: "sushi", label: "Sushi Bar Halal", icon: UtensilsCrossed },
   { id: "pastry", label: "Pâtisserie Japonaise", icon: Cake },
 ];
