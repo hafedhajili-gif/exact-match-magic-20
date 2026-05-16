@@ -111,7 +111,7 @@ export default function MenuPage() {
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <Tabs defaultValue="matcha">
-          <TabsList className="grid w-full grid-cols-4 mb-12">
+          <TabsList className="grid w-full grid-cols-5 mb-12">
             {categories.map((cat) => {
               const Icon = cat.icon;
               return (
