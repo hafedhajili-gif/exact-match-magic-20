@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Leaf, UtensilsCrossed, Cake, QrCode, Coffee } from "lucide-react";
+import { Leaf, UtensilsCrossed, Cake, QrCode, Coffee, Wine } from "lucide-react";
 
 import matchaLatteImg from "@/assets/menu/matcha-latte.jpg";
 import hojichaLatteImg from "@/assets/menu/hojicha-latte.jpg";
@@ -10,16 +10,21 @@ import matchaEspressoImg from "@/assets/menu/matcha-espresso.jpg";
 import yuzuSodaImg from "@/assets/menu/yuzu-soda.jpg";
 import sakuraLemonadeImg from "@/assets/menu/sakura-lemonade.jpg";
 import specialtyCoffeeImg from "@/assets/menu/specialty-coffee.jpg";
+import neonSakuraglowImg from "@/assets/menu/neon-sakuraglow.jpg";
+import lycheeYuzuSparklerImg from "@/assets/menu/lychee-yuzu-sparkler.jpg";
+import matchaMojitoImg from "@/assets/menu/matcha-mojito.jpg";
+import virginTokyoMuleImg from "@/assets/menu/virgin-tokyo-mule.jpg";
 
 import strawberryMilkTeaImg from "@/assets/menu/strawberry-milk-tea.jpg";
 import brownSugarBobaImg from "@/assets/menu/brown-sugar-boba.jpg";
 import taroBubbleTeaImg from "@/assets/menu/taro-bubble-tea.jpg";
 
-import sushiPlatterImg from "@/assets/menu/sushi-platter.jpg";
-import nigiriSalmonImg from "@/assets/menu/nigiri-salmon.jpg";
 import californiaRollImg from "@/assets/menu/california-roll.jpg";
 import spicyTunaRollImg from "@/assets/menu/spicy-tuna-roll.jpg";
+import nigiriSalmonImg from "@/assets/menu/nigiri-salmon.jpg";
 import ebiTempuraRollImg from "@/assets/menu/ebi-tempura-roll.jpg";
+import dragonRollImg from "@/assets/menu/dragon-roll.jpg";
+import vegetarianRollImg from "@/assets/menu/vegetarian-roll.jpg";
 
 import mochiImg from "@/assets/menu/mochi.jpg";
 import dorayakiImg from "@/assets/menu/dorayaki.jpg";
