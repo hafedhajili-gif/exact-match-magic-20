@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "./components/Navbar";
+import AmbientExperience from "./components/AmbientExperience";
 import Home from "./pages/Home";
 import Concept from "./pages/Concept";
 import MenuPage from "./pages/Menu";
@@ -21,7 +22,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Navbar />
+        <AmbientExperience />
+        <div className="relative z-10">
+          <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/concept" element={<Concept />} />
@@ -32,6 +35,7 @@ const App = () => (
           <Route path="/corporate" element={<CorporateBookings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
