@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Leaf, UtensilsCrossed, Cake, QrCode, Coffee, Wine } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import Reveal from "@/components/Reveal";
+import PageHero from "@/components/PageHero";
+import { Leaf, UtensilsCrossed, Cake, QrCode, Coffee, Wine, Search, Sparkles, Star } from "lucide-react";
 
 import matchaLatteImg from "@/assets/menu/matcha-latte.jpg";
 import hojichaLatteImg from "@/assets/menu/hojicha-latte.jpg";
@@ -94,24 +97,58 @@ const categories = [
 
 export default function MenuPage() {
   const [showQR, setShowQR] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("matcha");
+  const [search, setSearch] = useState("");
+
+  const activeItems = menuItems.filter((item) => {
+    const matchesCategory = item.category === activeCategory;
+    const query = search.trim().toLowerCase();
+    const matchesSearch = !query || item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
+  });
+
+  const signatureItems = menuItems.filter((item) => [1, 10, 14, 22].includes(item.id));
 
   return (
     <div className="min-h-screen bg-background pt-16">
-      <div className="bg-led-dark py-16 px-4 border-b border-border">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-5xl font-bold mb-4">Menu Digital</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl">
-            Notre cuisine froide « Lean & Luxury » : sushi halal-certifiés, matcha cérémonial, bubble tea artisanal et pâtisserie japonaise — directement issue du business plan YUME.
-          </p>
-          <Button onClick={() => setShowQR(true)} variant="outline" className="mt-6 border-secondary text-secondary hover:bg-secondary/10">
-            <QrCode className="w-4 h-4 mr-2" /> Générer QR Code
+      <PageHero
+        eyebrow={<><Sparkles className="h-4 w-4" /> Cold kitchen experience</>}
+        title={<><span className="text-gradient-brand">Menu</span> Digital</>}
+        subtitle="Une carte conçue comme une extension de l'expérience : matcha cérémonial, bubble tea, sushi halal, mocktails premium et pâtisserie japonaise."
+        align="left"
+      >
+        <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="relative max-w-md flex-1">
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Chercher matcha, sushi, mochi..." className="h-14 rounded-full border-white/10 bg-white/5 pl-12 text-base backdrop-blur-xl" />
+          </div>
+          <Button onClick={() => setShowQR(true)} variant="outline" className="h-14 rounded-full border-secondary/35 bg-secondary/10 px-6 font-bold text-secondary hover:bg-secondary/15">
+            <QrCode className="mr-2 h-4 w-4" /> Générer QR Code
           </Button>
         </div>
-      </div>
+      </PageHero>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <Tabs defaultValue="matcha">
-          <TabsList className="grid w-full grid-cols-5 mb-12">
+      <div className="mx-auto max-w-6xl px-4 py-12">
+        <Reveal>
+          <div className="mb-12 grid gap-5 md:grid-cols-4">
+            {signatureItems.map((item) => (
+              <Card key={item.id} className="group overflow-hidden rounded-[1.75rem] border-white/10 bg-card/70 backdrop-blur-xl transition hover:-translate-y-2 hover:border-primary/50">
+                <div className="relative h-40 overflow-hidden">
+                  <img src={item.image} alt={item.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+                  <div className="absolute left-3 top-3 rounded-full bg-primary px-3 py-1 text-xs font-black text-primary-foreground"><Star className="mr-1 inline h-3 w-3" /> Signature</div>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-black">{item.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{item.price.toFixed(1)} DT</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </Reveal>
+
+        <Tabs value={activeCategory} onValueChange={setActiveCategory}>
+          <TabsList className="mb-12 grid h-auto w-full grid-cols-2 gap-2 rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-2 backdrop-blur-xl md:grid-cols-5">
             {categories.map((cat) => {
               const Icon = cat.icon;
               return (
@@ -125,41 +162,77 @@ export default function MenuPage() {
 
           {categories.map((cat) => (
             <TabsContent key={cat.id} value={cat.id}>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {menuItems
-                  .filter((item) => item.category === cat.id)
-                  .map((item) => (
-                    <Card key={item.id} className="bg-card border-border overflow-hidden hover:border-primary/50 transition-all group">
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          loading="lazy"
-                          width={768}
-                          height={512}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all" />
-                      </div>
-                      <div className="p-6">
-                        <div className="flex justify-between items-start mb-3">
-                          <h3 className="text-lg font-bold">{item.name}</h3>
-                          {item.portion && (
-                            <span className="text-xs text-secondary bg-secondary/10 px-2 py-1 rounded-full whitespace-nowrap ml-2">
-                              {item.portion}
-                            </span>
-                          )}
+              {activeItems.length === 0 ? (
+                <Card className="rounded-[2rem] border-white/10 bg-card/60 p-10 text-center backdrop-blur-xl">
+                  <p className="text-lg font-bold">Aucun produit trouvé.</p>
+                  <p className="mt-2 text-muted-foreground">Essayez un autre mot-clé ou changez de catégorie.</p>
+                </Card>
+              ) : (
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  {activeItems.map((item, index) => (
+                    <Reveal key={item.id} delay={index * 55}>
+                      <Card className="magnetic-card group h-full overflow-hidden rounded-[2rem] border-white/10 bg-card/70 backdrop-blur-xl">
+                        <div className="relative h-56 overflow-hidden">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            loading="lazy"
+                            width={768}
+                            height={512}
+                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-background via-black/10 to-transparent" />
+                          <span className="absolute right-4 top-4 rounded-full border border-white/15 bg-background/70 px-3 py-1 text-xs font-black text-secondary backdrop-blur-xl">
+                            {categories.find((category) => category.id === item.category)?.label}
+                          </span>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-4">{item.description}</p>
-                        <span className="text-2xl font-bold text-primary">{item.price.toFixed(1)} DT</span>
-                      </div>
-                    </Card>
+                        <div className="p-6">
+                          <div className="mb-3 flex items-start justify-between gap-4">
+                            <h3 className="text-xl font-black">{item.name}</h3>
+                            {item.portion && (
+                              <span className="whitespace-nowrap rounded-full bg-secondary/10 px-3 py-1 text-xs font-bold text-secondary">
+                                {item.portion}
+                              </span>
+                            )}
+                          </div>
+                          <p className="mb-5 min-h-[44px] text-sm leading-6 text-muted-foreground">{item.description}</p>
+                          <div className="flex items-end justify-between">
+                            <span className="text-3xl font-black text-gradient-brand">{item.price.toFixed(1)} DT</span>
+                            <Button size="sm" variant="outline" className="rounded-full border-primary/30 bg-primary/10 text-primary hover:bg-primary/15">Ajouter</Button>
+                          </div>
+                        </div>
+                      </Card>
+                    </Reveal>
                   ))}
-              </div>
+                </div>
+              )}
             </TabsContent>
           ))}
         </Tabs>
       </div>
+
+      <Reveal>
+        <section className="mx-auto max-w-6xl px-4 pb-20">
+          <Card className="relative overflow-hidden rounded-[2rem] border-white/10 bg-card/70 p-8 backdrop-blur-xl md:p-10">
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_0%,hsl(var(--primary)/0.18),transparent_35%),radial-gradient(circle_at_90%_35%,hsl(var(--secondary)/0.12),transparent_32%)]" />
+            <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr] md:items-center">
+              <div>
+                <span className="section-eyebrow"><UtensilsCrossed className="h-4 w-4" /> Menu engine</span>
+                <h2 className="mb-4 text-4xl font-black">Le goût suit le thème.</h2>
+                <p className="leading-8 text-muted-foreground">Chaque catégorie peut être associée à un mood LED : mocktail néon pour Tokyo, matcha doux pour Zen Forest, dessert sakura pour Sunset Lounge.</p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {["Scan QR", "Choose mood", "Enjoy 8K"].map((step, index) => (
+                  <div key={step} className="rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-5 text-center">
+                    <p className="text-3xl font-black text-gradient-brand">0{index + 1}</p>
+                    <p className="mt-2 font-bold">{step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        </section>
+      </Reveal>
 
       {showQR && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowQR(false)}>
