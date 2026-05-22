@@ -11,8 +11,56 @@ import toriiImg from "@/assets/themes/torii-gates.png";
 import tokyoNightImg from "@/assets/themes/tokyo-night.jpg";
 import jungleImg from "@/assets/themes/jungle.jpg";
 import galaxyImg from "@/assets/themes/galaxy.jpg";
+import yumeAquariumImg from "@/assets/themes/yume-aquarium.jpg";
+import yumeZenForestImg from "@/assets/themes/yume-zen-forest.jpg";
+import yumeSeoulKpopImg from "@/assets/themes/yume-seoul-kpop.jpg";
+import yumeSakuraSunsetImg from "@/assets/themes/yume-sakura-sunset.jpg";
+import yumeTokyoNeonImg from "@/assets/themes/yume-tokyo-neon.jpg";
+import yumeSakuraCoastImg from "@/assets/themes/yume-sakura-coast.jpg";
 
 const themes = [
+  {
+    name: "YUME Aquarium",
+    description: "Méduses bioluminescentes et récifs coralliens en 360°",
+    details: "Plongée immersive dans un océan profond avec méduses translucides, coraux fluorescents et lumière sous-marine. Le Matcha Lab YUME éclaire la salle en contraste chaleureux.",
+    image: yumeAquariumImg,
+    category: "Nature",
+  },
+  {
+    name: "Zen Forest Sanctuary",
+    description: "Forêt de bambous mystique sous un ciel étoilé",
+    details: "Bambous géants, lanternes japonaises, koïs lumineux et brume nocturne. Une retraite méditative au cœur de YUME, parfaite pour une expérience contemplative.",
+    image: yumeZenForestImg,
+    category: "Zen",
+  },
+  {
+    name: "Seoul K-Pop Night",
+    description: "Néons de Séoul, hangul et énergie K-pop",
+    details: "Murs LED saturés de violet et magenta, panneaux publicitaires coréens, idoles K-pop et ambiance karaoké numérique. Le thème signature pour la Gen Z.",
+    image: yumeSeoulKpopImg,
+    category: "Urbain",
+  },
+  {
+    name: "Sakura Sunset Lounge",
+    description: "Cerisiers en fleurs au coucher de soleil sur l'océan",
+    details: "Plafond saturé de pétales roses, lanternes suspendues et horizon orangé. L'expérience la plus instagrammable de YUME — romantique et phygitale.",
+    image: yumeSakuraSunsetImg,
+    category: "Zen",
+  },
+  {
+    name: "Tokyo Neon Rain",
+    description: "Tokyo cyberpunk sous la pluie, néons et katakana",
+    details: "Reflets mouillés sur l'asphalte, enseignes カラオケ, gratte-ciels saturés de néons rouges et bleus. L'ambiance signature urbaine de YUME Sousse.",
+    image: yumeTokyoNeonImg,
+    category: "Urbain",
+  },
+  {
+    name: "Sakura Coast Paradise",
+    description: "Côte japonaise, sakura et coucher de soleil panoramique",
+    details: "Falaises baignées de lumière dorée, cerisiers en pleine floraison et océan calme. Le thème hero de YUME — l'invitation à entrer dans un autre monde.",
+    image: yumeSakuraCoastImg,
+    category: "Nature",
+  },
   {
     name: "Real Aquarium",
     description: "Plongez dans un océan immersif à 360°",
