@@ -419,7 +419,7 @@ export default function MenuPage() {
               </div>
 
               <a
-                href={`https://wa.me/21629000000?text=${buildWhatsAppMessage()}`}
+                href={`https://wa.me/21696506693?text=${buildWhatsAppMessage()}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 flex h-14 w-full items-center justify-center rounded-full bg-primary font-black text-primary-foreground transition hover:opacity-90"
