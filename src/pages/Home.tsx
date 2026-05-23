@@ -349,16 +349,6 @@ export default function Home() {
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
               YUME parle à la Gen Z, aux entreprises et aux visiteurs qui veulent une expérience premium sans dépendre de l'alcool ni des formats classiques.
             </p>
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              <Card className="neo-card rounded-3xl p-6">
-                <AnimatedCounter value={77} suffix="%" className="text-4xl font-black text-gradient-brand" />
-                <p className="mt-2 text-sm text-muted-foreground">Marge brute opérationnelle visée</p>
-              </Card>
-              <Card className="neo-card rounded-3xl p-6">
-                <AnimatedCounter value={526} suffix=" DT" className="text-4xl font-black text-gradient-brand" />
-                <p className="mt-2 text-sm text-muted-foreground">Revenu journalier stable estimé</p>
-              </Card>
-            </div>
           </Reveal>
 
           <div className="grid gap-5 md:grid-cols-3">
