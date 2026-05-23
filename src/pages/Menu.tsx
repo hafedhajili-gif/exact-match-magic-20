@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Reveal from "@/components/Reveal";
 import PageHero from "@/components/PageHero";
-import { Leaf, UtensilsCrossed, Cake, QrCode, Coffee, Wine, Search, Sparkles, Star } from "lucide-react";
+import { Leaf, UtensilsCrossed, Cake, QrCode, Coffee, Wine, Search, Sparkles, Star, Heart, ShoppingBag, Trash2, Plus, Minus } from "lucide-react";
 
 import matchaLatteImg from "@/assets/menu/matcha-latte.jpg";
 import hojichaLatteImg from "@/assets/menu/hojicha-latte.jpg";
@@ -99,15 +100,132 @@ export default function MenuPage() {
   const [showQR, setShowQR] = useState(false);
   const [activeCategory, setActiveCategory] = useState("matcha");
   const [search, setSearch] = useState("");
-
-  const activeItems = menuItems.filter((item) => {
-    const matchesCategory = item.category === activeCategory;
-    const query = search.trim().toLowerCase();
-    const matchesSearch = !query || item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query);
-    return matchesCategory && matchesSearch;
+  const [wishlist, setWishlist] = useState<Record<number, number>>(() => {
+    try {
+      const raw = localStorage.getItem("yume_wishlist");
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
   });
+  const [wishlistOpen, setWishlistOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("yume_wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  const addToWishlist = (id: number) =>
+    setWishlist((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+  const removeFromWishlist = (id: number) =>
+    setWishlist((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  const decrement = (id: number) =>
+    setWishlist((prev) => {
+      const qty = (prev[id] || 0) - 1;
+      const next = { ...prev };
+      if (qty <= 0) delete next[id];
+      else next[id] = qty;
+      return next;
+    });
+  const clearWishlist = () => setWishlist({});
+
+  const query = search.trim().toLowerCase();
+  const isSearching = query.length > 0;
+
+  const searchResults = useMemo(
+    () =>
+      isSearching
+        ? menuItems.filter(
+            (item) =>
+              item.name.toLowerCase().includes(query) ||
+              item.description.toLowerCase().includes(query) ||
+              categories.find((c) => c.id === item.category)?.label.toLowerCase().includes(query),
+          )
+        : [],
+    [query, isSearching],
+  );
+
+  const activeItems = menuItems.filter((item) => item.category === activeCategory);
 
   const signatureItems = menuItems.filter((item) => [1, 10, 14, 22].includes(item.id));
+
+  const wishlistEntries = Object.entries(wishlist)
+    .map(([id, qty]) => ({ item: menuItems.find((m) => m.id === Number(id))!, qty }))
+    .filter((e) => e.item);
+  const wishlistCount = wishlistEntries.reduce((sum, e) => sum + e.qty, 0);
+  const wishlistTotal = wishlistEntries.reduce((sum, e) => sum + e.qty * e.item.price, 0);
+
+  const buildWhatsAppMessage = () => {
+    const lines = [
+      "Bonjour YUME, je souhaite passer cette commande :",
+      "",
+      ...wishlistEntries.map(
+        (e) => `• ${e.qty}× ${e.item.name} — ${(e.qty * e.item.price).toFixed(1)} DT`,
+      ),
+      "",
+      `Total : ${wishlistTotal.toFixed(1)} DT`,
+    ];
+    return encodeURIComponent(lines.join("\n"));
+  };
+
+  const renderItemCard = (item: MenuItem, index: number) => {
+    const inList = !!wishlist[item.id];
+    return (
+      <Reveal key={item.id} delay={index * 55}>
+        <Card className="magnetic-card group h-full overflow-hidden rounded-[2rem] border-white/10 bg-card/70 backdrop-blur-xl">
+          <div className="relative h-56 overflow-hidden">
+            <img
+              src={item.image}
+              alt={item.name}
+              loading="lazy"
+              width={768}
+              height={512}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-black/10 to-transparent" />
+            <span className="absolute right-4 top-4 rounded-full border border-white/15 bg-background/70 px-3 py-1 text-xs font-black text-secondary backdrop-blur-xl">
+              {categories.find((category) => category.id === item.category)?.label}
+            </span>
+            <button
+              type="button"
+              onClick={() => (inList ? removeFromWishlist(item.id) : addToWishlist(item.id))}
+              aria-label={inList ? "Retirer de la wishlist" : "Ajouter à la wishlist"}
+              className={`absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 backdrop-blur-xl transition ${
+                inList ? "bg-primary text-primary-foreground" : "bg-background/70 text-foreground hover:bg-primary/20"
+              }`}
+            >
+              <Heart className={`h-4 w-4 ${inList ? "fill-current" : ""}`} />
+            </button>
+          </div>
+          <div className="p-6">
+            <div className="mb-3 flex items-start justify-between gap-4">
+              <h3 className="text-xl font-black">{item.name}</h3>
+              {item.portion && (
+                <span className="whitespace-nowrap rounded-full bg-secondary/10 px-3 py-1 text-xs font-bold text-secondary">
+                  {item.portion}
+                </span>
+              )}
+            </div>
+            <p className="mb-5 min-h-[44px] text-sm leading-6 text-muted-foreground">{item.description}</p>
+            <div className="flex items-end justify-between">
+              <span className="text-3xl font-black text-gradient-brand">{item.price.toFixed(1)} DT</span>
+              <Button
+                size="sm"
+                onClick={() => addToWishlist(item.id)}
+                variant="outline"
+                className="rounded-full border-primary/30 bg-primary/10 text-primary hover:bg-primary/15"
+              >
+                <Plus className="mr-1 h-4 w-4" /> Ajouter
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </Reveal>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background pt-16">
@@ -122,13 +240,48 @@ export default function MenuPage() {
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Chercher matcha, sushi, mochi..." className="h-14 rounded-full border-white/10 bg-white/5 pl-12 text-base backdrop-blur-xl" />
           </div>
-          <Button onClick={() => setShowQR(true)} variant="outline" className="h-14 rounded-full border-secondary/35 bg-secondary/10 px-6 font-bold text-secondary hover:bg-secondary/15">
-            <QrCode className="mr-2 h-4 w-4" /> Générer QR Code
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={() => setWishlistOpen(true)} variant="outline" className="relative h-14 rounded-full border-primary/35 bg-primary/10 px-6 font-bold text-primary hover:bg-primary/15">
+              <ShoppingBag className="mr-2 h-4 w-4" /> Ma commande
+              {wishlistCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-black text-primary-foreground">
+                  {wishlistCount}
+                </span>
+              )}
+            </Button>
+            <Button onClick={() => setShowQR(true)} variant="outline" className="h-14 rounded-full border-secondary/35 bg-secondary/10 px-6 font-bold text-secondary hover:bg-secondary/15">
+              <QrCode className="mr-2 h-4 w-4" /> QR Code
+            </Button>
+          </div>
         </div>
       </PageHero>
 
       <div className="mx-auto max-w-6xl px-4 py-12">
+        {isSearching && (
+          <div className="mb-12">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-2xl font-black">
+                Résultats pour « <span className="text-gradient-brand">{search}</span> »
+              </h2>
+              <Button variant="ghost" onClick={() => setSearch("")} className="text-muted-foreground">
+                Effacer
+              </Button>
+            </div>
+            {searchResults.length === 0 ? (
+              <Card className="rounded-[2rem] border-white/10 bg-card/60 p-10 text-center backdrop-blur-xl">
+                <p className="text-lg font-bold">Aucun produit trouvé.</p>
+                <p className="mt-2 text-muted-foreground">Essayez un autre mot-clé.</p>
+              </Card>
+            ) : (
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {searchResults.map((item, index) => renderItemCard(item, index))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {!isSearching && (
+        <>
         <Reveal>
           <div className="mb-12 grid gap-5 md:grid-cols-4">
             {signatureItems.map((item) => (
@@ -169,46 +322,14 @@ export default function MenuPage() {
                 </Card>
               ) : (
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {activeItems.map((item, index) => (
-                    <Reveal key={item.id} delay={index * 55}>
-                      <Card className="magnetic-card group h-full overflow-hidden rounded-[2rem] border-white/10 bg-card/70 backdrop-blur-xl">
-                        <div className="relative h-56 overflow-hidden">
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            loading="lazy"
-                            width={768}
-                            height={512}
-                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-background via-black/10 to-transparent" />
-                          <span className="absolute right-4 top-4 rounded-full border border-white/15 bg-background/70 px-3 py-1 text-xs font-black text-secondary backdrop-blur-xl">
-                            {categories.find((category) => category.id === item.category)?.label}
-                          </span>
-                        </div>
-                        <div className="p-6">
-                          <div className="mb-3 flex items-start justify-between gap-4">
-                            <h3 className="text-xl font-black">{item.name}</h3>
-                            {item.portion && (
-                              <span className="whitespace-nowrap rounded-full bg-secondary/10 px-3 py-1 text-xs font-bold text-secondary">
-                                {item.portion}
-                              </span>
-                            )}
-                          </div>
-                          <p className="mb-5 min-h-[44px] text-sm leading-6 text-muted-foreground">{item.description}</p>
-                          <div className="flex items-end justify-between">
-                            <span className="text-3xl font-black text-gradient-brand">{item.price.toFixed(1)} DT</span>
-                            <Button size="sm" variant="outline" className="rounded-full border-primary/30 bg-primary/10 text-primary hover:bg-primary/15">Ajouter</Button>
-                          </div>
-                        </div>
-                      </Card>
-                    </Reveal>
-                  ))}
+                  {activeItems.map((item, index) => renderItemCard(item, index))}
                 </div>
               )}
             </TabsContent>
           ))}
         </Tabs>
+        </>
+        )}
       </div>
 
       <Reveal>
@@ -246,6 +367,72 @@ export default function MenuPage() {
           </Card>
         </div>
       )}
+
+      <Sheet open={wishlistOpen} onOpenChange={setWishlistOpen}>
+        <SheetContent side="right" className="w-full overflow-y-auto border-white/10 bg-card/95 backdrop-blur-2xl sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2 text-2xl font-black">
+              <ShoppingBag className="h-5 w-5 text-primary" /> Ma commande
+            </SheetTitle>
+          </SheetHeader>
+
+          {wishlistEntries.length === 0 ? (
+            <div className="mt-12 text-center">
+              <Heart className="mx-auto h-12 w-12 text-muted-foreground/40" />
+              <p className="mt-4 font-bold">Votre liste est vide.</p>
+              <p className="mt-2 text-sm text-muted-foreground">Ajoutez vos produits favoris pour préparer votre commande.</p>
+            </div>
+          ) : (
+            <div className="mt-6 space-y-3">
+              {wishlistEntries.map(({ item, qty }) => (
+                <div key={item.id} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+                  <img src={item.image} alt={item.name} className="h-16 w-16 rounded-xl object-cover" />
+                  <div className="flex flex-1 flex-col">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-bold leading-tight">{item.name}</p>
+                      <button onClick={() => removeFromWishlist(item.id)} className="text-muted-foreground hover:text-destructive">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{item.price.toFixed(1)} DT</p>
+                    <div className="mt-auto flex items-center justify-between">
+                      <div className="flex items-center gap-2 rounded-full border border-white/10 bg-background/50 px-2 py-1">
+                        <button onClick={() => decrement(item.id)} className="text-muted-foreground hover:text-foreground">
+                          <Minus className="h-3 w-3" />
+                        </button>
+                        <span className="min-w-6 text-center text-sm font-bold">{qty}</span>
+                        <button onClick={() => addToWishlist(item.id)} className="text-muted-foreground hover:text-foreground">
+                          <Plus className="h-3 w-3" />
+                        </button>
+                      </div>
+                      <span className="text-sm font-black text-gradient-brand">{(item.price * qty).toFixed(1)} DT</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Total</span>
+                  <span className="text-2xl font-black text-gradient-brand">{wishlistTotal.toFixed(1)} DT</span>
+                </div>
+              </div>
+
+              <a
+                href={`https://wa.me/21629000000?text=${buildWhatsAppMessage()}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 flex h-14 w-full items-center justify-center rounded-full bg-primary font-black text-primary-foreground transition hover:opacity-90"
+              >
+                Envoyer la commande sur WhatsApp
+              </a>
+              <Button variant="ghost" onClick={clearWishlist} className="mt-2 w-full text-muted-foreground">
+                Vider la liste
+              </Button>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
