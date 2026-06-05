@@ -96,11 +96,36 @@
     @apply bg-background text-foreground antialiased;
     min-width: 320px;
     overflow-x: hidden;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     background:
       radial-gradient(circle at 20% 0%, hsl(var(--neon-violet) / 0.18), transparent 30rem),
       radial-gradient(circle at 90% 12%, hsl(var(--matcha) / 0.11), transparent 28rem),
       linear-gradient(180deg, hsl(var(--background)), hsl(255 42% 3%));
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: "Syne", "Manrope", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--led-dark)); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, hsl(var(--neon-violet) / 0.65), hsl(var(--sakura) / 0.55));
+    border-radius: 999px;
+    border: 2px solid hsl(var(--led-dark));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, hsl(var(--neon-violet)), hsl(var(--sakura)));
   }
 
   ::selection {
