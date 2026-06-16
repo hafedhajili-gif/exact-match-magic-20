@@ -238,7 +238,14 @@ export default function MenuPage() {
         <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="relative max-w-md flex-1">
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Chercher matcha, sushi, mochi..." className="h-14 appearance-none rounded-full border-white/10 bg-card/80 pl-12 text-base shadow-none backdrop-blur-xl" />
+            <Input
+              type="text"
+              inputMode="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Chercher matcha, sushi, mochi..."
+              className="h-14 rounded-full border-white/10 bg-card pl-12 text-base text-foreground shadow-none outline-none placeholder:text-muted-foreground [appearance:none] [-webkit-appearance:none] [background:hsl(var(--card))] [color-scheme:dark] focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0"
+            />
           </div>
           <div className="flex gap-3">
             <Button onClick={() => setWishlistOpen(true)} variant="outline" className="relative h-14 rounded-full border-primary/35 bg-primary/10 px-6 font-bold text-primary hover:bg-primary/15">
