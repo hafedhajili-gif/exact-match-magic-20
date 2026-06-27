@@ -12,6 +12,8 @@ import Gallery from "./pages/Gallery";
 import Votes from "./pages/Votes";
 import Reservations from "./pages/Reservations";
 import CorporateBookings from "./pages/CorporateBookings";
+import Visit from "./pages/Visit";
+import World from "./pages/World";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/votes" element={<Votes />} />
           <Route path="/reservations" element={<Reservations />} />
           <Route path="/corporate" element={<CorporateBookings />} />
+          <Route path="/visit" element={<Visit />} />
+          <Route path="/worlds/:slug" element={<World />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         </div>
