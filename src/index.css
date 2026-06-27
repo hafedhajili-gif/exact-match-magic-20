@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
-    /* YUME: immersive dark lounge, neon violet, matcha green, sakura glow */
-    --background: 260 34% 5%;
-    --foreground: 38 28% 94%;
+    /* YUME: pure-black immersive lounge — neon violet, matcha, sakura, gold accents */
+    --background: 270 30% 3%;            /* ~#0A0612 */
+    --foreground: 38 28% 96%;
 
-    --card: 260 28% 10%;
-    --card-foreground: 38 28% 94%;
+    --card: 270 22% 6%;
+    --card-foreground: 38 28% 96%;
 
-    --popover: 260 28% 10%;
-    --popover-foreground: 38 28% 94%;
+    --popover: 270 30% 4%;
+    --popover-foreground: 38 28% 96%;
 
     --primary: 270 90% 63%;
     --primary-foreground: 0 0% 100%;
@@ -20,8 +20,8 @@
     --secondary: 138 64% 52%;
     --secondary-foreground: 250 30% 8%;
 
-    --muted: 258 22% 17%;
-    --muted-foreground: 39 13% 68%;
+    --muted: 270 16% 11%;
+    --muted-foreground: 39 12% 72%;
 
     --accent: 321 86% 64%;
     --accent-foreground: 0 0% 100%;
@@ -29,8 +29,8 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 260 22% 18%;
-    --input: 260 21% 13%;
+    --border: 270 18% 14%;
+    --input: 270 22% 8%;
     --ring: 270 90% 63%;
 
     --radius: 1rem;
@@ -39,7 +39,7 @@
     --neon-violet-foreground: 0 0% 100%;
     --matcha: 138 64% 52%;
     --matcha-foreground: 250 30% 8%;
-    --led-dark: 260 38% 4%;
+    --led-dark: 0 0% 0%;
     --led-dark-foreground: 0 0% 100%;
     --sakura: 321 86% 64%;
     --gold: 42 100% 64%;
@@ -58,28 +58,28 @@
   }
 
   .dark {
-    --background: 260 34% 5%;
-    --foreground: 38 28% 94%;
-    --card: 260 28% 10%;
-    --card-foreground: 38 28% 94%;
-    --popover: 260 28% 10%;
-    --popover-foreground: 38 28% 94%;
+    --background: 270 30% 3%;
+    --foreground: 38 28% 96%;
+    --card: 270 22% 6%;
+    --card-foreground: 38 28% 96%;
+    --popover: 270 30% 4%;
+    --popover-foreground: 38 28% 96%;
     --primary: 270 90% 63%;
     --primary-foreground: 0 0% 100%;
     --secondary: 138 64% 52%;
     --secondary-foreground: 250 30% 8%;
-    --muted: 258 22% 17%;
-    --muted-foreground: 39 13% 68%;
+    --muted: 270 16% 11%;
+    --muted-foreground: 39 12% 72%;
     --accent: 321 86% 64%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 260 22% 18%;
-    --input: 260 21% 13%;
+    --border: 270 18% 14%;
+    --input: 270 22% 8%;
     --ring: 270 90% 63%;
     --neon-violet: 270 90% 63%;
     --matcha: 138 64% 52%;
-    --led-dark: 260 38% 4%;
+    --led-dark: 0 0% 0%;
   }
 }
 
@@ -101,9 +101,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background:
-      radial-gradient(circle at 20% 0%, hsl(var(--neon-violet) / 0.18), transparent 30rem),
-      radial-gradient(circle at 90% 12%, hsl(var(--matcha) / 0.11), transparent 28rem),
-      linear-gradient(180deg, hsl(var(--background)), hsl(255 42% 3%));
+      radial-gradient(circle at 18% -5%, hsl(var(--neon-violet) / 0.14), transparent 32rem),
+      radial-gradient(circle at 92% 8%, hsl(var(--matcha) / 0.08), transparent 28rem),
+      radial-gradient(circle at 50% 110%, hsl(var(--accent) / 0.10), transparent 36rem),
+      linear-gradient(180deg, #07040D, #000000);
   }
 
   h1, h2, h3, h4, h5, h6, .font-display {
