@@ -1,200 +1,479 @@
-import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, CalendarCheck, MapPin, Sparkles, Utensils } from "lucide-react";
-import { worlds } from "@/lib/worlds";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+
+const WA_NUMBER = "21696506693";
+
+type World = { k: string; n: string; d: string; c: string };
+const worlds: World[] = [
+  { k: "桜", n: "Sakura Coast", d: "Soft pink light, drifting petals", c: "#F25BB5" },
+  { k: "夜", n: "Tokyo Neon", d: "Electric rain, glowing signage", c: "#22D3EE" },
+  { k: "森", n: "Zen Forest", d: "Moss, mist, slow calm", c: "#34D27B" },
+  { k: "海", n: "Aquarium", d: "Drifting deep-blue light", c: "#38BDF8" },
+  { k: "京", n: "Kyoto Dusk", d: "Golden temple evening", c: "#FFC24B" },
+  { k: "宙", n: "Galaxy", d: "Stardust and violet void", c: "#8B5CF6" },
+];
+
+type Dish = { c: string; n: string; d: string; p: string; t?: string };
+const menu: Dish[] = [
+  { c: "Coffee", n: "Yume Velvet Latte", d: "Double espresso, oat milk, vanilla, gold dust", p: "13", t: "Signature" },
+  { c: "Coffee", n: "Sakura Cloud Cappuccino", d: "Cherry-blossom syrup, silk microfoam", p: "12" },
+  { c: "Matcha & Tea", n: "Ceremonial Matcha Latte", d: "Stone-ground matcha, milk of choice", p: "14", t: "Bestseller" },
+  { c: "Matcha & Tea", n: "Yuzu Green Tea Fizz", d: "Sparkling green tea, yuzu, mint", p: "12" },
+  { c: "Sweets", n: "Soufflé Pancakes", d: "Triple-stack, jiggly, maple & berries", p: "22", t: "Must-try" },
+  { c: "Sweets", n: "Crème Brûlée Crêpe", d: "Torched sugar, vanilla custard", p: "18" },
+  { c: "Sushi & Bites", n: "Spicy Tuna Roll", d: "Halal tuna, sriracha mayo, scallion", p: "26", t: "Chef's pick" },
+  { c: "Sushi & Bites", n: "Avocado Veggie Roll", d: "Avocado, cucumber, pickled radish", p: "18" },
+  { c: "Mocktails", n: "Tokyo Neon Mule", d: "Ginger, lime, yuzu, soda — virgin", p: "16", t: "Glows" },
+  { c: "Mocktails", n: "Sakura Glow Spritz", d: "Cherry blossom, citrus, tonic", p: "15" },
+];
+
+const CATS = ["All", ...Array.from(new Set(menu.map((m) => m.c)))];
+const MARQUEE = ["夢 YUME", "Six Worlds", "One Café", "Sousse 2026", "Reserve Now", "360° Immersion"];
 
 export default function Home() {
-  const [active, setActive] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [cursor, setCursor] = useState({ x: 50, y: 40 });
-  const [reduced, setReduced] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [cat, setCat] = useState("All");
+  const [chosenWorld, setChosenWorld] = useState(worlds[0].n);
+  const [confirm, setConfirm] = useState<{ msg: string; err?: boolean } | null>(null);
+  const reserveRef = useRef<HTMLElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
-    const m = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(m.matches);
-    const onChange = () => setReduced(m.matches);
-    m.addEventListener("change", onChange);
-    return () => m.removeEventListener("change", onChange);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    if (reduced) return;
-    const id = window.setInterval(() => setActive((i) => (i + 1) % worlds.length), 6000);
-    return () => window.clearInterval(id);
-  }, [reduced]);
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+    );
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [cat]);
 
-  const onMove = (e: React.MouseEvent) => {
-    if (reduced) return;
-    const rect = heroRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    setCursor({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
+  const goTo = (id: string) => {
+    const el = document.querySelector(id);
+    if (el) (el as HTMLElement).scrollIntoView({ behavior: "smooth" });
   };
 
-  const current = worlds[active];
+  const pickWorldAndReserve = (n: string) => {
+    setChosenWorld(n);
+    setTimeout(() => goTo("#reserve"), 30);
+  };
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = formRef.current!;
+    const name = (f.elements.namedItem("name") as HTMLInputElement).value.trim();
+    const phone = (f.elements.namedItem("phone") as HTMLInputElement).value.trim();
+    const date = (f.elements.namedItem("date") as HTMLInputElement).value;
+    const time = (f.elements.namedItem("time") as HTMLInputElement).value;
+    const guests = (f.elements.namedItem("guests") as HTMLSelectElement).value;
+    const notes = (f.elements.namedItem("notes") as HTMLTextAreaElement).value.trim();
+    if (!name || !phone || !date || !time) {
+      setConfirm({ msg: "Please add your name, phone, date and time so we can confirm.", err: true });
+      return;
+    }
+    const msg = `Bonjour YUME 👋%0A%0ARéservation:%0A• Nom: ${name}%0A• Téléphone: ${phone}%0A• Date: ${date} à ${time}%0A• Invités: ${guests}%0A• Monde: ${chosenWorld}${notes ? `%0A• Notes: ${notes}` : ""}`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
+    setConfirm({
+      msg: `Merci ${name} — votre table ${chosenWorld} pour ${guests} le ${date} à ${time} est demandée. Nous confirmons par WhatsApp.`,
+    });
+  };
+
+  const todayMin = new Date().toISOString().split("T")[0];
 
   return (
-    <main className="min-h-screen bg-black text-foreground">
-      {/* HERO */}
-      <section
-        ref={heroRef}
-        onMouseMove={onMove}
-        className="relative isolate min-h-[100svh] overflow-hidden pt-16"
-      >
-        {/* Layered world images */}
-        <div className="absolute inset-0 -z-10">
-          {worlds.map((w, i) => (
-            <img
-              key={w.slug}
-              src={w.image}
-              alt=""
-              aria-hidden="true"
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1600ms] ease-out ${i === active ? "opacity-100" : "opacity-0"}`}
-              style={reduced ? undefined : { transform: i === active ? `scale(1.05) translate(${(cursor.x - 50) / 30}%, ${(cursor.y - 50) / 30}%)` : "scale(1)" }}
-            />
-          ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black" />
-          <div
-            className="pointer-events-none absolute inset-0 transition-opacity duration-700"
-            style={{ background: `radial-gradient(600px circle at ${cursor.x}% ${cursor.y}%, ${current.color}33, transparent 60%)` }}
-          />
-          <div className="absolute inset-0 opacity-[0.07] mix-blend-overlay" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>\")" }} />
-        </div>
+    <div className="yume-root">
+      <style>{CSS}</style>
 
-        <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-7xl flex-col justify-between gap-10 px-4 pb-12 pt-14 sm:pt-20">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-foreground/90 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" style={{ color: current.color }} />
-              YUME · Sousse · Ouverture 2026
-            </div>
-            <h1 className="mt-6 font-display text-5xl font-black leading-[0.95] tracking-tight sm:text-7xl md:text-8xl">
-              <span className="block text-gradient-brand">Un rêve dans lequel</span>
-              <span className="block">vous pouvez entrer.</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-base text-white/75 sm:text-lg">
-              Six mondes immersifs en 360°, projetés sur 4 murs LED 8K. Café · Lounge · Phygital. Choisissez votre univers — laissez-le vous transformer.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link to="/reservations" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90">
-                <CalendarCheck className="h-4 w-4" /> Réserver ma table
-              </Link>
-              <Link to="/menu" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-foreground backdrop-blur transition hover:bg-white/10">
-                <Utensils className="h-4 w-4" /> Voir le menu
-              </Link>
-            </div>
+      <header id="head" className={scrolled ? "on" : ""}>
+        <div className="shell navrow">
+          <a className="brand" href="#top">
+            <span className="m">夢</span>YUME
+          </a>
+          <nav className="navlinks">
+            <a href="#story">Story</a>
+            <a href="#worlds">Worlds</a>
+            <a href="#menu">Menu</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+          <button className="cta sm" onClick={() => goTo("#reserve")}>Reserve a table</button>
+        </div>
+      </header>
+
+      <a id="top" />
+      <section className="hero">
+        <div className="shell">
+          <span className="kicker reveal"><span className="d" /> Sousse, Tunisia — opening 2026</span>
+          <h1 className="reveal">
+            Step into <span className="g">six worlds.</span>
+            <br />One café.
+          </h1>
+          <p className="sub reveal">
+            YUME wraps the entire room in 360° light and sound — so a quiet matcha in a Kyoto dusk and a neon Tokyo night
+            happen at the same table, an hour apart. Reserve once. Choose the world when you arrive.
+          </p>
+          <div className="row reveal">
+            <button className="cta" onClick={() => goTo("#reserve")}>Reserve a table</button>
+            <span className="micro">Open daily, 9:00 → 23:00 · No deposit required</span>
           </div>
 
-          {/* World selector strip */}
-          <div>
-            <div className="mb-3 flex items-end justify-between gap-4">
-              <div>
-                <div className="text-xs font-bold uppercase tracking-[0.24em] text-white/60">Choose Your World</div>
-                <div className="mt-1 text-2xl font-bold sm:text-3xl" style={{ color: current.color }}>
-                  {current.name} <span className="text-white/40">·</span> <span className="text-white/80 italic font-light">{current.tagline}</span>
-                </div>
+          <div className="reveal" style={{ marginTop: "3.6rem" }}>
+            <div className="visual">
+              <div className="scene">
+                {worlds.map((w, i) => (
+                  <HeroCell key={w.n} w={w} primary={i === 0} />
+                ))}
               </div>
-              <Link to={`/worlds/${current.slug}`} className="hidden shrink-0 items-center gap-2 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/10 sm:inline-flex">
-                Entrer dans {current.name} <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="frame" />
             </div>
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-              {worlds.map((w, i) => {
-                const isActive = i === active;
-                return (
-                  <button
-                    key={w.slug}
-                    onMouseEnter={() => setActive(i)}
-                    onFocus={() => setActive(i)}
-                    onClick={() => (window.location.href = `/worlds/${w.slug}`)}
-                    aria-label={`Aperçu du monde ${w.name}`}
-                    className={`group relative overflow-hidden rounded-2xl border transition-all duration-500 ${
-                      isActive ? "border-white/60 ring-2 ring-offset-2 ring-offset-black" : "border-white/10 hover:border-white/30"
-                    }`}
-                    style={{ aspectRatio: "3 / 4", boxShadow: isActive ? `0 0 32px ${w.color}66` : undefined, ...(isActive ? { borderColor: w.color } : {}) }}
-                  >
-                    <img src={w.image} alt="" aria-hidden="true" loading="lazy" className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${isActive ? "scale-110 opacity-100" : "opacity-60 group-hover:opacity-90"}`} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-2 text-left">
-                      <div className="text-[9px] font-bold uppercase tracking-[0.2em]" style={{ color: w.color }}>{w.tag}</div>
-                      <div className="text-xs font-bold text-white">{w.name}</div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-            <Link to={`/worlds/${current.slug}`} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/10 px-4 py-3 text-sm font-bold text-white sm:hidden">
-              Entrer dans {current.name} <ArrowRight className="h-4 w-4" />
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* CONCEPT TEASER */}
-      <section className="relative border-t border-white/5 bg-black py-24">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 md:grid-cols-2 md:items-center">
-          <div>
-            <div className="text-xs font-bold uppercase tracking-[0.24em] text-primary">Le concept</div>
-            <h2 className="mt-3 font-display text-4xl font-black leading-tight sm:text-5xl">
-              Café, lounge, <span className="text-gradient-brand">expérience.</span>
-            </h2>
-            <p className="mt-5 text-white/70">
-              YUME est un hub d'expérience digitale immersive. 4 murs LED 8K (7,04 m × 3,84 m chacun, P1.8 COB) transforment la salle en aquarium, en forêt zen, en Tokyo nocturne — à la demande. Vous changez de monde sans changer de fauteuil.
-            </p>
-            <ul className="mt-6 space-y-3 text-sm text-white/80">
-              {["360° immersif · ISEMC 8K", "Matcha Lab & cuisine japonaise halal", "Privatisations corporate & événements"].map((t) => (
-                <li key={t} className="flex items-start gap-3">
-                  <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
-                  {t}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/concept" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-bold text-white hover:bg-white/10">
-                Découvrir l'expérience <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link to="/corporate" className="inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/10 px-5 py-2.5 text-sm font-bold text-secondary hover:bg-secondary/20">
-                Corporate & privatisations
-              </Link>
+      <div className="mq-wrap reveal" aria-hidden="true">
+        <div className="mq">
+          {[...MARQUEE, ...MARQUEE].map((w, i) => (
+            <span key={i}>{w}</span>
+          ))}
+        </div>
+      </div>
+
+      <section className="sec" id="story">
+        <div className="shell">
+          <div className="split reveal">
+            <div>
+              <span className="eyebrow">The idea</span>
+              <h2>Most cafés decorate a wall.<br />We become the room.</h2>
+              <p className="lead">
+                Floor-to-ceiling 8K LED surrounds every table — the world doesn't sit in front of you, you sit inside it.
+                Light, motion, and sound shift together, so the room feels alive rather than decorated.
+              </p>
+              <ul className="checks">
+                <li><span className="ok">✓</span> 360° immersive coverage, not a single screen</li>
+                <li><span className="ok">✓</span> Six interchangeable worlds, switched by time of day</li>
+                <li><span className="ok">✓</span> A menu styled to match the scene you're in</li>
+              </ul>
+            </div>
+            <div className="visual-card" style={{ ["--c1" as never]: "#241338" }}>
+              <span className="tag">Live now · Sakura</span>
+              <span className="kan">桜</span>
+              <div className="mini"><b>Sakura Coast</b><span>Soft pink light, drifting petals</span></div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {worlds.slice(0, 4).map((w) => (
-              <Link key={w.slug} to={`/worlds/${w.slug}`} className="group relative block overflow-hidden rounded-3xl border border-white/10" style={{ aspectRatio: "1 / 1" }}>
-                <img src={w.image} alt={w.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: w.color }}>{w.tag}</div>
-                  <div className="text-lg font-bold">{w.name}</div>
+        </div>
+      </section>
+
+      <section className="sec alt">
+        <div className="shell">
+          <div className="split rev reveal">
+            <div className="visual-card" style={{ ["--c1" as never]: "#0e2a24" }}>
+              <span className="tag">Live now · Zen Forest</span>
+              <span className="kan">森</span>
+              <div className="mini"><b>Zen Forest</b><span>Moss, mist, slow morning light</span></div>
+            </div>
+            <div>
+              <span className="eyebrow">Phygital, by the hour</span>
+              <h2>Book a mood, not just a table.</h2>
+              <p className="lead">
+                Worlds rotate across the day — calm and green at sunrise, electric and neon by midnight. Pick your moment
+                when you reserve, and we'll set the room before you arrive.
+              </p>
+              <ul className="checks">
+                <li><span className="ok">✓</span> Choose your world at booking — no surprises</li>
+                <li><span className="ok">✓</span> Private scene available for groups of 7+</li>
+                <li><span className="ok">✓</span> Same seat, six completely different evenings</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="sec" id="worlds">
+        <div className="shell">
+          <div className="worlds-head reveal">
+            <span className="eyebrow">All six worlds</span>
+            <h2>Pick the one that fits tonight.</h2>
+          </div>
+          <div className="wgrid">
+            {worlds.map((w, i) => (
+              <button
+                key={w.n}
+                type="button"
+                className="wcard reveal"
+                style={{ ["--c" as never]: w.c + "3d" }}
+                onClick={() => pickWorldAndReserve(w.n)}
+              >
+                <span className="no">0{i + 1}</span>
+                <span className="kan">{w.k}</span>
+                <h3>{w.n}</h3>
+                <p>{w.d}</p>
+              </button>
+            ))}
+          </div>
+
+          <div className="statsbar reveal">
+            <div className="cell"><b>360°</b><span>LED coverage</span></div>
+            <div className="cell"><b>6</b><span>Switchable worlds</span></div>
+            <div className="cell"><b>2026</b><span>Opening, Sousse</span></div>
+            <div className="cell"><b>9–23h</b><span>Open every day</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="sec alt" id="menu">
+        <div className="shell">
+          <div className="worlds-head reveal">
+            <span className="eyebrow">The menu</span>
+            <h2>Tastes as good as the room looks.</h2>
+          </div>
+          <div className="menu-top reveal">
+            <div className="tabs">
+              {CATS.map((c) => (
+                <button key={c} className={"tab" + (cat === c ? " active" : "")} onClick={() => setCat(c)}>
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="mgrid">
+            {menu.filter((m) => cat === "All" || m.c === cat).map((m) => (
+              <div className="dish" key={m.n}>
+                <div className="top">
+                  <span className="nm">{m.n}</span>
+                  <span className="pr">{m.p} DT</span>
                 </div>
-              </Link>
+                <div className="ds">{m.d}</div>
+                {m.t && <span className="tg">{m.t}</span>}
+              </div>
+            ))}
+          </div>
+          <p className="menu-foot">Prices in TND, illustrative pre-launch.</p>
+        </div>
+      </section>
+
+      <section className="sec" id="faq">
+        <div className="shell tight">
+          <div className="worlds-head reveal">
+            <span className="eyebrow">Before you book</span>
+            <h2>Questions, answered.</h2>
+          </div>
+          <div className="faq reveal">
+            {FAQ.map((q, i) => (
+              <details className="qa" key={q.q} open={i === 0}>
+                <summary>{q.q}<span className="plus">+</span></summary>
+                <div className="a">{q.a}</div>
+              </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* QUICK-FIND ROW: never hide essentials */}
-      <section className="border-t border-white/5 bg-black py-16">
-        <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:grid-cols-3">
-          {[
-            { label: "Menu complet", desc: "Signature drinks · matcha · sushi · pâtisseries.", path: "/menu", icon: Utensils },
-            { label: "Réserver", desc: "Date, heure, monde de votre choix.", path: "/reservations", icon: CalendarCheck },
-            { label: "Nous trouver", desc: "Sousse, Tunisie · plan & horaires.", path: "/visit", icon: MapPin },
-          ].map(({ label, desc, path, icon: Icon }) => (
-            <Link key={path} to={path} className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-primary/40 hover:bg-white/[0.06]">
-              <Icon className="h-6 w-6 text-primary" />
-              <div className="mt-4 text-lg font-bold">{label}</div>
-              <div className="mt-1 text-sm text-white/65">{desc}</div>
-              <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                Accéder <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+      <section className="sec" id="reserve" ref={reserveRef as never}>
+        <div className="shell">
+          <div className="banner reveal">
+            <span className="eyebrow eyebrow-center">One page. One goal.</span>
+            <h2>Reserve your seat inside the dream.</h2>
+            <p>Tell us when, and which world — we'll confirm by WhatsApp. No deposit, no fuss.</p>
+
+            <form className="resv" ref={formRef} onSubmit={onSubmit}>
+              <div className="field"><label htmlFor="name">Full name</label><input id="name" name="name" required /></div>
+              <div className="field"><label htmlFor="phone">Phone</label><input id="phone" name="phone" type="tel" required /></div>
+              <div className="field"><label htmlFor="date">Date</label><input id="date" name="date" type="date" min={todayMin} required /></div>
+              <div className="field"><label htmlFor="time">Time</label><input id="time" name="time" type="time" required /></div>
+              <div className="field">
+                <label htmlFor="guests">Guests</label>
+                <select id="guests" name="guests" defaultValue="2">
+                  {["1", "2", "3", "4", "5", "6", "7+"].map((g) => <option key={g}>{g}</option>)}
+                </select>
               </div>
-            </Link>
-          ))}
+              <div className="field">
+                <label htmlFor="world">Preferred world</label>
+                <select id="world" name="world" value={chosenWorld} onChange={(e) => setChosenWorld(e.target.value)}>
+                  {worlds.map((w) => <option key={w.n}>{w.n}</option>)}
+                </select>
+              </div>
+              <div className="field full">
+                <label htmlFor="notes">Notes (optional)</label>
+                <textarea id="notes" name="notes" rows={2} placeholder="Occasion, private group, dietary…" />
+              </div>
+              <div className="field full" style={{ marginTop: ".4rem" }}>
+                <button className="cta" type="submit" style={{ justifyContent: "center" }}>Request reservation</button>
+              </div>
+            </form>
+            {confirm && (
+              <div className={"confirm show" + (confirm.err ? " err" : "")}>{confirm.msg}</div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* FOOTER MINI */}
-      <footer className="border-t border-white/5 bg-black py-10 text-center text-xs text-white/40">
-        © {new Date().getFullYear()} YUME · Sousse, Tunisie · Un rêve dans lequel vous pouvez entrer.
+      <footer>
+        <div className="shell">
+          <div className="footrow">
+            <div style={{ maxWidth: 300 }}>
+              <a className="brand" href="#top" style={{ marginBottom: ".8rem" }}><span className="m">夢</span>YUME</a>
+              <p style={{ opacity: 0.7, fontSize: ".88rem" }}>An immersive café in Sousse. Step into a world — then taste it.</p>
+            </div>
+            <div className="foot-col"><h4>Page</h4><a href="#story">Story</a><a href="#worlds">Worlds</a><a href="#menu">Menu</a><a href="#faq">FAQ</a></div>
+            <div className="foot-col"><h4>Visit</h4><p>Sousse, Tunisia</p><p>Daily · 9:00–23:00</p><p>+216 96 506 693</p></div>
+            <div className="foot-col"><h4>Follow</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
+          </div>
+          <div className="copy">© {new Date().getFullYear()} YUME — Sousse, Tunisia.</div>
+        </div>
       </footer>
-    </main>
+    </div>
   );
 }
+
+function HeroCell({ w, primary }: { w: World; primary: boolean }) {
+  const base = primary ? "1.4" : "1";
+  return (
+    <div
+      style={{ ["--c" as never]: w.c + "33", flex: base }}
+      onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.flex = "2")}
+      onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.flex = base)}
+    >
+      <span>{w.k}</span>
+    </div>
+  );
+}
+
+const FAQ = [
+  { q: "What exactly is an \"immersive world\"?", a: "Floor-to-ceiling 8K LED panels wrap the room in synchronized visuals, light, and ambient sound — so the environment around your table changes completely, not just a screen on one wall." },
+  { q: "Can I choose which world I sit in?", a: "Yes — pick your preferred world when you reserve. We schedule worlds by time of day and confirm yours by WhatsApp before your visit." },
+  { q: "Do I need a reservation, or can I walk in?", a: "Walk-ins are welcome, but reserving locks in your preferred world and time slot — popular worlds book out, especially evenings and weekends." },
+  { q: "Is YUME suitable for groups or private events?", a: "Yes. Groups of 7 or more can request a private scene — tell us in the notes field when reserving and we'll arrange it." },
+];
+
+const CSS = `
+.yume-root{--ink:#0A0612;--ink-2:#0F0A1D;--ink-3:#150E29;--paper:#F4EFE9;--muted:#9A8FB0;--line:rgba(255,255,255,.09);--violet:#7C3AED;--pink:#F25BB5;--matcha:#34D27B;--gold:#FFC24B;--cyan:#22D3EE;--r:28px;--font-d:"Syne",system-ui,sans-serif;--font-b:"Manrope",system-ui,sans-serif;background:var(--ink);color:var(--paper);font-family:var(--font-b);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+.yume-root *{box-sizing:border-box}
+.yume-root h1,.yume-root h2,.yume-root h3{font-family:var(--font-d);font-weight:800;letter-spacing:-.02em;line-height:1.04;margin:0}
+.yume-root p{margin:0}
+.yume-root a{color:inherit;text-decoration:none}
+.yume-root img{max-width:100%;display:block}
+.yume-root ::selection{background:rgba(124,58,237,.4)}
+.yume-root .shell{width:min(100% - 2.6rem,1180px);margin-inline:auto}
+.yume-root .tight{width:min(100% - 2.6rem,920px);margin-inline:auto}
+.yume-root .cta{display:inline-flex;align-items:center;gap:.55rem;border:0;cursor:pointer;font-family:var(--font-b);font-weight:700;padding:1rem 1.7rem;border-radius:999px;font-size:.98rem;background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;box-shadow:0 14px 38px rgba(124,58,237,.35);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;white-space:nowrap}
+.yume-root .cta:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(124,58,237,.5)}
+.yume-root .cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.yume-root .cta.sm{padding:.65rem 1.15rem;font-size:.86rem}
+.yume-root .cta::after{content:"";position:absolute;inset:0;transform:translateX(-120%);background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transition:transform .6s}
+.yume-root .cta:hover::after{transform:translateX(120%)}
+.yume-root header{position:sticky;top:0;z-index:50;padding:1.1rem 0;transition:background .3s,border-color .3s}
+.yume-root header.on{background:rgba(10,6,18,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.yume-root .navrow{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.yume-root .brand{display:flex;align-items:center;gap:.55rem;font-family:var(--font-d);font-weight:800;font-size:1.15rem}
+.yume-root .brand .m{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--violet),var(--pink));font-size:.95rem}
+.yume-root .navlinks{display:flex;gap:1.8rem;font-size:.88rem;color:var(--muted);font-weight:600}
+.yume-root .navlinks a:hover{color:var(--paper)}
+@media(max-width:760px){.yume-root .navlinks{display:none}}
+.yume-root .hero{padding:clamp(4rem,12vw,8rem) 0 clamp(3rem,8vw,5rem);position:relative;overflow:hidden}
+.yume-root .hero::before{content:"";position:absolute;inset:-20% -10% auto -10%;height:140%;z-index:-1;background:radial-gradient(48rem 36rem at 18% 0%,rgba(124,58,237,.35),transparent 60%),radial-gradient(40rem 30rem at 88% 18%,rgba(52,210,127,.16),transparent 60%);filter:blur(10px)}
+.yume-root .kicker{display:inline-flex;align-items:center;gap:.55rem;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:1.4rem}
+.yume-root .kicker .d{width:7px;height:7px;border-radius:50%;background:var(--matcha);box-shadow:0 0 12px var(--matcha)}
+.yume-root .hero h1{font-size:clamp(2.5rem,8.6vw,5.6rem);max-width:16ch}
+.yume-root .hero h1 .g{background:linear-gradient(110deg,var(--violet),var(--pink),var(--matcha));-webkit-background-clip:text;background-clip:text;color:transparent}
+.yume-root .hero .sub{margin-top:1.4rem;font-size:clamp(1.02rem,2vw,1.25rem);color:var(--muted);max-width:46ch}
+.yume-root .hero .row{display:flex;align-items:center;gap:1rem;margin-top:2.1rem;flex-wrap:wrap}
+.yume-root .hero .micro{font-size:.84rem;color:var(--muted)}
+.yume-root .hero .visual{border-radius:var(--r);border:1px solid var(--line);overflow:hidden;background:linear-gradient(160deg,#160d2c,#0a0614);position:relative;aspect-ratio:16/8;display:flex;align-items:center;justify-content:center}
+.yume-root .hero .visual .frame{position:absolute;inset:1.1rem;border:1px dashed rgba(255,255,255,.14);border-radius:18px;pointer-events:none}
+.yume-root .hero .visual .scene{display:flex;width:100%;height:100%}
+.yume-root .hero .visual .scene > div{display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:2.2rem;color:rgba(255,255,255,.92);position:relative;transition:flex 1s;cursor:pointer;min-width:0}
+.yume-root .hero .visual .scene > div::after{content:"";position:absolute;inset:0;opacity:.55;background:var(--c)}
+.yume-root .hero .visual .scene > div span{position:relative;z-index:1}
+.yume-root .sec{padding:clamp(4.5rem,9vw,7.5rem) 0;position:relative}
+.yume-root .sec.alt{background:linear-gradient(180deg,var(--ink-2),var(--ink-3))}
+.yume-root .sec.alt::before,.yume-root .sec.alt::after{content:"";position:absolute;left:0;right:0;height:1px;background:var(--line)}
+.yume-root .sec.alt::before{top:0}.yume-root .sec.alt::after{bottom:0}
+.yume-root .eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--violet);font-weight:800;margin-bottom:1rem}
+.yume-root .eyebrow-center{justify-content:center;display:flex}
+.yume-root .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
+.yume-root .split.rev{direction:rtl}
+.yume-root .split.rev > *{direction:ltr}
+.yume-root .split h2{font-size:clamp(1.9rem,4.4vw,3rem);margin-top:.6rem}
+.yume-root .split p.lead{color:var(--muted);font-size:1.05rem;margin-top:1.1rem;max-width:48ch}
+.yume-root .checks{margin-top:1.6rem;display:flex;flex-direction:column;gap:.8rem;padding:0}
+.yume-root .checks li{list-style:none;display:flex;gap:.7rem;align-items:start;color:var(--paper);font-size:.96rem}
+.yume-root .checks .ok{flex:0 0 22px;height:22px;border-radius:50%;background:rgba(52,210,127,.16);color:var(--matcha);display:grid;place-items:center;font-size:.72rem;margin-top:.1rem}
+.yume-root .visual-card{border-radius:var(--r);border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5;position:relative;background:linear-gradient(160deg,var(--c1,#1c1136),#0a0614)}
+.yume-root .visual-card .tag{position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);border:1px solid var(--line);padding:.4rem .8rem;border-radius:999px;font-size:.76rem;font-weight:700}
+.yume-root .visual-card .kan{position:absolute;right:1.1rem;bottom:1.1rem;font-family:var(--font-d);font-size:5rem;opacity:.18;line-height:1}
+.yume-root .visual-card .mini{position:absolute;left:1.1rem;bottom:1.1rem;right:5.5rem}
+.yume-root .visual-card .mini b{display:block;font-size:1.15rem}
+.yume-root .visual-card .mini span{color:var(--muted);font-size:.84rem}
+.yume-root .worlds-head{max-width:46ch;margin-bottom:2.6rem}
+.yume-root .worlds-head h2{font-size:clamp(1.9rem,4.4vw,3rem);margin-top:.6rem}
+.yume-root .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.yume-root .wcard{border-radius:22px;border:1px solid var(--line);padding:1.6rem;min-height:220px;position:relative;overflow:hidden;background:linear-gradient(165deg,var(--c) 0%,rgba(10,6,18,0) 70%),#0d0820;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s,border-color .3s;text-align:left;color:inherit;font-family:inherit;cursor:pointer}
+.yume-root .wcard:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.22)}
+.yume-root .wcard .kan{font-family:var(--font-d);font-size:2rem}
+.yume-root .wcard h3{font-size:1.2rem;margin-top:auto}
+.yume-root .wcard p{color:var(--muted);font-size:.86rem;margin-top:.3rem}
+.yume-root .wcard .no{position:absolute;top:1.1rem;right:1.2rem;font-size:.74rem;color:var(--muted);font-weight:700}
+.yume-root .statsbar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:2rem}
+.yume-root .statsbar .cell{background:var(--ink-2);padding:1.8rem 1.4rem;text-align:center}
+.yume-root .statsbar b{display:block;font-family:var(--font-d);font-size:2.4rem;background:linear-gradient(120deg,var(--gold),var(--matcha));-webkit-background-clip:text;background-clip:text;color:transparent}
+.yume-root .statsbar span{color:var(--muted);font-size:.84rem}
+.yume-root .menu-top{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
+.yume-root .tabs{display:flex;gap:.4rem;flex-wrap:wrap}
+.yume-root .tab{padding:.5rem .95rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;font-family:inherit}
+.yume-root .tab.active{background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;border-color:transparent}
+.yume-root .mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.yume-root .dish{border:1px solid var(--line);border-radius:18px;padding:1.2rem;background:rgba(255,255,255,.025);transition:transform .25s,border-color .25s}
+.yume-root .dish:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2)}
+.yume-root .dish .top{display:flex;justify-content:space-between;gap:.6rem;align-items:start}
+.yume-root .dish .nm{font-weight:700;font-size:1rem}
+.yume-root .dish .pr{font-family:var(--font-d);color:var(--gold);font-weight:700}
+.yume-root .dish .ds{color:var(--muted);font-size:.85rem;margin-top:.4rem}
+.yume-root .dish .tg{display:inline-block;margin-top:.7rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);font-weight:800}
+.yume-root .menu-foot{color:var(--muted);font-size:.8rem;margin-top:1.4rem;font-style:italic}
+.yume-root .faq{display:flex;flex-direction:column;gap:.7rem}
+.yume-root .qa{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
+.yume-root .qa summary{list-style:none;padding:1.1rem 1.3rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.98rem}
+.yume-root .qa summary::-webkit-details-marker{display:none}
+.yume-root .qa summary .plus{font-size:1.3rem;color:var(--violet);transition:transform .25s;flex:0 0 auto;margin-left:1rem}
+.yume-root .qa[open] summary .plus{transform:rotate(45deg)}
+.yume-root .qa .a{padding:0 1.3rem 1.2rem;color:var(--muted);font-size:.92rem;max-width:65ch}
+.yume-root .banner{border-radius:32px;padding:clamp(2.6rem,7vw,5rem);position:relative;overflow:hidden;text-align:center;background:linear-gradient(155deg,#1c1037,#0a0614);border:1px solid var(--line)}
+.yume-root .banner::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 0%,rgba(124,58,237,.35),transparent 70%);pointer-events:none}
+.yume-root .banner h2{font-size:clamp(2rem,5.4vw,3.4rem);position:relative;max-width:18ch;margin:0 auto}
+.yume-root .banner p{color:var(--muted);max-width:46ch;margin:1.1rem auto 0;position:relative;font-size:1.02rem}
+.yume-root .resv{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:2.4rem;text-align:left;position:relative}
+.yume-root .field{display:flex;flex-direction:column;gap:.4rem}
+.yume-root .field.full{grid-column:1/-1}
+.yume-root label{font-size:.78rem;color:var(--muted);font-weight:700}
+.yume-root input,.yume-root select,.yume-root textarea{font-family:inherit;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--paper);border-radius:12px;padding:.75rem .9rem;font-size:.95rem;outline:none;transition:border-color .2s,box-shadow .2s;color-scheme:dark}
+.yume-root input:focus,.yume-root select:focus,.yume-root textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,58,237,.25)}
+.yume-root select option{color:#111}
+.yume-root .confirm{margin-top:1rem;padding:.85rem 1rem;border-radius:12px;border:1px solid rgba(52,210,127,.4);background:rgba(52,210,127,.1);color:#c9ffe2;font-size:.9rem;text-align:left;position:relative}
+.yume-root .confirm.err{border-color:rgba(242,91,181,.5);background:rgba(242,91,181,.12);color:#ffd0ec}
+.yume-root footer{border-top:1px solid var(--line);padding:3rem 0}
+.yume-root .footrow{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.yume-root .foot-col h4{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.yume-root .foot-col a,.yume-root .foot-col p{display:block;color:var(--paper);opacity:.85;font-size:.9rem;padding:.18rem 0;margin:0}
+.yume-root .foot-col a:hover{opacity:1;color:var(--violet)}
+.yume-root .copy{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+.yume-root .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.yume-root .reveal.in{opacity:1;transform:none}
+.yume-root .mq-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1rem 0;overflow:hidden}
+.yume-root .mq{display:flex;gap:3rem;width:max-content;animation:yume-mq 28s linear infinite;font-family:var(--font-d);color:var(--muted);font-size:.95rem}
+.yume-root .mq span{margin-right:3rem}
+@keyframes yume-mq{to{transform:translateX(-50%)}}
+@media(max-width:920px){.yume-root .split,.yume-root .split.rev{grid-template-columns:1fr;direction:ltr}.yume-root .split .visual-card{order:-1}.yume-root .wgrid{grid-template-columns:repeat(2,1fr)}.yume-root .mgrid{grid-template-columns:1fr 1fr}.yume-root .statsbar{grid-template-columns:repeat(2,1fr)}.yume-root .resv{grid-template-columns:1fr}}
+@media(max-width:620px){.yume-root .wgrid{grid-template-columns:1fr}.yume-root .mgrid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.yume-root *{transition:none!important;animation:none!important;scroll-behavior:auto!important}.yume-root .reveal{opacity:1;transform:none}}
+`;
