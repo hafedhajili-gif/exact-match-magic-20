@@ -171,8 +171,11 @@ export default function Home() {
                 <li><span className="ok">✓</span> A menu styled to match the scene you're in</li>
               </ul>
             </div>
-            <div className="visual-card" style={{ ["--c1" as never]: "#241338" }}>
-              <span className="tag">Live now · Sakura</span>
+            <div
+              className="visual-card"
+              style={{ ["--c1" as never]: "#241338", backgroundImage: `url(${sakuraImg})` }}
+            >
+              <span className="tag"><i className="live-dot" />Live now · Sakura</span>
               <span className="kan">桜</span>
               <div className="mini"><b>Sakura Coast</b><span>Soft pink light, drifting petals</span></div>
             </div>
@@ -183,8 +186,11 @@ export default function Home() {
       <section className="sec alt">
         <div className="shell">
           <div className="split rev reveal">
-            <div className="visual-card" style={{ ["--c1" as never]: "#0e2a24" }}>
-              <span className="tag">Live now · Zen Forest</span>
+            <div
+              className="visual-card"
+              style={{ ["--c1" as never]: "#0e2a24", backgroundImage: `url(${zenImg})` }}
+            >
+              <span className="tag"><i className="live-dot" />Live now · Zen Forest</span>
               <span className="kan">森</span>
               <div className="mini"><b>Zen Forest</b><span>Moss, mist, slow morning light</span></div>
             </div>
@@ -217,13 +223,18 @@ export default function Home() {
                 key={w.n}
                 type="button"
                 className="wcard reveal"
-                style={{ ["--c" as never]: w.c + "3d" }}
+                style={{
+                  ["--c" as never]: w.c + "3d",
+                  ["--c2" as never]: w.c,
+                  backgroundImage: `url(${w.img})`,
+                }}
                 onClick={() => pickWorldAndReserve(w.n)}
               >
                 <span className="no">0{i + 1}</span>
                 <span className="kan">{w.k}</span>
                 <h3>{w.n}</h3>
                 <p>{w.d}</p>
+                <span className="cta-mini">Réserver →</span>
               </button>
             ))}
           </div>
