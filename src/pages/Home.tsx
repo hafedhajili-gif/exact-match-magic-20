@@ -1,15 +1,21 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import sakuraImg from "@/assets/themes/yume-sakura-coast.jpg";
+import tokyoImg from "@/assets/themes/yume-tokyo-neon.jpg";
+import zenImg from "@/assets/themes/yume-zen-forest.jpg";
+import aquariumImg from "@/assets/themes/yume-aquarium.jpg";
+import kyotoImg from "@/assets/themes/kyoto-temple.jpg";
+import galaxyImg from "@/assets/themes/galaxy.jpg";
 
 const WA_NUMBER = "21696506693";
 
-type World = { k: string; n: string; d: string; c: string };
+type World = { k: string; n: string; d: string; c: string; img: string };
 const worlds: World[] = [
-  { k: "桜", n: "Sakura Coast", d: "Soft pink light, drifting petals", c: "#F25BB5" },
-  { k: "夜", n: "Tokyo Neon", d: "Electric rain, glowing signage", c: "#22D3EE" },
-  { k: "森", n: "Zen Forest", d: "Moss, mist, slow calm", c: "#34D27B" },
-  { k: "海", n: "Aquarium", d: "Drifting deep-blue light", c: "#38BDF8" },
-  { k: "京", n: "Kyoto Dusk", d: "Golden temple evening", c: "#FFC24B" },
-  { k: "宙", n: "Galaxy", d: "Stardust and violet void", c: "#8B5CF6" },
+  { k: "桜", n: "Sakura Coast", d: "Soft pink light, drifting petals", c: "#F25BB5", img: sakuraImg },
+  { k: "夜", n: "Tokyo Neon", d: "Electric rain, glowing signage", c: "#22D3EE", img: tokyoImg },
+  { k: "森", n: "Zen Forest", d: "Moss, mist, slow calm", c: "#34D27B", img: zenImg },
+  { k: "海", n: "Aquarium", d: "Drifting deep-blue light", c: "#38BDF8", img: aquariumImg },
+  { k: "京", n: "Kyoto Dusk", d: "Golden temple evening", c: "#FFC24B", img: kyotoImg },
+  { k: "宙", n: "Galaxy", d: "Stardust and violet void", c: "#8B5CF6", img: galaxyImg },
 ];
 
 type Dish = { c: string; n: string; d: string; p: string; t?: string };
