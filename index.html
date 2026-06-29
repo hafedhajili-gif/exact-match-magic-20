@@ -1,33 +1,911 @@
 <!doctype html>
-<html lang="en" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0612" />
-    <title>YUME — Café · Lounge Immersif · Sousse</title>
-    <meta name="description" content="YUME — Le sanctuaire digital immersif de Sousse. Café &amp; lounge japonais 360° avec technologie LED 8K.">
-    <meta name="author" content="YUME" />
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0A0612" />
+<title>YUME — Dream. Taste. Enter. | Sousse, 2026</title>
+<meta name="description" content="YUME — le premier café phygital immersif de Tunisie. Murs LED 8K, 14 mondes thématiques, sushi halal, matcha cérémonial. Sousse, 2026." />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="YUME — Café · Lounge Immersif · Sousse">
-    <meta property="og:description" content="YUME — Le sanctuaire digital immersif de Sousse. Café &amp; lounge japonais 360° avec technologie LED 8K.">
-    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6c471963-b051-43c5-8d91-a0de20efd8e6/id-preview-7a6bc5c4--8a9f2be9-e164-41ae-adca-f5974ef879bc.lovable.app-1775838643629.png">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Syne:wght@600;700;800&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="YUME — Café · Lounge Immersif · Sousse">
-    <meta name="twitter:description" content="YUME — Le sanctuaire digital immersif de Sousse. Café &amp; lounge japonais 360° avec technologie LED 8K.">
-    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6c471963-b051-43c5-8d91-a0de20efd8e6/id-preview-7a6bc5c4--8a9f2be9-e164-41ae-adca-f5974ef879bc.lovable.app-1775838643629.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CafeOrCoffeeShop","name":"YUME","description":"First immersive phygital café in Tunisia — 360° 8K LED worlds, halal Japanese-inspired menu.","address":{"@type":"PostalAddress","addressLocality":"Sousse","addressCountry":"TN"},"openingHours":"Mo-Su 09:00-23:00","servesCuisine":["Japanese","Café","Desserts"],"priceRange":"$$"}
+</script>
 
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+<style>
+:root{
+  --ink:#0A0612; --ink2:#0F0A1D; --ink3:#150E29; --ink4:#1A1230;
+  --paper:#F4EFE9; --muted:#9C90B2; --line:rgba(255,255,255,.09);
+  --violet:#7C3AED; --pink:#F25BB5; --matcha:#34D27B; --gold:#FFC24B; --cyan:#22D3EE; --indigo:#6366F1; --teal:#2DD4BF;
+  --cat-nature:#34D27B; --cat-zen:#2DD4BF; --cat-urbain:#C026D3; --cat-culture:#FFC24B; --cat-scifi:#6366F1;
+  --r:26px; --rs:16px;
+  --font-d:"Syne",system-ui,sans-serif; --font-b:"Manrope",system-ui,sans-serif; --font-jp:"Zen Maru Gothic",system-ui,sans-serif;
+  --cx:50vw; --cy:30vh;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--font-b);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--font-d);font-weight:800;letter-spacing:-.02em;line-height:1.06;margin:0}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:rgba(124,58,237,.4)}
+.shell{width:min(100% - 2.6rem,1240px);margin-inline:auto}
+.tight{width:min(100% - 2.6rem,820px);margin-inline:auto}
+button{font-family:inherit}
 
-    <!-- Distinctive type pairing: Syne (display) + Manrope (body) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Syne:wght@600;700;800&family=Noto+Sans+JP:wght@500;700;800&display=swap" rel="stylesheet">
-  </head>
+/* ---------- ambient atmosphere ---------- */
+.atmos{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.30;mix-blend-mode:screen;will-change:transform}
+.orb.a{width:34rem;height:34rem;top:-10rem;left:-12rem;background:var(--violet);animation:fA 22s ease-in-out infinite alternate}
+.orb.b{width:28rem;height:28rem;right:-10rem;top:30%;background:var(--matcha);animation:fB 26s ease-in-out infinite alternate}
+.orb.c{width:24rem;height:24rem;left:40%;bottom:-8rem;background:var(--pink);animation:fC 19s ease-in-out infinite alternate}
+@keyframes fA{to{transform:translate3d(8vw,8vh,0) scale(1.15)}}
+@keyframes fB{to{transform:translate3d(-7vw,6vh,0) scale(.9)}}
+@keyframes fC{to{transform:translate3d(5vw,-9vh,0) scale(1.2)}}
+.grain{position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:radial-gradient(#fff .6px,transparent .6px);background-size:4px 4px}
+.spotlight{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(460px circle at var(--cx) var(--cy),rgba(124,58,237,.10),transparent 45%)}
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+/* ---------- shared atoms ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:800;margin-bottom:1rem}
+.eyebrow .d{width:7px;height:7px;border-radius:50%;box-shadow:0 0 10px currentColor}
+.pill{display:inline-flex;align-items:center;gap:.4rem;border-radius:999px;padding:.4rem .85rem;font-size:.78rem;font-weight:700;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+.cta{display:inline-flex;align-items:center;gap:.55rem;border:0;cursor:pointer;font-weight:700;padding:1rem 1.7rem;border-radius:999px;font-size:.97rem;
+  background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;box-shadow:0 14px 38px rgba(124,58,237,.35);
+  transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;white-space:nowrap}
+.cta:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(124,58,237,.5)}
+.cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.cta::after{content:"";position:absolute;inset:0;transform:translateX(-120%);background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transition:transform .6s}
+.cta:hover::after{transform:translateX(120%)}
+.cta.sm{padding:.65rem 1.2rem;font-size:.86rem}
+.cta-ghost{background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--paper);box-shadow:none}
+.cta-ghost:hover{background:rgba(255,255,255,.1);box-shadow:none}
+.card{border:1px solid var(--line);border-radius:var(--r);background:rgba(255,255,255,.03);transition:transform .3s,border-color .3s,box-shadow .3s}
+.card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.gradtext{background:linear-gradient(110deg,var(--violet),var(--pink),var(--matcha),var(--violet));background-size:240% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s ease infinite}
+@keyframes flow{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+.kan{font-family:var(--font-jp)}
+
+/* ---------- nav ---------- */
+header{position:sticky;top:0;z-index:80;padding:1rem 0;transition:background .3s,border-color .3s}
+header.on{background:rgba(10,6,18,.78);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.navrow{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.6rem;font-family:var(--font-d);font-weight:800;font-size:1.1rem}
+.brand img{width:32px;height:32px;border-radius:9px;object-fit:cover}
+.navlinks{display:flex;gap:1.5rem;font-size:.85rem;color:var(--muted);font-weight:700}
+.navlinks a{transition:color .2s}
+.navlinks a:hover{color:var(--paper)}
+.burger{display:none;width:42px;height:42px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;place-items:center}
+.burger span{display:block;width:16px;height:2px;background:var(--paper);position:relative}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:16px;height:2px;background:var(--paper)}
+.burger span::before{top:-5px}.burger span::after{top:5px}
+.drawer{position:fixed;inset:0;z-index:90;display:none}
+.drawer.open{display:block}
+.drawer .scrim{position:absolute;inset:0;background:rgba(5,3,12,.7);backdrop-filter:blur(6px)}
+.drawer .panel{position:absolute;right:0;top:0;height:100%;width:min(82vw,320px);background:linear-gradient(180deg,var(--ink3),var(--ink));border-left:1px solid var(--line);padding:1.4rem;display:flex;flex-direction:column;gap:.3rem}
+.drawer .panel a{padding:.9rem 1rem;border-radius:12px;color:var(--paper);font-weight:700;font-size:1rem}
+.drawer .panel a:hover{background:rgba(255,255,255,.06)}
+.drawer .close{align-self:flex-end;background:none;border:0;color:var(--muted);font-size:1.6rem;cursor:pointer}
+@media(max-width:840px){.navlinks{display:none}.burger{display:grid}}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}.orb,.spotlight{display:none}}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;padding:7rem 0 4rem}
+.hero-bg{position:absolute;inset:0;z-index:-1}
+.hero-bg img{width:100%;height:100%;object-fit:cover;transition:opacity 1.2s ease}
+.hero-bg::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(10,6,18,.55) 0%,rgba(10,6,18,.78) 55%,rgba(10,6,18,.96) 100%),
+  linear-gradient(90deg,rgba(10,6,18,.55),rgba(10,6,18,.15) 55%,rgba(10,6,18,.6))}
+.hero-content{position:relative;max-width:46rem}
+.hero .badge{margin-bottom:1.3rem}
+.hero h1{font-size:clamp(2.6rem,7.4vw,5.2rem)}
+.hero p.sub{margin-top:1.3rem;font-size:clamp(1.02rem,2vw,1.22rem);color:#D8D0E4;max-width:42ch}
+.hero .row{display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:2.6rem;max-width:34rem}
+.hstat{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.06);backdrop-filter:blur(10px);padding:.9rem .6rem;text-align:center}
+.hstat b{display:block;font-family:var(--font-d);font-size:1.5rem}
+.hstat span{color:#C9C0D8;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+.hero-dots{position:absolute;right:clamp(1rem,4vw,3rem);bottom:2rem;display:flex;flex-direction:column;gap:.5rem;z-index:2}
+.hero-dots button{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);border:0;cursor:pointer;transition:all .3s}
+.hero-dots button.on{background:var(--pink);height:22px}
+
+/* ---------- marquee ---------- */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1rem 0;overflow:hidden}
+.marquee .track{display:flex;width:max-content;animation:mq 30s linear infinite;font-family:var(--font-d);color:var(--muted);font-size:.95rem}
+.marquee .track span{margin-right:3rem;display:inline-flex;align-items:center;gap:.6rem}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ============ zone shells ============ */
+.zone{padding:clamp(4.5rem,9vw,7.5rem) 0;position:relative;border-top:1px solid var(--line)}
+.zone-ink2{background:var(--ink2)}
+.zone-ink3{background:var(--ink3)}
+.zone-head{max-width:50ch;margin-bottom:2.6rem}
+.zone-head.center{margin-inline:auto;text-align:center}
+.zone-head h2{font-size:clamp(1.9rem,4.4vw,3rem);margin-top:.5rem}
+.zone-head p{color:var(--muted);margin-top:1rem;font-size:1.02rem}
+
+/* ============ CONCEPT (matcha zone) ============ */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.pillar{padding:1.7rem}
+.pillar .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:1.1rem;font-size:1.3rem;
+  background:linear-gradient(135deg,rgba(52,210,127,.32),rgba(34,211,238,.22))}
+.pillar h3{font-size:1.18rem}
+.pillar .tag{display:inline-block;margin:.5rem 0 .8rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--matcha);font-weight:800}
+.pillar .problem{color:var(--muted);font-size:.85rem;text-decoration:line-through;opacity:.65}
+.pillar .solution{margin-top:.5rem;font-size:.92rem;color:var(--paper)}
+.audience{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.4rem}
+.aud{padding:1.5rem;text-align:center}
+.aud .em{font-size:2.4rem;margin-bottom:.6rem}
+.aud h4{font-size:1.05rem}
+.aud p{color:var(--muted);font-size:.85rem;margin-top:.4rem}
+.trust-row{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.8rem}
+.trust{display:inline-flex;align-items:center;gap:.5rem;border-radius:999px;padding:.55rem 1rem;font-size:.82rem;font-weight:700;
+  border:1px solid rgba(52,210,127,.35);background:rgba(52,210,127,.1);color:#bdf7d6}
+
+/* ============ WORLDS ============ */
+.world-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.8rem}
+.f-tab{padding:.55rem 1rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font-weight:700;font-size:.84rem;cursor:pointer;transition:all .2s}
+.f-tab.active{color:#fff;border-color:transparent}
+.feature-world{display:grid;grid-template-columns:1.5fr 1fr;gap:1.2rem;margin-bottom:1.8rem}
+.fw-main{border-radius:var(--r);overflow:hidden;position:relative;aspect-ratio:16/10;border:1px solid var(--line)}
+.fw-main img{width:100%;height:100%;object-fit:cover}
+.fw-main .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,4,16,.92));display:flex;flex-direction:column;justify-content:flex-end;padding:1.8rem}
+.fw-main .badges{display:flex;gap:.5rem;margin-bottom:.9rem}
+.fw-main h3{font-size:clamp(1.6rem,3.4vw,2.4rem)}
+.fw-main p{color:#D8D0E4;margin-top:.5rem;max-width:38ch;font-size:.95rem}
+.fw-side{display:flex;flex-direction:column;gap:1rem}
+.fw-card{padding:1.5rem;flex:1;display:flex;flex-direction:column}
+.fw-card h4{font-size:1.1rem;margin-bottom:.7rem}
+.fw-card p{color:var(--muted);font-size:.88rem;flex:1}
+.intensity{margin-top:1rem}
+.intensity .lbl{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:.4rem}
+.bar{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar > div{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.fw-nav{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.fw-nav button{padding:.7rem;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--paper);font-weight:700;font-size:.82rem;cursor:pointer}
+.fw-nav button:hover{background:rgba(255,255,255,.09)}
+.wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem}
+.wcard{border-radius:18px;overflow:hidden;position:relative;aspect-ratio:4/5;cursor:pointer;border:2px solid transparent;transition:transform .3s,border-color .3s}
+.wcard img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.wcard:hover img{transform:scale(1.08)}
+.wcard:hover{transform:translateY(-5px)}
+.wcard.sel{border-color:var(--pink)}
+.wcard .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(6,3,12,.9));display:flex;flex-direction:column;justify-content:flex-end;padding:.8rem}
+.wcard .cat{position:absolute;top:.6rem;left:.6rem;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  padding:.25rem .55rem;border-radius:999px;background:rgba(0,0,0,.4);backdrop-filter:blur(4px)}
+.wcard b{font-size:.86rem;line-height:1.2}
+.wcard span{font-size:.68rem;color:#cfc7da}
+.specs-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:2.4rem}
+.specs-strip .cell{background:var(--ink3);padding:1.5rem 1rem;text-align:center}
+.specs-strip b{display:block;font-family:var(--font-d);color:var(--cyan);font-size:1.15rem}
+.specs-strip span{color:var(--muted);font-size:.76rem}
+
+/* ============ VOTE — electric zone ============ */
+.vote-top{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.vstat{padding:1.4rem;text-align:center}
+.vstat b{display:block;font-family:var(--font-d);font-size:2rem;color:var(--cyan)}
+.vstat span{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.vcard{overflow:hidden;cursor:pointer}
+.vcard .vimg{position:relative;aspect-ratio:4/3}
+.vcard .vimg img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.vcard:hover .vimg img{transform:scale(1.08)}
+.vcard .vimg .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(6,3,12,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:1.1rem}
+.vcard .mood{position:absolute;top:.8rem;left:.8rem;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);padding:.3rem .7rem;border-radius:999px;font-size:.74rem;font-weight:700}
+.vcard h4{font-size:1.3rem;color:#fff}
+.vcard .body{padding:1.2rem}
+.vcard .body p{color:var(--muted);font-size:.85rem;min-height:42px}
+.vcard .pct-row{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700;margin:.8rem 0 .4rem}
+.vcard .pct-row .n{color:var(--cyan)}
+.vcard .votec{color:var(--muted);font-size:.74rem;margin-top:.4rem}
+.vbtn{margin-top:.9rem;width:100%;padding:.75rem;border-radius:12px;border:0;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff;transition:transform .2s,opacity .2s}
+.vbtn:hover{transform:translateY(-2px)}
+.vbtn.voted{background:rgba(255,255,255,.08);color:var(--muted)}
+.vbtn:disabled{cursor:default}
+.vote-note{margin-top:1.6rem;padding:1.3rem 1.5rem;display:flex;gap:1rem;align-items:flex-start}
+.vote-note .ic{font-size:1.6rem}
+.vote-note p{color:var(--muted);font-size:.9rem}
+
+/* ============ MENU — warm appetite zone ============ */
+.menu-sig{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:2.2rem}
+.sig{overflow:hidden}
+.sig .im{position:relative;aspect-ratio:4/3}
+.sig .im img{width:100%;height:100%;object-fit:cover}
+.sig .tag{position:absolute;top:.6rem;left:.6rem;background:var(--gold);color:#1a1206;font-size:.66rem;font-weight:800;padding:.25rem .55rem;border-radius:999px;text-transform:uppercase}
+.sig .body{padding:.9rem 1rem}
+.sig .body b{font-size:.92rem;display:block}
+.sig .body span{color:var(--gold);font-weight:700;font-size:.85rem}
+.menu-top{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap;margin-bottom:1.8rem}
+.tabs{display:flex;gap:.45rem;flex-wrap:wrap}
+.tab{padding:.55rem 1rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font-weight:700;font-size:.83rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;transition:all .2s}
+.tab.active{background:linear-gradient(135deg,var(--gold),var(--pink));color:#1a1206;border-color:transparent}
+.search{display:flex;align-items:center;gap:.5rem;border:1px solid var(--line);border-radius:999px;padding:.5rem 1rem;background:rgba(255,255,255,.03)}
+.search input{background:none;border:0;color:var(--paper);font-family:inherit;font-size:.88rem;outline:none;width:170px}
+.search input::placeholder{color:var(--muted)}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.dish{overflow:hidden}
+.dish .im{position:relative;aspect-ratio:16/11}
+.dish .im img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.dish:hover .im img{transform:scale(1.07)}
+.dish .portion{position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);padding:.25rem .6rem;border-radius:999px;font-size:.68rem;font-weight:700}
+.dish .body{padding:1.1rem 1.2rem}
+.dish .top{display:flex;justify-content:space-between;gap:.6rem;align-items:start}
+.dish .nm{font-weight:700;font-size:1rem}
+.dish .pr{font-family:var(--font-d);color:var(--gold);font-weight:700;white-space:nowrap}
+.dish .ds{color:var(--muted);font-size:.85rem;margin-top:.4rem;min-height:38px}
+.menu-note{color:var(--muted);font-size:.8rem;margin-top:1.4rem;font-style:italic}
+
+/* ============ RESERVE — violet bookend zone ============ */
+.banner{border-radius:32px;padding:clamp(2.4rem,6vw,4.4rem);position:relative;overflow:hidden;border:1px solid var(--line);
+  background:linear-gradient(155deg,#1c1037,#0a0614)}
+.banner::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 0%,rgba(124,58,237,.35),transparent 70%)}
+.banner-head{position:relative;text-align:center;max-width:36rem;margin:0 auto 2.2rem}
+.banner-head h2{font-size:clamp(1.9rem,4.6vw,3rem)}
+.banner-head p{color:var(--muted);margin-top:.8rem}
+.resv-wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:1.4rem}
+.resv-form{padding:1.6rem;background:rgba(255,255,255,.04)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.9rem}
+.field.full{grid-column:1/-1}
+label{font-size:.78rem;color:var(--muted);font-weight:700}
+input,select,textarea{font-family:inherit;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--paper);
+  border-radius:12px;padding:.75rem .9rem;font-size:.94rem;outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,58,237,.25)}
+select option{color:#111}
+.guest-row{display:flex;align-items:center;gap:.7rem}
+.gbtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--paper);font-size:1.1rem;cursor:pointer}
+.gcount{font-family:var(--font-d);font-size:1.3rem;min-width:2ch;text-align:center}
+.confirm{margin-top:1rem;padding:.85rem 1rem;border-radius:12px;border:1px solid rgba(52,210,127,.4);background:rgba(52,210,127,.1);color:#c9ffe2;font-size:.9rem;display:none}
+.confirm.show{display:block}
+.confirm.err{border-color:rgba(242,91,181,.5);background:rgba(242,91,181,.12);color:#ffd0ec}
+.resv-side{padding:1.6rem;background:linear-gradient(160deg,rgba(124,58,237,.16),rgba(10,6,18,.4));display:flex;flex-direction:column;justify-content:center;gap:1.1rem}
+.resv-side .big{font-family:var(--font-d);font-size:1.35rem}
+.resv-side .info{display:flex;gap:.6rem;align-items:start;font-size:.86rem;color:#D8D0E4}
+
+/* ============ VISIT / FOOTER ============ */
+.visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.map{border-radius:var(--r);min-height:300px;position:relative;overflow:hidden;border:1px solid var(--line);
+  background:radial-gradient(60% 60% at 70% 30%,rgba(124,58,237,.3),transparent 60%),
+  repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 38px),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 38px),
+  linear-gradient(160deg,#100a22,#0a0616)}
+.map .pin{position:absolute;left:60%;top:42%;transform:translate(-50%,-100%);text-align:center}
+.map .pin .d{width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(45deg);background:linear-gradient(135deg,var(--violet),var(--pink));margin:0 auto;box-shadow:0 0 0 6px rgba(124,58,237,.22)}
+.map .pin small{display:block;margin-top:.5rem;font-weight:700;font-size:.78rem}
+.info-list{padding:1.6rem}
+.info-list .ln{display:flex;gap:.9rem;padding:.85rem 0;border-bottom:1px solid var(--line)}
+.info-list .ln:last-child{border-bottom:0}
+.info-list .ic{flex:0 0 38px;height:38px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.06);font-size:1rem}
+.info-list b{display:block;font-size:.95rem}
+.info-list span{color:var(--muted);font-size:.85rem}
+footer{border-top:1px solid var(--line);padding:3rem 0}
+.footrow{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.foot-col h4{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.foot-col a,.foot-col p{display:block;color:var(--paper);opacity:.85;font-size:.9rem;padding:.18rem 0;margin:0}
+.foot-col a:hover{opacity:1;color:var(--gold)}
+.copy{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+
+/* ============ responsive ============ */
+@media(max-width:980px){
+  .pillars{grid-template-columns:1fr}
+  .audience{grid-template-columns:1fr 1fr}
+  .feature-world{grid-template-columns:1fr}
+  .wgrid{grid-template-columns:repeat(3,1fr)}
+  .vote-top{grid-template-columns:1fr 1fr}
+  .vgrid{grid-template-columns:1fr 1fr}
+  .menu-sig{grid-template-columns:1fr 1fr}
+  .mgrid{grid-template-columns:1fr 1fr}
+  .resv-wrap{grid-template-columns:1fr}
+  .visit-grid{grid-template-columns:1fr}
+  .specs-strip{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .wgrid{grid-template-columns:1fr 1fr}
+  .vote-top{grid-template-columns:1fr}
+  .vgrid{grid-template-columns:1fr}
+  .audience{grid-template-columns:1fr}
+  .menu-sig{grid-template-columns:1fr}
+  .mgrid{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="atmos" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
+<div class="spotlight" id="spot" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header id="head">
+  <div class="shell navrow">
+    <a class="brand" href="#top"><img src="assets/yume-logo.png" alt="YUME logo" />YUME</a>
+    <nav class="navlinks">
+      <a href="#concept">Concept</a>
+      <a href="#worlds">Mondes</a>
+      <a href="#vote">Vote</a>
+      <a href="#menu">Menu</a>
+      <a href="#visit">Visite</a>
+    </nav>
+    <button class="cta sm" data-go="#reserve">Réserver</button>
+    <button class="burger" id="burger" aria-label="Menu"><span></span></button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="scrim" data-close></div>
+  <div class="panel">
+    <button class="close" data-close aria-label="Fermer">×</button>
+    <a href="#concept" data-close>Concept</a>
+    <a href="#worlds" data-close>Mondes</a>
+    <a href="#vote" data-close>Vote communautaire</a>
+    <a href="#menu" data-close>Menu</a>
+    <a href="#visit" data-close>Visite</a>
+    <button class="cta" data-go="#reserve" style="margin-top:1rem;justify-content:center">Réserver</button>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<a id="top"></a>
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="shell hero-content">
+    <span class="pill badge reveal" style="border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.15)">✨ Premier café phygital immersif de Tunisie</span>
+    <h1 class="reveal">YUME <span class="gradtext">n'est pas un café.</span></h1>
+    <p class="sub reveal">C'est un hub d'expérience digitale immersive&nbsp;: murs LED 8K, son 3D, un thème qui change chaque jour, cuisine japonaise halal — pensé pour être vécu, filmé et partagé.</p>
+    <div class="row reveal">
+      <button class="cta" data-go="#reserve">Réserver l'expérience →</button>
+      <button class="cta cta-ghost" data-go="#worlds">Voir les 14 mondes 360°</button>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hstat"><b data-count="8" data-suffix="K">0</b><span>LED visuals</span></div>
+      <div class="hstat"><b data-count="360" data-suffix="°">0</b><span>Immersion</span></div>
+      <div class="hstat"><b data-count="14" data-suffix="">0</b><span>Mondes thématiques</span></div>
+    </div>
+  </div>
+  <div class="hero-dots" id="heroDots"></div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+<!-- ============ CONCEPT — matcha trust zone ============ -->
+<section class="zone" id="concept">
+  <div class="shell">
+    <div class="zone-head reveal">
+      <span class="eyebrow" style="color:var(--matcha)"><span class="d" style="background:var(--matcha)"></span>Le concept</span>
+      <h2>Trois idées. Un seul lieu.</h2>
+      <p>Chaque pilier répond à un problème concret des cafés classiques — et le résout par le design, la technologie et la cuisine.</p>
+    </div>
+    <div class="pillars" id="pillars"></div>
+
+    <div class="audience" id="audience"></div>
+
+    <div class="trust-row reveal">
+      <span class="trust">✓ 100% Halal</span>
+      <span class="trust">✓ Sans alcool</span>
+      <span class="trust">✓ Process HACCP</span>
+      <span class="trust">✓ Familial &amp; inclusif</span>
+      <span class="trust">✓ Sousse · Ouverture 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORLDS — data-driven category colors ============ -->
+<section class="zone zone-ink2" id="worlds">
+  <div class="shell">
+    <div class="zone-head reveal">
+      <span class="eyebrow" style="color:var(--cyan)"><span class="d" style="background:var(--cyan)"></span>Galerie immersive</span>
+      <h2>14 mondes. Un café qui se réinvente chaque jour.</h2>
+      <p>Nature, Zen, Urbain, Culture, Sci-Fi — chaque univers transforme la salle en 360° grâce à des murs LED 8K.</p>
+    </div>
+
+    <div class="world-filters reveal" id="worldFilters"></div>
+
+    <div class="feature-world reveal">
+      <div class="fw-main">
+        <img id="fwImg" src="" alt="" />
+        <div class="ov">
+          <div class="badges">
+            <span class="pill" id="fwCat" style="background:rgba(0,0,0,.4);border-color:rgba(255,255,255,.2)">Nature</span>
+            <span class="pill" style="background:rgba(0,0,0,.4);border-color:rgba(255,255,255,.2)">🔍 Aperçu 360°</span>
+          </div>
+          <h3 id="fwName">—</h3>
+          <p id="fwDesc">—</p>
+        </div>
+      </div>
+      <div class="fw-side">
+        <div class="fw-card card">
+          <h4 id="fwName2">—</h4>
+          <p id="fwDetails">—</p>
+          <div class="intensity">
+            <div class="lbl"><span>Intensité visuelle</span><span id="fwPct">0%</span></div>
+            <div class="bar"><div id="fwBar" style="width:0%;background:var(--cyan)"></div></div>
+          </div>
+        </div>
+        <div class="fw-nav">
+          <button id="fwPrev">← Précédent</button>
+          <button id="fwNext">Suivant →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wgrid reveal" id="wgrid"></div>
+
+    <div class="specs-strip reveal">
+      <div class="cell"><b>1.86mm</b><span>Pixel pitch</span></div>
+      <div class="cell"><b>7.04m × 3.84m</b><span>Surface LED</span></div>
+      <div class="cell"><b>3840Hz</b><span>Taux de rafraîchissement</span></div>
+      <div class="cell"><b>75–100k h</b><span>Durée de vie</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VOTE — community, electric zone ============ -->
+<section class="zone" id="vote">
+  <div class="shell">
+    <div class="zone-head center reveal">
+      <span class="eyebrow" style="color:var(--cyan);justify-content:center;display:flex"><span class="d" style="background:var(--cyan)"></span>Vote communautaire en direct</span>
+      <h2>Votez le thème de demain.</h2>
+      <p style="margin-inline:auto">La communauté choisit l'ambiance du lendemain — visuels LED, playlist et accords mets-thème en découlent directement.</p>
+    </div>
+
+    <div class="vote-top reveal">
+      <div class="vstat card"><b id="voteTotal">0</b><span>Votes en direct</span></div>
+      <div class="vstat card"><b id="voteLeader">—</b><span>Thème en tête</span></div>
+      <div class="vstat card"><b id="voteMomentum">0%</b><span>Momentum</span></div>
+    </div>
+
+    <div class="vgrid reveal" id="vgrid"></div>
+
+    <div class="vote-note card reveal">
+      <span class="ic">🎵</span>
+      <p><b>Comment le vote influence YUME&nbsp;:</b> les résultats aident l'équipe à programmer les visuels LED, ajuster la playlist et créer un accord mets-thème pour la soirée gagnante — <em>scan QR → choisis le mood → vis le 8K</em>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENU — warm appetite zone ============ -->
+<section class="zone zone-ink3" id="menu">
+  <div class="shell">
+    <div class="zone-head reveal">
+      <span class="eyebrow" style="color:var(--gold)"><span class="d" style="background:var(--gold)"></span>Menu digital</span>
+      <h2>Le goût suit le thème.</h2>
+      <p>Matcha cérémonial, bubble tea, mocktails premium, sushi 100% halal et pâtisserie japonaise — une carte pensée comme une extension de l'expérience.</p>
+    </div>
+
+    <div class="menu-sig reveal" id="sigGrid"></div>
+
+    <div class="menu-top reveal">
+      <div class="tabs" id="tabs"></div>
+      <div class="search"><span aria-hidden="true">🔍</span><input id="msearch" type="search" placeholder="Chercher matcha, sushi, mochi…" /></div>
+    </div>
+    <div class="mgrid" id="mgrid"></div>
+    <p class="menu-note">Prix en DT. 100% Halal · Process HACCP · Cold Kitchen — pas de cuisine chaude.</p>
+  </div>
+</section>
+
+<!-- ============ RESERVE — violet bookend ============ -->
+<section class="zone" id="reserve">
+  <div class="shell">
+    <div class="banner reveal">
+      <div class="banner-head">
+        <span class="eyebrow" style="justify-content:center;display:flex;color:var(--pink)"><span class="d" style="background:var(--pink)"></span>Réservation</span>
+        <h2>Réservez votre place dans le rêve.</h2>
+        <p>Dites-nous quand, et quel monde — nous confirmons par téléphone. Sans dépôt, sans complication.</p>
+      </div>
+      <div class="resv-wrap">
+        <form class="resv-form card" id="form" onsubmit="return false">
+          <div class="fgrid">
+            <div class="field"><label for="name">Nom complet</label><input id="name" required /></div>
+            <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="name@email.com" /></div>
+            <div class="field"><label for="phone">Téléphone</label><input id="phone" type="tel" placeholder="+216 …" required /></div>
+            <div class="field"><label for="date">Date</label><input id="date" type="date" required /></div>
+            <div class="field"><label for="time">Heure</label><input id="time" type="time" required /></div>
+            <div class="field"><label>Invités</label>
+              <div class="guest-row">
+                <button type="button" class="gbtn" id="gMinus">−</button>
+                <span class="gcount" id="gCount">2</span>
+                <button type="button" class="gbtn" id="gPlus">+</button>
+              </div>
+            </div>
+            <div class="field full"><label for="world">Monde préféré</label><select id="world"></select></div>
+            <div class="field full"><label for="notes">Notes (optionnel)</label><textarea id="notes" rows="2" placeholder="Anniversaire, groupe privé, allergie…"></textarea></div>
+          </div>
+          <button class="cta" id="submitBtn" style="width:100%;justify-content:center;margin-top:.4rem">Demander la réservation</button>
+          <div class="confirm" id="confirm"></div>
+        </form>
+        <aside class="resv-side card">
+          <div class="big">Sans réservation, on vous accueille aussi.</div>
+          <p style="color:#D8D0E4;font-size:.92rem">Mais réserver verrouille votre monde préféré et votre créneau — les mondes populaires se remplissent vite le soir et le week-end.</p>
+          <div class="info"><span>⏱</span><span>Ouvert tous les jours, 9h00 → 23h00</span></div>
+          <div class="info"><span>👥</span><span>Groupes de 7+ : scène privée sur demande</span></div>
+          <div class="info"><span>📍</span><span>Sousse, Tunisie — hub de 55 m²</span></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISIT ============ -->
+<section class="zone zone-ink2" id="visit">
+  <div class="shell">
+    <div class="zone-head reveal">
+      <span class="eyebrow" style="color:var(--gold)"><span class="d" style="background:var(--gold)"></span>Visite</span>
+      <h2>Retrouvez-nous à Sousse.</h2>
+    </div>
+    <div class="visit-grid reveal">
+      <div class="map" role="img" aria-label="Carte montrant YUME à Sousse">
+        <div class="pin"><span class="d"></span><small>YUME · Sousse</small></div>
+      </div>
+      <div class="info-list card">
+        <div class="ln"><div class="ic">📍</div><div><b>Adresse</b><span>Sousse, Tunisie — lieu exact dévoilé à l'ouverture</span></div></div>
+        <div class="ln"><div class="ic">⏰</div><div><b>Horaires</b><span>Tous les jours · 9h00 → 23h00</span></div></div>
+        <div class="ln"><div class="ic">📞</div><div><b>Contact</b><span>+216 — — — · hello@yume.tn</span></div></div>
+        <div class="ln"><div class="ic">📷</div><div><b>Suivez-nous</b><span>@yume.sousse — chaque monde, en coulisses</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="shell">
+    <div class="footrow">
+      <div style="max-width:300px">
+        <a class="brand" href="#top" style="margin-bottom:.8rem"><img src="assets/yume-logo.png" alt="YUME" />YUME</a>
+        <p style="opacity:.7;font-size:.88rem">Le premier café phygital immersif de Tunisie. Dream. Taste. Enter.</p>
+      </div>
+      <div class="foot-col"><h4>Page</h4><a href="#concept">Concept</a><a href="#worlds">Mondes</a><a href="#vote">Vote</a><a href="#menu">Menu</a></div>
+      <div class="foot-col"><h4>Visite</h4><p>Sousse, Tunisie</p><p>Tous les jours · 9h–23h</p><p>+216 — — —</p></div>
+      <div class="foot-col"><h4>Suivez</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
+    </div>
+    <div class="copy">© <span id="yr"></span> YUME — Sousse, Tunisie. Premier café phygital immersif.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ===================================================================
+   REAL DATA — transcribed from the YUME product (worlds, menu, votes)
+   =================================================================== */
+
+var CAT_COLOR = { Nature:"var(--cat-nature)", Zen:"var(--cat-zen)", Urbain:"var(--cat-urbain)", Culture:"var(--cat-culture)", "Sci-Fi":"var(--cat-scifi)" };
+
+var worlds = [
+ {n:"YUME Aquarium",img:"assets/themes/yume-aquarium.jpg",cat:"Nature",intensity:72,desc:"Méduses bioluminescentes et récifs coralliens en 360°.",details:"Plongée immersive dans un océan profond avec méduses translucides, coraux fluorescents et lumière sous-marine."},
+ {n:"Zen Forest Sanctuary",img:"assets/themes/yume-zen-forest.jpg",cat:"Zen",intensity:58,desc:"Forêt de bambous mystique sous un ciel étoilé.",details:"Bambous géants, lanternes japonaises, koïs lumineux et brume nocturne. Une retraite méditative premium."},
+ {n:"Seoul K-Pop Night",img:"assets/themes/yume-seoul-kpop.jpg",cat:"Urbain",intensity:93,desc:"Néons de Séoul, hangul et énergie K-pop.",details:"Murs LED saturés de violet et magenta, panneaux coréens, karaoké numérique et ambiance Gen Z."},
+ {n:"Sakura Sunset Lounge",img:"assets/themes/yume-sakura-sunset.jpg",cat:"Zen",intensity:76,desc:"Cerisiers en fleurs au coucher de soleil sur l'océan.",details:"Pétales roses, lanternes suspendues et horizon orangé. Un thème social-first et doux."},
+ {n:"Tokyo Neon Rain",img:"assets/themes/yume-tokyo-neon.jpg",cat:"Urbain",intensity:96,desc:"Tokyo cyberpunk sous la pluie, néons et katakana.",details:"Reflets mouillés, enseignes カラオケ et gratte-ciels saturés de néons rouges et bleus."},
+ {n:"Sakura Coast Paradise",img:"assets/themes/yume-sakura-coast.jpg",cat:"Nature",intensity:70,desc:"Côte japonaise, sakura et coucher de soleil panoramique.",details:"Falaises dorées, cerisiers en floraison et océan calme. L'invitation à entrer dans un autre monde."},
+ {n:"Real Aquarium",img:"assets/themes/aquarium.jpg",cat:"Nature",intensity:66,desc:"Plongez dans un océan immersif à 360°.",details:"Requins, poissons tropicaux et coraux projetés sur les 4 murs LED en 8K."},
+ {n:"Tokyo Night",img:"assets/themes/tokyo-night.jpg",cat:"Urbain",intensity:90,desc:"Néons cyberpunk et énergie urbaine de Tokyo.",details:"Rues de Shinjuku et Shibuya projetées en 360°, tables LED lumineuses et ambiance nocturne."},
+ {n:"Sakura & Mont Fuji",img:"assets/themes/sakura-fuji.jpg",cat:"Zen",intensity:62,desc:"Cerisiers en fleurs avec vue sur le Mont Fuji.",details:"Paysage japonais iconique avec lac, cerisiers roses et atmosphère romantique."},
+ {n:"Kyoto Temple",img:"assets/themes/kyoto-temple.jpg",cat:"Culture",intensity:54,desc:"Temples traditionnels au coucher du soleil.",details:"Portes Torii, pagodes et lanternes au crépuscule. Ambiance culturelle authentique."},
+ {n:"Sunset Coast",img:"assets/themes/sunset-coast.jpg",cat:"Nature",intensity:64,desc:"Côte paradisiaque au coucher du soleil.",details:"Falaises, océan et ciel violet-rose. Expérience immersive de sérénité totale."},
+ {n:"Torii Gates",img:"assets/themes/torii-gates.jpg",cat:"Culture",intensity:57,desc:"Forêt de portes Torii du sanctuaire Fushimi Inari.",details:"Tunnel infini de portes rouges avec ambiance mystique et contemplative."},
+ {n:"Jungle Tropicale",img:"assets/themes/jungle.jpg",cat:"Nature",intensity:74,desc:"Forêt luxuriante avec faune exotique.",details:"Végétation dense, perroquets colorés et lumière verte naturelle avec sons de nature."},
+ {n:"Galaxy",img:"assets/themes/galaxy.jpg",cat:"Sci-Fi",intensity:88,desc:"Voyage interstellaire dans l'espace profond.",details:"Nébuleuses, planètes et étoiles projetées en 8K avec ambiance cosmique."}
+];
+
+var pillars = [
+ {ic:"🖥️",tag:"Software-defined ambiance",title:"LED 8K 360°",problem:"Les cafés classiques restent les mêmes après chaque visite.",solution:"YUME change d'univers comme un film vivant : Tokyo, Aquarium, Sakura, Zen Forest, Galaxy…"},
+ {ic:"🍵",tag:"Lean & luxury",title:"Matcha Lab & Sushi Halal",problem:"La cuisine chaude augmente les coûts et la complexité.",solution:"Cold Kitchen premium : matcha cérémonial, sushi halal, bubble tea et pâtisserie japonaise."},
+ {ic:"👥",tag:"Built for Gen Z",title:"Social-first Lounge",problem:"Les lieux premium sont souvent fermés, chers ou peu shareable.",solution:"Un espace inclusif, sans alcool, familial, photogénique et prêt pour TikTok/Instagram."}
+];
+var audience = [
+ {em:"🎓",t:"Gen Z",d:"Expérience photogénique, sans alcool, pensée pour être filmée et partagée."},
+ {em:"💼",t:"Corporate",d:"Espace premium pour réunions informelles, team-buildings et événements de marque."},
+ {em:"🌍",t:"Touristes",d:"Une parenthèse japonaise immersive, à deux pas des plages de Sousse."}
+];
+
+var voteThemes = [
+ {id:"tokyo_night",n:"Tokyo Night",emoji:"🌃",img:"assets/themes/tokyo-night.jpg",color:"Violet neon",vibe:"High energy",desc:"Cyberpunk futuriste avec néons violets, pluie digitale et énergie urbaine.",base:142},
+ {id:"deep_ocean",n:"Real Aquarium",emoji:"🌊",img:"assets/themes/aquarium.jpg",color:"Blue glow",vibe:"Calm",desc:"Océan immersif à 360°, requins, coraux lumineux et ambiance apaisante.",base:98},
+ {id:"saharian_sunset",n:"Sunset Coast",emoji:"🌅",img:"assets/themes/sunset-coast.jpg",color:"Sakura gold",vibe:"Chill",desc:"Côte paradisiaque au coucher du soleil avec sakura, horizon rose et golden hour.",base:67}
+];
+
+var CAT_LABEL = {matcha:"Matcha & Boissons",bubble_tea:"Bubble Tea",mocktail:"Mocktails Premium",sushi:"Sushi Bar Halal",pastry:"Pâtisserie Japonaise"};
+var CAT_ICON = {matcha:"🍵",bubble_tea:"🧋",mocktail:"🍹",sushi:"🍣",pastry:"🍰"};
+var menu = [
+ {id:1,n:"Matcha Latte",d:"Matcha cérémonial de qualité supérieure avec lait onctueux",c:"matcha",p:11.0,img:"assets/menu/matcha-latte.jpg",sig:1},
+ {id:2,n:"Hojicha Latte",d:"Thé vert torréfié avec lait crémeux, saveur douce et boisée",c:"matcha",p:10.0,img:"assets/menu/hojicha-latte.jpg"},
+ {id:3,n:"Matcha Espresso Fusion",d:"Alliance unique du matcha et d'un shot espresso avec lait",c:"matcha",p:12.0,img:"assets/menu/matcha-espresso.jpg"},
+ {id:4,n:"Yuzu Sparkling Soda",d:"Soda pétillant artisanal au jus de yuzu frais",c:"matcha",p:9.5,img:"assets/menu/yuzu-soda.jpg"},
+ {id:5,n:"Sakura Lemonade",d:"Limonade délicate au sirop de fleur de cerisier",c:"matcha",p:9.5,img:"assets/menu/sakura-lemonade.jpg"},
+ {id:6,n:"Café de Spécialité",d:"Café premium single origin préparé avec soin",c:"matcha",p:6.5,img:"assets/menu/specialty-coffee.jpg"},
+ {id:7,n:"Strawberry Milk Tea",d:"Thé noir au lait avec sirop fraise et perles de tapioca",c:"bubble_tea",p:11.5,img:"assets/menu/strawberry-milk-tea.jpg"},
+ {id:8,n:"Brown Sugar Boba",d:"Lait au sucre brun caramélisé avec perles de tapioca",c:"bubble_tea",p:11.0,img:"assets/menu/brown-sugar-boba.jpg"},
+ {id:9,n:"Taro Bubble Tea",d:"Pâte de taro crémeuse avec lait et perles de tapioca",c:"bubble_tea",p:11.5,img:"assets/menu/taro-bubble-tea.jpg"},
+ {id:10,n:"Neon SakuraGlow",d:"Mocktail hibiscus, litchi et eau de rose pétillante — visuel néon",c:"mocktail",p:13.0,img:"assets/menu/neon-sakuraglow.jpg",sig:1},
+ {id:11,n:"Lychee Yuzu Sparkler",d:"Pétillant rafraîchissant au litchi et yuzu",c:"mocktail",p:12.5,img:"assets/menu/lychee-yuzu-sparkler.jpg"},
+ {id:12,n:"Matcha Mojito",d:"Mojito sans alcool au matcha, citron vert et menthe fraîche",c:"mocktail",p:12.0,img:"assets/menu/matcha-mojito.jpg"},
+ {id:13,n:"Virgin Tokyo Mule",d:"Ginger beer, yuzu et concombre — twist sans alcool du Moscou",c:"mocktail",p:12.0,img:"assets/menu/virgin-tokyo-mule.jpg"},
+ {id:14,n:"California Roll",d:"Rouleau classique riz, nori, avocat et surimi halal",c:"sushi",p:18.0,portion:"6 pièces",img:"assets/menu/california-roll.jpg",sig:1},
+ {id:15,n:"Spicy Tuna Roll",d:"Rouleau au thon halal et mayo épicée maison",c:"sushi",p:19.5,portion:"6 pièces",img:"assets/menu/spicy-tuna-roll.jpg"},
+ {id:16,n:"Salmon Nigiri",d:"Saumon halal frais posé sur riz vinaigré, wasabi",c:"sushi",p:17.0,portion:"2 pièces",img:"assets/menu/nigiri-salmon.jpg"},
+ {id:17,n:"Ebi Tempura Roll",d:"Crevette halal en tempura croustillante, avocat et nori",c:"sushi",p:20.0,portion:"6 pièces",img:"assets/menu/ebi-tempura-roll.jpg"},
+ {id:18,n:"Dragon Roll",d:"Rouleau avec avocat, concombre, sauce anguille et graines de sésame",c:"sushi",p:21.0,portion:"6 pièces",img:"assets/menu/dragon-roll.jpg"},
+ {id:19,n:"Vegetarian Roll",d:"Rouleau frais concombre, avocat, carotte et daikon",c:"sushi",p:14.0,portion:"6 pièces",img:"assets/menu/vegetarian-roll.jpg"},
+ {id:20,n:"Mochi",d:"Douceur japonaise en pâte de riz, garniture sucrée",c:"pastry",p:9.0,portion:"3 pièces",img:"assets/menu/mochi.jpg"},
+ {id:21,n:"Dorayaki",d:"Pancake japonais fourré à la pâte de haricots rouges sucrée",c:"pastry",p:10.0,portion:"2 pièces",img:"assets/menu/dorayaki.jpg"},
+ {id:22,n:"Matcha Cheesecake",d:"Cheesecake onctueux infusé au matcha",c:"pastry",p:11.5,portion:"1 part",img:"assets/menu/matcha-cheesecake.jpg",sig:1},
+ {id:23,n:"Taiyaki",d:"Gâteau en forme de poisson garni de pâte de haricots sucrée",c:"pastry",p:10.0,portion:"1 pièce",img:"assets/menu/taiyaki.jpg"},
+ {id:24,n:"Lava Cake",d:"Fondant au chocolat avec cœur coulant",c:"pastry",p:14.0,portion:"1 pièce",img:"assets/menu/lava-cake.jpg"},
+ {id:25,n:"Soufflé Pancake",d:"Pancake japonais ultra-moelleux et aérien",c:"pastry",p:13.0,portion:"1 pièce",img:"assets/menu/souffle-pancake.jpg"},
+ {id:26,n:"Fukuta Brûlé Crêpe",d:"Crêpe caramélisée garnie de crème pâtissière",c:"pastry",p:12.0,portion:"1 pièce",img:"assets/menu/brule-crepe.jpg"},
+ {id:27,n:"Mochi Gelato",d:"Glace artisanale enrobée de pâte de riz",c:"pastry",p:10.0,portion:"1 portion",img:"assets/menu/mochi-gelato.jpg"}
+];
+
+/* ===================================================================
+   HERO — rotating real world backdrop
+   =================================================================== */
+var heroWorlds = [worlds[4], worlds[0], worlds[3], worlds[2], worlds[1]]; // Tokyo Neon, Aquarium, Sakura Sunset, Seoul, Zen Forest
+var heroBg = document.getElementById('heroBg'), heroDots = document.getElementById('heroDots');
+var heroIdx = 0, heroImgs = [];
+heroWorlds.forEach(function(w,i){
+  var im = document.createElement('img'); im.src = w.img; im.alt = w.n;
+  im.style.position='absolute'; im.style.inset=0; im.style.opacity = i===0?1:0;
+  heroBg.appendChild(im); heroImgs.push(im);
+  var dot = document.createElement('button'); if(i===0) dot.className='on';
+  dot.addEventListener('click', function(){ showHero(i); });
+  heroDots.appendChild(dot);
+});
+function showHero(i){
+  heroImgs[heroIdx].style.opacity=0; heroIdx=i; heroImgs[heroIdx].style.opacity=1;
+  Array.from(heroDots.children).forEach(function(d,j){ d.className = j===i?'on':''; });
+}
+setInterval(function(){ showHero((heroIdx+1)%heroWorlds.length); }, 5000);
+
+/* marquee */
+var mq = document.getElementById('mq');
+var words = ['夢 YUME','14 Mondes Immersifs','LED 8K 360°','100% Halal','Sousse 2026','Matcha Cérémonial','Vote Communautaire','Sans Alcool'];
+var line = words.map(function(w){return '<span>'+w+' <span style="color:var(--pink)">✦</span></span>';}).join('');
+mq.innerHTML = line+line;
+
+/* ===================================================================
+   CONCEPT — pillars + audience
+   =================================================================== */
+var pWrap = document.getElementById('pillars');
+pillars.forEach(function(p){
+  var el=document.createElement('div'); el.className='pillar card reveal';
+  el.innerHTML='<div class="ic">'+p.ic+'</div><h3>'+p.title+'</h3><span class="tag">'+p.tag+'</span>'+
+    '<p class="problem">'+p.problem+'</p><p class="solution">'+p.solution+'</p>';
+  pWrap.appendChild(el);
+});
+var aWrap = document.getElementById('audience');
+audience.forEach(function(a){
+  var el=document.createElement('div'); el.className='aud card reveal';
+  el.innerHTML='<div class="em">'+a.em+'</div><h4>'+a.t+'</h4><p>'+a.d+'</p>';
+  aWrap.appendChild(el);
+});
+
+/* ===================================================================
+   WORLDS — filters + featured carousel + grid
+   =================================================================== */
+var categories = ["Toutes","Nature","Zen","Urbain","Culture","Sci-Fi"];
+var activeCat = "Toutes";
+var fIdx = 0; // index within filtered list
+var wFilters = document.getElementById('worldFilters');
+categories.forEach(function(c,i){
+  var b=document.createElement('button'); b.className='f-tab'+(i===0?' active':''); b.textContent=c;
+  if(c!=="Toutes"){ b.style.setProperty('--c', CAT_COLOR[c]); }
+  b.addEventListener('click', function(){
+    activeCat=c; fIdx=0;
+    document.querySelectorAll('.f-tab').forEach(function(t){t.classList.remove('active'); t.style.background=''; t.style.color='';});
+    b.classList.add('active');
+    if(c!=="Toutes"){ b.style.background=CAT_COLOR[c]; b.style.color="#0a0612"; }
+    renderWorlds();
+  });
+  wFilters.appendChild(b);
+});
+
+function filteredWorlds(){ return activeCat==="Toutes" ? worlds : worlds.filter(function(w){return w.cat===activeCat;}); }
+
+function renderFeatured(){
+  var list = filteredWorlds(); if(!list.length) return;
+  var w = list[fIdx % list.length];
+  document.getElementById('fwImg').src = w.img;
+  document.getElementById('fwImg').alt = w.n;
+  document.getElementById('fwCat').textContent = w.cat;
+  document.getElementById('fwName').textContent = w.n;
+  document.getElementById('fwName2').textContent = w.n;
+  document.getElementById('fwDesc').textContent = w.desc;
+  document.getElementById('fwDetails').textContent = w.details;
+  document.getElementById('fwPct').textContent = w.intensity+'%';
+  var bar = document.getElementById('fwBar'); bar.style.width = w.intensity+'%'; bar.style.background = CAT_COLOR[w.cat];
+}
+document.getElementById('fwPrev').addEventListener('click', function(){ var l=filteredWorlds(); fIdx=(fIdx-1+l.length)%l.length; renderFeatured(); highlightGrid(); });
+document.getElementById('fwNext').addEventListener('click', function(){ var l=filteredWorlds(); fIdx=(fIdx+1)%l.length; renderFeatured(); highlightGrid(); });
+
+var wgrid = document.getElementById('wgrid');
+function renderWorlds(){
+  wgrid.innerHTML='';
+  filteredWorlds().forEach(function(w,i){
+    var el=document.createElement('div'); el.className='wcard'+(i===fIdx?' sel':'');
+    el.innerHTML='<img src="'+w.img+'" alt="'+w.n+'" loading="lazy"><span class="cat" style="color:'+CAT_COLOR[w.cat]+'">'+w.cat+'</span>'+
+      '<div class="ov"><b>'+w.n+'</b><br><span>'+w.intensity+'% intensité</span></div>';
+    el.addEventListener('click', function(){ fIdx=i; renderFeatured(); highlightGrid(); });
+    wgrid.appendChild(el);
+  });
+  renderFeatured();
+}
+function highlightGrid(){ Array.from(wgrid.children).forEach(function(c,i){ c.classList.toggle('sel', i===fIdx); }); }
+renderWorlds();
+
+/* ===================================================================
+   VOTE — live community vote, persisted in localStorage
+   =================================================================== */
+var VOTE_KEY = 'yume_votes_v1', VOTED_KEY = 'yume_voted_choice_v1';
+var votes = {};
+try { votes = JSON.parse(localStorage.getItem(VOTE_KEY)) || {}; } catch(e){ votes = {}; }
+voteThemes.forEach(function(t){ if(typeof votes[t.id] !== 'number') votes[t.id] = t.base; });
+var votedChoice = null;
+try { votedChoice = localStorage.getItem(VOTED_KEY); } catch(e){}
+
+function totalVotes(){ return voteThemes.reduce(function(s,t){return s+votes[t.id];},0); }
+function pct(id){ var tot=totalVotes(); return tot===0?0:Math.round(votes[id]/tot*100); }
+function leader(){ return voteThemes.reduce(function(b,t){ return votes[t.id]>votes[b.id]?t:b; }, voteThemes[0]); }
+
+var vgrid = document.getElementById('vgrid');
+function renderVotes(){
+  vgrid.innerHTML='';
+  voteThemes.forEach(function(t){
+    var voted = votedChoice===t.id;
+    var el=document.createElement('div'); el.className='vcard card';
+    el.innerHTML =
+      '<div class="vimg"><img src="'+t.img+'" alt="'+t.n+'" loading="lazy"><span class="mood">'+t.emoji+' '+t.vibe+'</span><div class="ov"><h4>'+t.n+'</h4></div></div>'+
+      '<div class="body">'+
+        '<p>'+t.desc+'</p>'+
+        '<div class="pct-row"><span>'+t.color+'</span><span class="n">'+pct(t.id)+'%</span></div>'+
+        '<div class="bar"><div style="width:'+pct(t.id)+'%;background:linear-gradient(90deg,var(--cyan),var(--violet))"></div></div>'+
+        '<div class="votec">'+votes[t.id]+' votes</div>'+
+        '<button class="vbtn'+(voted?' voted':'')+'" '+(votedChoice?'disabled':'')+'>'+(voted?'✓ Voté':(votedChoice?'Vote clos':'Voter pour ce thème'))+'</button>'+
+      '</div>';
+    el.querySelector('.vbtn').addEventListener('click', function(){
+      if(votedChoice) return;
+      votes[t.id]++; votedChoice=t.id;
+      try { localStorage.setItem(VOTE_KEY, JSON.stringify(votes)); localStorage.setItem(VOTED_KEY, votedChoice); } catch(e){}
+      renderVotes(); renderVoteStats();
+    });
+    vgrid.appendChild(el);
+  });
+}
+function renderVoteStats(){
+  document.getElementById('voteTotal').textContent = totalVotes();
+  document.getElementById('voteLeader').textContent = leader().n;
+  document.getElementById('voteMomentum').textContent = pct(leader().id)+'%';
+}
+renderVotes(); renderVoteStats();
+
+/* ===================================================================
+   MENU — signature grid + filter tabs + search
+   =================================================================== */
+var sigGrid = document.getElementById('sigGrid');
+menu.filter(function(m){return m.sig;}).forEach(function(m){
+  var el=document.createElement('div'); el.className='sig card';
+  el.innerHTML='<div class="im"><img src="'+m.img+'" alt="'+m.n+'" loading="lazy"><span class="tag">★ Signature</span></div>'+
+    '<div class="body"><b>'+m.n+'</b><span>'+m.p.toFixed(1)+' DT</span></div>';
+  sigGrid.appendChild(el);
+});
+
+var menuCats = Object.keys(CAT_LABEL);
+var tabs = document.getElementById('tabs'), mgrid = document.getElementById('mgrid'), msearch = document.getElementById('msearch');
+var activeMenuCat = menuCats[0];
+menuCats.forEach(function(c,i){
+  var b=document.createElement('button'); b.className='tab'+(i===0?' active':'');
+  b.innerHTML = CAT_ICON[c]+' <span>'+CAT_LABEL[c]+'</span>';
+  b.addEventListener('click', function(){
+    activeMenuCat=c;
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+    b.classList.add('active'); renderMenu();
+  });
+  tabs.appendChild(b);
+});
+function renderMenu(){
+  var q = (msearch.value||'').trim().toLowerCase();
+  mgrid.innerHTML='';
+  var list = menu.filter(function(m){
+    var okCat = m.c===activeMenuCat;
+    var okQ = !q || (m.n+' '+m.d).toLowerCase().indexOf(q)>-1;
+    return okCat && okQ;
+  });
+  if(!list.length){ mgrid.innerHTML = '<p style="color:var(--muted)">Aucun plat ne correspond à cette recherche.</p>'; return; }
+  list.forEach(function(m){
+    var el=document.createElement('div'); el.className='dish card';
+    el.innerHTML='<div class="im"><img src="'+m.img+'" alt="'+m.n+'" loading="lazy">'+(m.portion?'<span class="portion">'+m.portion+'</span>':'')+'</div>'+
+      '<div class="body"><div class="top"><span class="nm">'+m.n+'</span><span class="pr">'+m.p.toFixed(1)+' DT</span></div><div class="ds">'+m.d+'</div></div>';
+    mgrid.appendChild(el);
+  });
+}
+msearch.addEventListener('input', renderMenu);
+renderMenu();
+
+/* ===================================================================
+   RESERVATION — guest counter, world select, submit
+   =================================================================== */
+var wsel = document.getElementById('world');
+worlds.forEach(function(w){ var o=document.createElement('option'); o.textContent=w.n; wsel.appendChild(o); });
+voteThemes.forEach(function(){}); // (vote themes also exist within worlds list where relevant)
+
+var gCount = document.getElementById('gCount'), guests = 2;
+document.getElementById('gMinus').addEventListener('click', function(){ guests=Math.max(1,guests-1); gCount.textContent=guests; });
+document.getElementById('gPlus').addEventListener('click', function(){ guests=Math.min(20,guests+1); gCount.textContent=guests; });
+
+document.getElementById('date').min = new Date().toISOString().split('T')[0];
+document.getElementById('submitBtn').addEventListener('click', function(){
+  var name=document.getElementById('name').value.trim();
+  var phone=document.getElementById('phone').value.trim();
+  var date=document.getElementById('date').value, time=document.getElementById('time').value;
+  var c=document.getElementById('confirm');
+  if(!name||!phone||!date||!time){
+    c.className='confirm show err';
+    c.textContent='Merci de renseigner votre nom, téléphone, date et heure pour confirmer.';
+    return;
+  }
+  c.className='confirm show';
+  c.textContent='Merci, '+name+' ✦ Votre table « '+wsel.value+' » pour '+guests+' personne(s) le '+date+' à '+time+' est demandée — nous confirmons par téléphone. (Formulaire démo — aucune donnée envoyée.)';
+});
+
+/* ===================================================================
+   GLOBAL — nav, drawer, cursor spotlight, scroll reveal, counters
+   =================================================================== */
+var head=document.getElementById('head');
+window.addEventListener('scroll', function(){ head.classList.toggle('on', window.scrollY>10); }, {passive:true});
+
+document.querySelectorAll('[data-go]').forEach(function(b){
+  b.addEventListener('click', function(){ document.querySelector(b.dataset.go).scrollIntoView({behavior:'smooth'}); closeDrawer(); });
+});
+var drawer=document.getElementById('drawer'), burger=document.getElementById('burger');
+function openDrawer(){ drawer.classList.add('open'); }
+function closeDrawer(){ drawer.classList.remove('open'); }
+burger.addEventListener('click', openDrawer);
+drawer.querySelectorAll('[data-close]').forEach(function(x){ x.addEventListener('click', closeDrawer); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDrawer(); });
+
+window.addEventListener('pointermove', function(e){
+  document.documentElement.style.setProperty('--cx', e.clientX+'px');
+  document.documentElement.style.setProperty('--cy', e.clientY+'px');
+}, {passive:true});
+
+/* animated counters */
+function animateCount(el){
+  var target = parseFloat(el.dataset.count), suffix = el.dataset.suffix||'';
+  var start=null, dur=1200;
+  function step(ts){
+    if(!start) start=ts;
+    var p = Math.min(1, (ts-start)/dur);
+    var val = Math.floor(p*target);
+    el.textContent = val + suffix;
+    if(p<1) requestAnimationFrame(step); else el.textContent = target + suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      e.target.querySelectorAll('[data-count]').forEach(animateCount);
+      if(e.target.hasAttribute('data-count')) animateCount(e.target);
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
 </html>
+
+
