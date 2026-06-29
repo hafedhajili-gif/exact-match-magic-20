@@ -380,7 +380,7 @@ const FAQ = [
 
 const CSS = `
 .yume-root{--ink:#0A0612;--ink-2:#0F0A1D;--ink-3:#150E29;--paper:#F4EFE9;--muted:#9A8FB0;--line:rgba(255,255,255,.09);--violet:#7C3AED;--pink:#F25BB5;--matcha:#34D27B;--gold:#FFC24B;--cyan:#22D3EE;--r:28px;--font-d:"Syne",system-ui,sans-serif;--font-b:"Manrope",system-ui,sans-serif;background:var(--ink);color:var(--paper);font-family:var(--font-b);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
-.yume-root .kan,.yume-root .brand .m,.yume-root .hero .visual .scene > div .k{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Noto Sans CJK JP","Meiryo",sans-serif;font-weight:700}
+.yume-root .kan,.yume-root .brand .m,.yume-root .hero .visual .scene > div .k{font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;font-weight:700}
 .yume-root *{box-sizing:border-box}
 .yume-root h1,.yume-root h2,.yume-root h3{font-family:var(--font-d);font-weight:800;letter-spacing:-.02em;line-height:1.04;margin:0}
 .yume-root p{margin:0}
