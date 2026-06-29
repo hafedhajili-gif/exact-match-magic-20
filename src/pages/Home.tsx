@@ -357,11 +357,16 @@ function HeroCell({ w, primary }: { w: World; primary: boolean }) {
   const base = primary ? "1.4" : "1";
   return (
     <div
-      style={{ ["--c" as never]: w.c + "33", flex: base }}
+      style={{
+        ["--c" as never]: w.c + "55",
+        backgroundImage: `url(${w.img})`,
+        flex: base,
+      }}
       onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.flex = "2")}
       onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.flex = base)}
     >
-      <span>{w.k}</span>
+      <span className="k">{w.k}</span>
+      <span className="n">{w.n}</span>
     </div>
   );
 }
