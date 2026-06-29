@@ -1,15 +1,21 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import sakuraImg from "@/assets/themes/yume-sakura-coast.jpg";
+import tokyoImg from "@/assets/themes/yume-tokyo-neon.jpg";
+import zenImg from "@/assets/themes/yume-zen-forest.jpg";
+import aquariumImg from "@/assets/themes/yume-aquarium.jpg";
+import kyotoImg from "@/assets/themes/kyoto-temple.jpg";
+import galaxyImg from "@/assets/themes/galaxy.jpg";
 
 const WA_NUMBER = "21696506693";
 
-type World = { k: string; n: string; d: string; c: string };
+type World = { k: string; n: string; d: string; c: string; img: string };
 const worlds: World[] = [
-  { k: "桜", n: "Sakura Coast", d: "Soft pink light, drifting petals", c: "#F25BB5" },
-  { k: "夜", n: "Tokyo Neon", d: "Electric rain, glowing signage", c: "#22D3EE" },
-  { k: "森", n: "Zen Forest", d: "Moss, mist, slow calm", c: "#34D27B" },
-  { k: "海", n: "Aquarium", d: "Drifting deep-blue light", c: "#38BDF8" },
-  { k: "京", n: "Kyoto Dusk", d: "Golden temple evening", c: "#FFC24B" },
-  { k: "宙", n: "Galaxy", d: "Stardust and violet void", c: "#8B5CF6" },
+  { k: "桜", n: "Sakura Coast", d: "Soft pink light, drifting petals", c: "#F25BB5", img: sakuraImg },
+  { k: "夜", n: "Tokyo Neon", d: "Electric rain, glowing signage", c: "#22D3EE", img: tokyoImg },
+  { k: "森", n: "Zen Forest", d: "Moss, mist, slow calm", c: "#34D27B", img: zenImg },
+  { k: "海", n: "Aquarium", d: "Drifting deep-blue light", c: "#38BDF8", img: aquariumImg },
+  { k: "京", n: "Kyoto Dusk", d: "Golden temple evening", c: "#FFC24B", img: kyotoImg },
+  { k: "宙", n: "Galaxy", d: "Stardust and violet void", c: "#8B5CF6", img: galaxyImg },
 ];
 
 type Dish = { c: string; n: string; d: string; p: string; t?: string };
@@ -165,8 +171,11 @@ export default function Home() {
                 <li><span className="ok">✓</span> A menu styled to match the scene you're in</li>
               </ul>
             </div>
-            <div className="visual-card" style={{ ["--c1" as never]: "#241338" }}>
-              <span className="tag">Live now · Sakura</span>
+            <div
+              className="visual-card"
+              style={{ ["--c1" as never]: "#241338", backgroundImage: `url(${sakuraImg})` }}
+            >
+              <span className="tag"><i className="live-dot" />Live now · Sakura</span>
               <span className="kan">桜</span>
               <div className="mini"><b>Sakura Coast</b><span>Soft pink light, drifting petals</span></div>
             </div>
@@ -177,8 +186,11 @@ export default function Home() {
       <section className="sec alt">
         <div className="shell">
           <div className="split rev reveal">
-            <div className="visual-card" style={{ ["--c1" as never]: "#0e2a24" }}>
-              <span className="tag">Live now · Zen Forest</span>
+            <div
+              className="visual-card"
+              style={{ ["--c1" as never]: "#0e2a24", backgroundImage: `url(${zenImg})` }}
+            >
+              <span className="tag"><i className="live-dot" />Live now · Zen Forest</span>
               <span className="kan">森</span>
               <div className="mini"><b>Zen Forest</b><span>Moss, mist, slow morning light</span></div>
             </div>
@@ -211,13 +223,18 @@ export default function Home() {
                 key={w.n}
                 type="button"
                 className="wcard reveal"
-                style={{ ["--c" as never]: w.c + "3d" }}
+                style={{
+                  ["--c" as never]: w.c + "3d",
+                  ["--c2" as never]: w.c,
+                  backgroundImage: `url(${w.img})`,
+                }}
                 onClick={() => pickWorldAndReserve(w.n)}
               >
                 <span className="no">0{i + 1}</span>
                 <span className="kan">{w.k}</span>
                 <h3>{w.n}</h3>
                 <p>{w.d}</p>
+                <span className="cta-mini">Réserver →</span>
               </button>
             ))}
           </div>
@@ -340,11 +357,16 @@ function HeroCell({ w, primary }: { w: World; primary: boolean }) {
   const base = primary ? "1.4" : "1";
   return (
     <div
-      style={{ ["--c" as never]: w.c + "33", flex: base }}
+      style={{
+        ["--c" as never]: w.c + "55",
+        backgroundImage: `url(${w.img})`,
+        flex: base,
+      }}
       onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.flex = "2")}
       onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.flex = base)}
     >
-      <span>{w.k}</span>
+      <span className="k">{w.k}</span>
+      <span className="n">{w.n}</span>
     </div>
   );
 }
@@ -358,6 +380,7 @@ const FAQ = [
 
 const CSS = `
 .yume-root{--ink:#0A0612;--ink-2:#0F0A1D;--ink-3:#150E29;--paper:#F4EFE9;--muted:#9A8FB0;--line:rgba(255,255,255,.09);--violet:#7C3AED;--pink:#F25BB5;--matcha:#34D27B;--gold:#FFC24B;--cyan:#22D3EE;--r:28px;--font-d:"Syne",system-ui,sans-serif;--font-b:"Manrope",system-ui,sans-serif;background:var(--ink);color:var(--paper);font-family:var(--font-b);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+.yume-root .kan,.yume-root .brand .m,.yume-root .hero .visual .scene > div .k{font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;font-weight:700}
 .yume-root *{box-sizing:border-box}
 .yume-root h1,.yume-root h2,.yume-root h3{font-family:var(--font-d);font-weight:800;letter-spacing:-.02em;line-height:1.04;margin:0}
 .yume-root p{margin:0}
@@ -392,9 +415,11 @@ const CSS = `
 .yume-root .hero .visual{border-radius:var(--r);border:1px solid var(--line);overflow:hidden;background:linear-gradient(160deg,#160d2c,#0a0614);position:relative;aspect-ratio:16/8;display:flex;align-items:center;justify-content:center}
 .yume-root .hero .visual .frame{position:absolute;inset:1.1rem;border:1px dashed rgba(255,255,255,.14);border-radius:18px;pointer-events:none}
 .yume-root .hero .visual .scene{display:flex;width:100%;height:100%}
-.yume-root .hero .visual .scene > div{display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:2.2rem;color:rgba(255,255,255,.92);position:relative;transition:flex 1s;cursor:pointer;min-width:0}
-.yume-root .hero .visual .scene > div::after{content:"";position:absolute;inset:0;opacity:.55;background:var(--c)}
-.yume-root .hero .visual .scene > div span{position:relative;z-index:1}
+.yume-root .hero .visual .scene > div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:1.2rem;gap:.35rem;font-family:var(--font-d);color:rgba(255,255,255,.96);position:relative;transition:flex 1.1s cubic-bezier(.2,.7,.2,1);cursor:pointer;min-width:0;background-size:cover;background-position:center;overflow:hidden;text-shadow:0 2px 18px rgba(0,0,0,.55)}
+.yume-root .hero .visual .scene > div::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(10,6,18,.85)),var(--c);mix-blend-mode:multiply;transition:opacity .4s}
+.yume-root .hero .visual .scene > div:hover::after{opacity:.55}
+.yume-root .hero .visual .scene > div .k{position:relative;z-index:1;font-size:2.2rem;line-height:1}
+.yume-root .hero .visual .scene > div .n{position:relative;z-index:1;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;opacity:.9}
 .yume-root .sec{padding:clamp(4.5rem,9vw,7.5rem) 0;position:relative}
 .yume-root .sec.alt{background:linear-gradient(180deg,var(--ink-2),var(--ink-3))}
 .yume-root .sec.alt::before,.yume-root .sec.alt::after{content:"";position:absolute;left:0;right:0;height:1px;background:var(--line)}
@@ -409,21 +434,30 @@ const CSS = `
 .yume-root .checks{margin-top:1.6rem;display:flex;flex-direction:column;gap:.8rem;padding:0}
 .yume-root .checks li{list-style:none;display:flex;gap:.7rem;align-items:start;color:var(--paper);font-size:.96rem}
 .yume-root .checks .ok{flex:0 0 22px;height:22px;border-radius:50%;background:rgba(52,210,127,.16);color:var(--matcha);display:grid;place-items:center;font-size:.72rem;margin-top:.1rem}
-.yume-root .visual-card{border-radius:var(--r);border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5;position:relative;background:linear-gradient(160deg,var(--c1,#1c1136),#0a0614)}
-.yume-root .visual-card .tag{position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);border:1px solid var(--line);padding:.4rem .8rem;border-radius:999px;font-size:.76rem;font-weight:700}
-.yume-root .visual-card .kan{position:absolute;right:1.1rem;bottom:1.1rem;font-family:var(--font-d);font-size:5rem;opacity:.18;line-height:1}
+.yume-root .visual-card{border-radius:var(--r);border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5;position:relative;background-color:var(--c1,#1c1136);background-size:cover;background-position:center;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.yume-root .visual-card:hover{transform:scale(1.015)}
+.yume-root .visual-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,6,18,.15) 0%,rgba(10,6,18,.25) 45%,rgba(10,6,18,.88) 100%)}
+.yume-root .visual-card > *{position:relative;z-index:1}
+.yume-root .visual-card .tag{position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);padding:.45rem .85rem;border-radius:999px;font-size:.76rem;font-weight:700;display:inline-flex;align-items:center;gap:.5rem;z-index:2}
+.yume-root .visual-card .kan{position:absolute;right:1.1rem;bottom:1.1rem;font-family:var(--font-d);font-size:5rem;opacity:.22;line-height:1;z-index:2}
+.yume-root .live-dot{width:7px;height:7px;border-radius:50%;background:#34D27B;box-shadow:0 0 10px #34D27B;animation:yume-pulse 1.8s ease-in-out infinite}
+@keyframes yume-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.25)}}
 .yume-root .visual-card .mini{position:absolute;left:1.1rem;bottom:1.1rem;right:5.5rem}
 .yume-root .visual-card .mini b{display:block;font-size:1.15rem}
 .yume-root .visual-card .mini span{color:var(--muted);font-size:.84rem}
 .yume-root .worlds-head{max-width:46ch;margin-bottom:2.6rem}
 .yume-root .worlds-head h2{font-size:clamp(1.9rem,4.4vw,3rem);margin-top:.6rem}
 .yume-root .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.yume-root .wcard{border-radius:22px;border:1px solid var(--line);padding:1.6rem;min-height:220px;position:relative;overflow:hidden;background:linear-gradient(165deg,var(--c) 0%,rgba(10,6,18,0) 70%),#0d0820;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s,border-color .3s;text-align:left;color:inherit;font-family:inherit;cursor:pointer}
-.yume-root .wcard:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.22)}
-.yume-root .wcard .kan{font-family:var(--font-d);font-size:2rem}
-.yume-root .wcard h3{font-size:1.2rem;margin-top:auto}
-.yume-root .wcard p{color:var(--muted);font-size:.86rem;margin-top:.3rem}
-.yume-root .wcard .no{position:absolute;top:1.1rem;right:1.2rem;font-size:.74rem;color:var(--muted);font-weight:700}
+.yume-root .wcard{border-radius:22px;border:1px solid var(--line);padding:1.5rem;min-height:280px;position:relative;overflow:hidden;background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:space-between;transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;text-align:left;color:inherit;font-family:inherit;cursor:pointer}
+.yume-root .wcard::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,6,18,.2) 0%,rgba(10,6,18,.55) 55%,rgba(10,6,18,.95) 100%),linear-gradient(165deg,var(--c) 0%,transparent 70%);transition:opacity .35s}
+.yume-root .wcard:hover{transform:translateY(-8px);border-color:var(--c2,rgba(255,255,255,.3));box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 30px color-mix(in srgb,var(--c2,#fff) 25%,transparent)}
+.yume-root .wcard > *{position:relative;z-index:1}
+.yume-root .wcard .kan{font-family:var(--font-d);font-size:2.4rem;text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.yume-root .wcard h3{font-size:1.3rem;margin-top:auto;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.yume-root .wcard p{color:rgba(244,239,233,.78);font-size:.88rem;margin-top:.35rem}
+.yume-root .wcard .no{position:absolute;top:1.1rem;right:1.2rem;font-size:.74rem;color:rgba(255,255,255,.7);font-weight:700;z-index:2}
+.yume-root .wcard .cta-mini{display:inline-flex;align-items:center;margin-top:.9rem;font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--c2,#fff);opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s}
+.yume-root .wcard:hover .cta-mini{opacity:1;transform:translateX(0)}
 .yume-root .statsbar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:2rem}
 .yume-root .statsbar .cell{background:var(--ink-2);padding:1.8rem 1.4rem;text-align:center}
 .yume-root .statsbar b{display:block;font-family:var(--font-d);font-size:2.4rem;background:linear-gradient(120deg,var(--gold),var(--matcha));-webkit-background-clip:text;background-clip:text;color:transparent}
