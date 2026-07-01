@@ -749,7 +749,7 @@ function renderWorlds(){
   wgrid.innerHTML='';
   filteredWorlds().forEach(function(w,i){
     var el=document.createElement('div'); el.className='wcard'+(i===fIdx?' sel':'');
-    el.innerHTML='<img src="'+w.img+'" alt="'+w.n+'" loading="lazy"><span class="cat" style="color:'+CAT_COLOR[w.cat]+'">'+w.cat+'</span>'+
+    el.innerHTML='<img src="'+w.img+'" alt="'+w.n+'" loading="lazy" decoding="async" width="800" height="600"><span class="cat" style="color:'+CAT_COLOR[w.cat]+'">'+w.cat+'</span>'+
       '<div class="ov"><b>'+w.n+'</b><br><span>'+w.intensity+'% intensité</span></div>';
     el.addEventListener('click', function(){ fIdx=i; renderFeatured(); highlightGrid(); });
     wgrid.appendChild(el);
