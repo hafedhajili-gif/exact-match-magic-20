@@ -50,6 +50,12 @@ button{font-family:inherit}
 @keyframes fC{to{transform:translate3d(5vw,-9vh,0) scale(1.2)}}
 .grain{position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:radial-gradient(#fff .6px,transparent .6px);background-size:4px 4px}
 .spotlight{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(460px circle at var(--cx) var(--cy),rgba(124,58,237,.10),transparent 45%)}
+@media(max-width:768px),(pointer:coarse){
+  .orb{filter:blur(40px);opacity:.22;animation:none!important}
+  .orb.c{display:none}
+  .spotlight{display:none}
+  .grain{opacity:.025}
+}
 
 /* ---------- shared atoms ---------- */
 .eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:800;margin-bottom:1rem}
