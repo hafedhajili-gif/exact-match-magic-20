@@ -660,14 +660,24 @@ var heroWorlds = [worlds[4], worlds[0], worlds[3], worlds[2], worlds[1]]; // Tok
 var heroBg = document.getElementById('heroBg'), heroDots = document.getElementById('heroDots');
 var heroIdx = 0, heroImgs = [];
 heroWorlds.forEach(function(w,i){
-  var im = document.createElement('img'); im.src = w.img; im.alt = w.n;
+  var im = document.createElement('img'); im.alt = w.n;
+  im.width=1280; im.height=720; im.decoding='async';
+  if(i===0){ im.src = w.img; im.loading='eager'; im.setAttribute('fetchpriority','high'); }
+  else { im.loading='lazy'; im.dataset.src = w.img; }
   im.style.position='absolute'; im.style.inset=0; im.style.opacity = i===0?1:0;
   heroBg.appendChild(im); heroImgs.push(im);
   var dot = document.createElement('button'); if(i===0) dot.className='on';
   dot.addEventListener('click', function(){ showHero(i); });
   heroDots.appendChild(dot);
 });
+// defer secondary hero backdrops until after first paint / idle
+function loadRestHero(){
+  heroImgs.forEach(function(im){ if(!im.src && im.dataset.src){ im.src = im.dataset.src; } });
+}
+if('requestIdleCallback' in window){ requestIdleCallback(loadRestHero,{timeout:2500}); }
+else { window.addEventListener('load', function(){ setTimeout(loadRestHero, 1200); }); }
 function showHero(i){
+  if(!heroImgs[i].src && heroImgs[i].dataset.src){ heroImgs[i].src = heroImgs[i].dataset.src; }
   heroImgs[heroIdx].style.opacity=0; heroIdx=i; heroImgs[heroIdx].style.opacity=1;
   Array.from(heroDots.children).forEach(function(d,j){ d.className = j===i?'on':''; });
 }
