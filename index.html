@@ -418,7 +418,7 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
 
     <div class="feature-world reveal">
       <div class="fw-main">
-        <img id="fwImg" src="" alt="" />
+        <img id="fwImg" src="" alt="" width="1280" height="720" decoding="async" loading="lazy" />
         <div class="ov">
           <div class="badges">
             <span class="pill" id="fwCat" style="background:rgba(0,0,0,.4);border-color:rgba(255,255,255,.2)">Nature</span>
@@ -889,10 +889,12 @@ burger.addEventListener('click', openDrawer);
 drawer.querySelectorAll('[data-close]').forEach(function(x){ x.addEventListener('click', closeDrawer); });
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDrawer(); });
 
-window.addEventListener('pointermove', function(e){
-  document.documentElement.style.setProperty('--cx', e.clientX+'px');
-  document.documentElement.style.setProperty('--cy', e.clientY+'px');
-}, {passive:true});
+if(!matchMedia('(pointer:coarse)').matches){
+  window.addEventListener('pointermove', function(e){
+    document.documentElement.style.setProperty('--cx', e.clientX+'px');
+    document.documentElement.style.setProperty('--cy', e.clientY+'px');
+  }, {passive:true});
+}
 
 /* animated counters */
 function animateCount(el){
