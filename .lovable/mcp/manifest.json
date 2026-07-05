@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "yume-mcp",
+      "version": "0.1.0",
+      "title": "YUME Café · Lounge"
+    },
+    "tools": [
+      {
+        "name": "venue_info",
+        "title": "Venue info",
+        "description": "Return general information about YUME Café · Lounge in Sousse, Tunisia: concept, opening hours, reservation link and the list of themed worlds.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_worlds",
+        "title": "List immersive worlds",
+        "description": "List every themed immersive world (LED universe) available at YUME Café · Lounge in Sousse, Tunisia. Returns slug, name, tagline and accent color for each world.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_world",
+        "title": "Get world details",
+        "description": "Return the full description of one immersive YUME world — its atmosphere, soundtrack and recommended food & drink pairing.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "description": "World slug. One of: sakura, tokyo-neon, zen-forest, aquarium, kyoto, galaxy."
+            }
+          },
+          "required": [
+            "slug"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_menu",
+        "title": "Search the menu",
+        "description": "Search the YUME menu (drinks, sushi, desserts). Optionally filter by category or a free-text query matched against name and description. Prices are in Tunisian Dinar (DT).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Free-text keyword, e.g. \"matcha\" or \"vegan\".",
+              "type": "string"
+            },
+            "category": {
+              "description": "Optional category filter. One of: Boissons chaudes, Bubble tea, Mocktails, Sushi & Maki, Desserts.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
