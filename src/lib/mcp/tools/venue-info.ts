@@ -1,5 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { VENUE, WORLDS } from "../data";
+import { cacheKey, memoize } from "../cache";
 
 export default defineTool({
   name: "venue_info",
@@ -9,10 +10,12 @@ export default defineTool({
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {
-    const payload = { ...VENUE, worlds: WORLDS.map((w) => ({ slug: w.slug, name: w.name })) };
-    return {
-      content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
-      structuredContent: payload,
-    };
+    return memoize(cacheKey("venue_info"), () => {
+      const payload = { ...VENUE, worlds: WORLDS.map((w) => ({ slug: w.slug, name: w.name })) };
+      return {
+        content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
+        structuredContent: payload,
+      };
+    });
   },
 });

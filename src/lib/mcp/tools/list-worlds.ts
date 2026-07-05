@@ -1,5 +1,6 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { WORLDS } from "../data";
+import { cacheKey, memoize } from "../cache";
 
 export default defineTool({
   name: "list_worlds",
@@ -9,16 +10,18 @@ export default defineTool({
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {
-    const summary = WORLDS.map((w) => ({
-      slug: w.slug,
-      name: w.name,
-      tag: w.tag,
-      tagline: w.tagline,
-      color: w.color,
-    }));
-    return {
-      content: [{ type: "text", text: JSON.stringify(summary, null, 2) }],
-      structuredContent: { worlds: summary },
-    };
+    return memoize(cacheKey("list_worlds"), () => {
+      const summary = WORLDS.map((w) => ({
+        slug: w.slug,
+        name: w.name,
+        tag: w.tag,
+        tagline: w.tagline,
+        color: w.color,
+      }));
+      return {
+        content: [{ type: "text", text: JSON.stringify(summary, null, 2) }],
+        structuredContent: { worlds: summary },
+      };
+    });
   },
 });

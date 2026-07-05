@@ -1,6 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { MENU } from "../data";
+import { cacheKey, memoize } from "../cache";
 
 const CATEGORIES = Array.from(new Set(MENU.map((m) => m.category)));
 
@@ -19,23 +20,25 @@ export default defineTool({
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ query, category }) => {
-    const q = query?.toLowerCase();
-    const cat = category?.toLowerCase();
-    const items = MENU.filter((m) => {
-      if (cat && m.category.toLowerCase() !== cat) return false;
-      if (q && !(`${m.name} ${m.description}`.toLowerCase().includes(q))) return false;
-      return true;
+    return memoize(cacheKey("search_menu", { query, category }), () => {
+      const q = query?.toLowerCase();
+      const cat = category?.toLowerCase();
+      const items = MENU.filter((m) => {
+        if (cat && m.category.toLowerCase() !== cat) return false;
+        if (q && !(`${m.name} ${m.description}`.toLowerCase().includes(q))) return false;
+        return true;
+      });
+      return {
+        content: [
+          {
+            type: "text",
+            text: items.length
+              ? JSON.stringify(items, null, 2)
+              : "No menu items match those filters.",
+          },
+        ],
+        structuredContent: { count: items.length, categories: CATEGORIES, items },
+      };
     });
-    return {
-      content: [
-        {
-          type: "text",
-          text: items.length
-            ? JSON.stringify(items, null, 2)
-            : "No menu items match those filters.",
-        },
-      ],
-      structuredContent: { count: items.length, categories: CATEGORIES, items },
-    };
   },
 });

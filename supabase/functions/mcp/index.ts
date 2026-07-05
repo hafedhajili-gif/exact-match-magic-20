@@ -116,6 +116,32 @@ var VENUE = {
   reservation_url: "https://yume-tn.lovable.app/#reservation"
 };
 
+// src/lib/mcp/cache.ts
+var store = /* @__PURE__ */ new Map();
+var DEFAULT_TTL_MS = 5 * 60 * 1e3;
+var MAX_ENTRIES = 200;
+function memoize(key, compute, ttlMs = DEFAULT_TTL_MS) {
+  const now = Date.now();
+  const hit = store.get(key);
+  if (hit && hit.expiresAt > now) return hit.value;
+  const value = compute();
+  if (store.size >= MAX_ENTRIES) {
+    const firstKey = store.keys().next().value;
+    if (firstKey !== void 0) store.delete(firstKey);
+  }
+  store.set(key, { value, expiresAt: now + ttlMs });
+  return value;
+}
+function cacheKey(tool, input) {
+  if (!input) return tool;
+  const normalized = {};
+  for (const k of Object.keys(input).sort()) {
+    const v = input[k];
+    normalized[k] = typeof v === "string" ? v.trim().toLowerCase() : v;
+  }
+  return `${tool}:${JSON.stringify(normalized)}`;
+}
+
 // src/lib/mcp/tools/list-worlds.ts
 var list_worlds_default = defineTool({
   name: "list_worlds",
@@ -124,17 +150,19 @@ var list_worlds_default = defineTool({
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {
-    const summary = WORLDS.map((w) => ({
-      slug: w.slug,
-      name: w.name,
-      tag: w.tag,
-      tagline: w.tagline,
-      color: w.color
-    }));
-    return {
-      content: [{ type: "text", text: JSON.stringify(summary, null, 2) }],
-      structuredContent: { worlds: summary }
-    };
+    return memoize(cacheKey("list_worlds"), () => {
+      const summary = WORLDS.map((w) => ({
+        slug: w.slug,
+        name: w.name,
+        tag: w.tag,
+        tagline: w.tagline,
+        color: w.color
+      }));
+      return {
+        content: [{ type: "text", text: JSON.stringify(summary, null, 2) }],
+        structuredContent: { worlds: summary }
+      };
+    });
   }
 });
 
@@ -150,22 +178,25 @@ var get_world_default = defineTool2({
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ slug }) => {
-    const world = WORLDS.find((w) => w.slug === slug.trim().toLowerCase());
-    if (!world) {
+    const normalized = slug.trim().toLowerCase();
+    return memoize(cacheKey("get_world", { slug: normalized }), () => {
+      const world = WORLDS.find((w) => w.slug === normalized);
+      if (!world) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `No world with slug "${slug}". Available: ${WORLDS.map((w) => w.slug).join(", ")}.`
+            }
+          ],
+          isError: true
+        };
+      }
       return {
-        content: [
-          {
-            type: "text",
-            text: `No world with slug "${slug}". Available: ${WORLDS.map((w) => w.slug).join(", ")}.`
-          }
-        ],
-        isError: true
+        content: [{ type: "text", text: JSON.stringify(world, null, 2) }],
+        structuredContent: { world }
       };
-    }
-    return {
-      content: [{ type: "text", text: JSON.stringify(world, null, 2) }],
-      structuredContent: { world }
-    };
+    });
   }
 });
 
@@ -183,22 +214,24 @@ var search_menu_default = defineTool3({
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ query, category }) => {
-    const q = query?.toLowerCase();
-    const cat = category?.toLowerCase();
-    const items = MENU.filter((m) => {
-      if (cat && m.category.toLowerCase() !== cat) return false;
-      if (q && !`${m.name} ${m.description}`.toLowerCase().includes(q)) return false;
-      return true;
+    return memoize(cacheKey("search_menu", { query, category }), () => {
+      const q = query?.toLowerCase();
+      const cat = category?.toLowerCase();
+      const items = MENU.filter((m) => {
+        if (cat && m.category.toLowerCase() !== cat) return false;
+        if (q && !`${m.name} ${m.description}`.toLowerCase().includes(q)) return false;
+        return true;
+      });
+      return {
+        content: [
+          {
+            type: "text",
+            text: items.length ? JSON.stringify(items, null, 2) : "No menu items match those filters."
+          }
+        ],
+        structuredContent: { count: items.length, categories: CATEGORIES, items }
+      };
     });
-    return {
-      content: [
-        {
-          type: "text",
-          text: items.length ? JSON.stringify(items, null, 2) : "No menu items match those filters."
-        }
-      ],
-      structuredContent: { count: items.length, categories: CATEGORIES, items }
-    };
   }
 });
 
@@ -211,11 +244,13 @@ var venue_info_default = defineTool4({
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {
-    const payload = { ...VENUE, worlds: WORLDS.map((w) => ({ slug: w.slug, name: w.name })) };
-    return {
-      content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
-      structuredContent: payload
-    };
+    return memoize(cacheKey("venue_info"), () => {
+      const payload = { ...VENUE, worlds: WORLDS.map((w) => ({ slug: w.slug, name: w.name })) };
+      return {
+        content: [{ type: "text", text: JSON.stringify(payload, null, 2) }],
+        structuredContent: payload
+      };
+    });
   }
 });
 
