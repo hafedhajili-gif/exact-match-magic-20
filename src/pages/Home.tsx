@@ -35,20 +35,65 @@ const menu: Dish[] = [
 const CATS = ["All", ...Array.from(new Set(menu.map((m) => m.c)))];
 const MARQUEE = ["夢 YUME", "Six Worlds", "One Café", "Sousse 2026", "Reserve Now", "360° Immersion"];
 
-const orderOnWhatsApp = (dishName?: string) => {
-  const base = dishName
-    ? `Bonjour YUME 👋%0AJe souhaite commander:%0A• ${dishName}%0A%0AMerci de confirmer disponibilité et délai 🙏`
-    : `Bonjour YUME 👋%0AJe souhaite passer une commande.%0AMerci de m'aider à finaliser 🙏`;
-  window.open(`https://wa.me/${WA_NUMBER}?text=${base}`, "_blank");
-};
-
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [cat, setCat] = useState("All");
   const [chosenWorld, setChosenWorld] = useState(worlds[0].n);
   const [confirm, setConfirm] = useState<{ msg: string; err?: boolean } | null>(null);
+  const [cart, setCart] = useState<Record<string, number>>({});
+  const [cartOpen, setCartOpen] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [orderMode, setOrderMode] = useState<"pickup" | "table">("table");
   const reserveRef = useRef<HTMLElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+
+  const addToCart = (name: string) => setCart((c) => ({ ...c, [name]: (c[name] ?? 0) + 1 }));
+  const removeFromCart = (name: string) =>
+    setCart((c) => {
+      const q = (c[name] ?? 0) - 1;
+      const next = { ...c };
+      if (q <= 0) delete next[name];
+      else next[name] = q;
+      return next;
+    });
+  const clearCart = () => setCart({});
+
+  const cartItems = Object.entries(cart).map(([n, q]) => {
+    const dish = menu.find((m) => m.n === n)!;
+    return { name: n, qty: q, price: Number(dish.p), line: Number(dish.p) * q };
+  });
+  const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
+  const cartTotal = cartItems.reduce((s, i) => s + i.line, 0);
+
+  const sendOrderOnWhatsApp = () => {
+    if (cartCount === 0) return;
+    if (!customerName.trim() || !customerPhone.trim()) {
+      setConfirm({ msg: "Merci d'ajouter votre nom et téléphone pour valider la commande.", err: true });
+      return;
+    }
+    const ref = "YM" + Date.now().toString().slice(-6);
+    const now = new Date();
+    const stamp = now.toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
+    const lines = cartItems
+      .map((i) => `• ${i.qty}× ${i.name} — ${i.line} DT`)
+      .join("%0A");
+    const modeLbl = orderMode === "pickup" ? "À emporter" : "Sur table (au café)";
+    const msg =
+      `🧾 *YUME — Reçu de commande*%0A` +
+      `Réf: ${ref}%0A` +
+      `Date: ${stamp}%0A%0A` +
+      `👤 Client: ${customerName.trim()}%0A` +
+      `📞 Tél: ${customerPhone.trim()}%0A` +
+      `📍 Mode: ${modeLbl}%0A%0A` +
+      `*Articles:*%0A${lines}%0A%0A` +
+      `*Total: ${cartTotal} DT*%0A%0A` +
+      `Merci de confirmer la commande et le délai 🙏`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
+    setConfirm({ msg: `Commande ${ref} envoyée sur WhatsApp. Nous confirmons dans un instant.` });
+    clearCart();
+    setCartOpen(false);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -279,16 +324,26 @@ export default function Home() {
                 </div>
                 <div className="ds">{m.d}</div>
                 {m.t && <span className="tg">{m.t}</span>}
-                <button type="button" className="order-btn" onClick={() => orderOnWhatsApp(m.n)}>
-                  Commander sur WhatsApp →
-                </button>
+                <div className="qty-row">
+                  {cart[m.n] ? (
+                    <div className="qty-ctrl">
+                      <button type="button" onClick={() => removeFromCart(m.n)} aria-label="moins">−</button>
+                      <span>{cart[m.n]}</span>
+                      <button type="button" onClick={() => addToCart(m.n)} aria-label="plus">+</button>
+                    </div>
+                  ) : (
+                    <button type="button" className="order-btn" onClick={() => addToCart(m.n)}>
+                      + Ajouter à la commande
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
           <p className="menu-foot">Prices in TND, illustrative pre-launch.</p>
           <div className="reveal" style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
-            <button type="button" className="cta" onClick={() => orderOnWhatsApp()}>
-              Passer une commande sur WhatsApp
+            <button type="button" className="cta" onClick={() => setCartOpen(true)} disabled={cartCount === 0}>
+              Voir ma commande {cartCount > 0 ? `(${cartCount} · ${cartTotal} DT)` : ""}
             </button>
           </div>
         </div>
@@ -364,6 +419,61 @@ export default function Home() {
           <div className="copy">© {new Date().getFullYear()} YUME — Sousse, Tunisia.</div>
         </div>
       </footer>
+
+      {cartCount > 0 && !cartOpen && (
+        <button type="button" className="cart-fab" onClick={() => setCartOpen(true)} aria-label="Voir la commande">
+          🛒 <span>{cartCount}</span> · {cartTotal} DT
+        </button>
+      )}
+
+      {cartOpen && (
+        <div className="cart-scrim" onClick={() => setCartOpen(false)}>
+          <aside className="cart-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="cart-head">
+              <h3>Ma commande</h3>
+              <button type="button" className="cart-close" onClick={() => setCartOpen(false)} aria-label="Fermer">×</button>
+            </div>
+            {cartItems.length === 0 ? (
+              <p className="cart-empty">Votre commande est vide. Ajoutez des articles depuis le menu.</p>
+            ) : (
+              <>
+                <ul className="cart-list">
+                  {cartItems.map((i) => (
+                    <li key={i.name}>
+                      <div className="ci-info">
+                        <span className="ci-name">{i.name}</span>
+                        <span className="ci-price">{i.price} DT</span>
+                      </div>
+                      <div className="qty-ctrl">
+                        <button type="button" onClick={() => removeFromCart(i.name)}>−</button>
+                        <span>{i.qty}</span>
+                        <button type="button" onClick={() => addToCart(i.name)}>+</button>
+                      </div>
+                      <span className="ci-line">{i.line} DT</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="cart-total"><span>Total</span><b>{cartTotal} DT</b></div>
+                <div className="cart-form">
+                  <div className="field"><label>Nom complet</label><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Votre nom" /></div>
+                  <div className="field"><label>Téléphone</label><input value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} type="tel" placeholder="+216 ..." /></div>
+                  <div className="field">
+                    <label>Mode</label>
+                    <div className="mode-pills">
+                      <button type="button" className={"pill" + (orderMode === "table" ? " on" : "")} onClick={() => setOrderMode("table")}>Sur table</button>
+                      <button type="button" className={"pill" + (orderMode === "pickup" ? " on" : "")} onClick={() => setOrderMode("pickup")}>À emporter</button>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" className="cta wa-send" onClick={sendOrderOnWhatsApp}>
+                  📲 Envoyer le reçu sur WhatsApp
+                </button>
+                <button type="button" className="cart-clear" onClick={clearCart}>Vider la commande</button>
+              </>
+            )}
+          </aside>
+        </div>
+      )}
     </div>
   );
 }
@@ -491,6 +601,39 @@ const CSS = `
 .yume-root .dish .tg{display:inline-block;margin-top:.7rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);font-weight:800}
 .yume-root .dish .order-btn{margin-top:1rem;display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(52,210,127,.35);background:rgba(52,210,127,.08);color:var(--matcha);font-family:var(--font-b);font-weight:700;font-size:.8rem;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
 .yume-root .dish .order-btn:hover{background:rgba(52,210,127,.16);border-color:var(--matcha);transform:translateY(-2px)}
+.yume-root .dish .qty-row{margin-top:1rem}
+.yume-root .qty-ctrl{display:inline-flex;align-items:center;gap:.6rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:.25rem .35rem}
+.yume-root .qty-ctrl button{width:28px;height:28px;border-radius:999px;border:0;background:rgba(124,58,237,.25);color:#fff;font-weight:800;cursor:pointer;font-size:1rem;line-height:1;display:grid;place-items:center;transition:background .2s}
+.yume-root .qty-ctrl button:hover{background:var(--violet)}
+.yume-root .qty-ctrl span{min-width:22px;text-align:center;font-weight:800;font-family:var(--font-d)}
+.yume-root .cart-fab{position:fixed;bottom:1.4rem;right:1.4rem;z-index:60;border:0;cursor:pointer;padding:.95rem 1.3rem;border-radius:999px;background:linear-gradient(135deg,var(--matcha),#1d8f52);color:#fff;font-family:var(--font-b);font-weight:800;font-size:.95rem;display:inline-flex;align-items:center;gap:.55rem;box-shadow:0 18px 40px rgba(52,210,127,.4);animation:yume-pulse 2.4s ease-in-out infinite}
+.yume-root .cart-fab span{background:rgba(0,0,0,.28);padding:.1rem .55rem;border-radius:999px;font-size:.8rem}
+.yume-root .cart-scrim{position:fixed;inset:0;z-index:70;background:rgba(6,3,14,.72);backdrop-filter:blur(6px);display:flex;justify-content:flex-end;animation:fadein .2s ease}
+.yume-root .cart-drawer{width:min(420px,100%);height:100%;background:#0e0820;border-left:1px solid var(--line);display:flex;flex-direction:column;padding:1.4rem;overflow-y:auto;animation:slidein .28s cubic-bezier(.2,.7,.2,1)}
+.yume-root .cart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.yume-root .cart-head h3{font-family:var(--font-d);font-size:1.4rem;margin:0}
+.yume-root .cart-close{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:36px;height:36px;border-radius:999px;font-size:1.3rem;cursor:pointer;line-height:1}
+.yume-root .cart-empty{color:var(--muted);text-align:center;padding:2rem 0}
+.yume-root .cart-list{list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:.7rem}
+.yume-root .cart-list li{display:grid;grid-template-columns:1fr auto auto;gap:.7rem;align-items:center;padding:.75rem;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+.yume-root .ci-info{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.yume-root .ci-name{font-weight:700;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.yume-root .ci-price{color:var(--muted);font-size:.75rem}
+.yume-root .ci-line{font-family:var(--font-d);color:var(--gold);font-weight:800;min-width:60px;text-align:right}
+.yume-root .cart-total{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);margin-bottom:1rem}
+.yume-root .cart-total b{font-family:var(--font-d);font-size:1.4rem;color:var(--matcha)}
+.yume-root .cart-form{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem}
+.yume-root .cart-form .field label{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.35rem;font-weight:700}
+.yume-root .cart-form .field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem;color:#fff;font-family:var(--font-b);font-size:.92rem;outline:none;transition:border-color .2s}
+.yume-root .cart-form .field input:focus{border-color:var(--violet)}
+.yume-root .mode-pills{display:flex;gap:.5rem}
+.yume-root .mode-pills .pill{flex:1;padding:.7rem;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;transition:all .2s}
+.yume-root .mode-pills .pill.on{background:rgba(124,58,237,.2);border-color:var(--violet);color:#fff}
+.yume-root .wa-send{width:100%;justify-content:center;background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 14px 38px rgba(37,211,102,.35)}
+.yume-root .cart-clear{margin-top:.7rem;background:transparent;border:1px solid var(--line);color:var(--muted);padding:.65rem;border-radius:12px;cursor:pointer;font-family:var(--font-b);width:100%}
+.yume-root .cart-clear:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+@keyframes slidein{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
 .yume-root .menu-foot{color:var(--muted);font-size:.8rem;margin-top:1.4rem;font-style:italic}
 .yume-root .faq{display:flex;flex-direction:column;gap:.7rem}
 .yume-root .qa{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
