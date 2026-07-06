@@ -489,6 +489,8 @@ const CSS = `
 .yume-root .dish .pr{font-family:var(--font-d);color:var(--gold);font-weight:700}
 .yume-root .dish .ds{color:var(--muted);font-size:.85rem;margin-top:.4rem}
 .yume-root .dish .tg{display:inline-block;margin-top:.7rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);font-weight:800}
+.yume-root .dish .order-btn{margin-top:1rem;display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(52,210,127,.35);background:rgba(52,210,127,.08);color:var(--matcha);font-family:var(--font-b);font-weight:700;font-size:.8rem;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
+.yume-root .dish .order-btn:hover{background:rgba(52,210,127,.16);border-color:var(--matcha);transform:translateY(-2px)}
 .yume-root .menu-foot{color:var(--muted);font-size:.8rem;margin-top:1.4rem;font-style:italic}
 .yume-root .faq{display:flex;flex-direction:column;gap:.7rem}
 .yume-root .qa{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
