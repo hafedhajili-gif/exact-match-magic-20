@@ -279,10 +279,18 @@ export default function Home() {
                 </div>
                 <div className="ds">{m.d}</div>
                 {m.t && <span className="tg">{m.t}</span>}
+                <button type="button" className="order-btn" onClick={() => orderOnWhatsApp(m.n)}>
+                  Commander sur WhatsApp →
+                </button>
               </div>
             ))}
           </div>
           <p className="menu-foot">Prices in TND, illustrative pre-launch.</p>
+          <div className="reveal" style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
+            <button type="button" className="cta" onClick={() => orderOnWhatsApp()}>
+              Passer une commande sur WhatsApp
+            </button>
+          </div>
         </div>
       </section>
 
