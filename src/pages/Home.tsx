@@ -419,6 +419,61 @@ export default function Home() {
           <div className="copy">© {new Date().getFullYear()} YUME — Sousse, Tunisia.</div>
         </div>
       </footer>
+
+      {cartCount > 0 && !cartOpen && (
+        <button type="button" className="cart-fab" onClick={() => setCartOpen(true)} aria-label="Voir la commande">
+          🛒 <span>{cartCount}</span> · {cartTotal} DT
+        </button>
+      )}
+
+      {cartOpen && (
+        <div className="cart-scrim" onClick={() => setCartOpen(false)}>
+          <aside className="cart-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="cart-head">
+              <h3>Ma commande</h3>
+              <button type="button" className="cart-close" onClick={() => setCartOpen(false)} aria-label="Fermer">×</button>
+            </div>
+            {cartItems.length === 0 ? (
+              <p className="cart-empty">Votre commande est vide. Ajoutez des articles depuis le menu.</p>
+            ) : (
+              <>
+                <ul className="cart-list">
+                  {cartItems.map((i) => (
+                    <li key={i.name}>
+                      <div className="ci-info">
+                        <span className="ci-name">{i.name}</span>
+                        <span className="ci-price">{i.price} DT</span>
+                      </div>
+                      <div className="qty-ctrl">
+                        <button type="button" onClick={() => removeFromCart(i.name)}>−</button>
+                        <span>{i.qty}</span>
+                        <button type="button" onClick={() => addToCart(i.name)}>+</button>
+                      </div>
+                      <span className="ci-line">{i.line} DT</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="cart-total"><span>Total</span><b>{cartTotal} DT</b></div>
+                <div className="cart-form">
+                  <div className="field"><label>Nom complet</label><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Votre nom" /></div>
+                  <div className="field"><label>Téléphone</label><input value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} type="tel" placeholder="+216 ..." /></div>
+                  <div className="field">
+                    <label>Mode</label>
+                    <div className="mode-pills">
+                      <button type="button" className={"pill" + (orderMode === "table" ? " on" : "")} onClick={() => setOrderMode("table")}>Sur table</button>
+                      <button type="button" className={"pill" + (orderMode === "pickup" ? " on" : "")} onClick={() => setOrderMode("pickup")}>À emporter</button>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" className="cta wa-send" onClick={sendOrderOnWhatsApp}>
+                  📲 Envoyer le reçu sur WhatsApp
+                </button>
+                <button type="button" className="cart-clear" onClick={clearCart}>Vider la commande</button>
+              </>
+            )}
+          </aside>
+        </div>
+      )}
     </div>
   );
 }
