@@ -35,6 +35,13 @@ const menu: Dish[] = [
 const CATS = ["All", ...Array.from(new Set(menu.map((m) => m.c)))];
 const MARQUEE = ["夢 YUME", "Six Worlds", "One Café", "Sousse 2026", "Reserve Now", "360° Immersion"];
 
+const orderOnWhatsApp = (dishName?: string) => {
+  const base = dishName
+    ? `Bonjour YUME 👋%0AJe souhaite commander:%0A• ${dishName}%0A%0AMerci de confirmer disponibilité et délai 🙏`
+    : `Bonjour YUME 👋%0AJe souhaite passer une commande.%0AMerci de m'aider à finaliser 🙏`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${base}`, "_blank");
+};
+
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [cat, setCat] = useState("All");
@@ -272,10 +279,18 @@ export default function Home() {
                 </div>
                 <div className="ds">{m.d}</div>
                 {m.t && <span className="tg">{m.t}</span>}
+                <button type="button" className="order-btn" onClick={() => orderOnWhatsApp(m.n)}>
+                  Commander sur WhatsApp →
+                </button>
               </div>
             ))}
           </div>
           <p className="menu-foot">Prices in TND, illustrative pre-launch.</p>
+          <div className="reveal" style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
+            <button type="button" className="cta" onClick={() => orderOnWhatsApp()}>
+              Passer une commande sur WhatsApp
+            </button>
+          </div>
         </div>
       </section>
 
@@ -474,6 +489,8 @@ const CSS = `
 .yume-root .dish .pr{font-family:var(--font-d);color:var(--gold);font-weight:700}
 .yume-root .dish .ds{color:var(--muted);font-size:.85rem;margin-top:.4rem}
 .yume-root .dish .tg{display:inline-block;margin-top:.7rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);font-weight:800}
+.yume-root .dish .order-btn{margin-top:1rem;display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(52,210,127,.35);background:rgba(52,210,127,.08);color:var(--matcha);font-family:var(--font-b);font-weight:700;font-size:.8rem;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
+.yume-root .dish .order-btn:hover{background:rgba(52,210,127,.16);border-color:var(--matcha);transform:translateY(-2px)}
 .yume-root .menu-foot{color:var(--muted);font-size:.8rem;margin-top:1.4rem;font-style:italic}
 .yume-root .faq{display:flex;flex-direction:column;gap:.7rem}
 .yume-root .qa{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
