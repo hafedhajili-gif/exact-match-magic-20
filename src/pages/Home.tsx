@@ -35,6 +35,13 @@ const menu: Dish[] = [
 const CATS = ["All", ...Array.from(new Set(menu.map((m) => m.c)))];
 const MARQUEE = ["夢 YUME", "Six Worlds", "One Café", "Sousse 2026", "Reserve Now", "360° Immersion"];
 
+const orderOnWhatsApp = (dishName?: string) => {
+  const base = dishName
+    ? `Bonjour YUME 👋%0AJe souhaite commander:%0A• ${dishName}%0A%0AMerci de confirmer disponibilité et délai 🙏`
+    : `Bonjour YUME 👋%0AJe souhaite passer une commande.%0AMerci de m'aider à finaliser 🙏`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${base}`, "_blank");
+};
+
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [cat, setCat] = useState("All");
