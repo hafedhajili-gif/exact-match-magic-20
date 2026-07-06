@@ -35,20 +35,65 @@ const menu: Dish[] = [
 const CATS = ["All", ...Array.from(new Set(menu.map((m) => m.c)))];
 const MARQUEE = ["夢 YUME", "Six Worlds", "One Café", "Sousse 2026", "Reserve Now", "360° Immersion"];
 
-const orderOnWhatsApp = (dishName?: string) => {
-  const base = dishName
-    ? `Bonjour YUME 👋%0AJe souhaite commander:%0A• ${dishName}%0A%0AMerci de confirmer disponibilité et délai 🙏`
-    : `Bonjour YUME 👋%0AJe souhaite passer une commande.%0AMerci de m'aider à finaliser 🙏`;
-  window.open(`https://wa.me/${WA_NUMBER}?text=${base}`, "_blank");
-};
-
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [cat, setCat] = useState("All");
   const [chosenWorld, setChosenWorld] = useState(worlds[0].n);
   const [confirm, setConfirm] = useState<{ msg: string; err?: boolean } | null>(null);
+  const [cart, setCart] = useState<Record<string, number>>({});
+  const [cartOpen, setCartOpen] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [orderMode, setOrderMode] = useState<"pickup" | "table">("table");
   const reserveRef = useRef<HTMLElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+
+  const addToCart = (name: string) => setCart((c) => ({ ...c, [name]: (c[name] ?? 0) + 1 }));
+  const removeFromCart = (name: string) =>
+    setCart((c) => {
+      const q = (c[name] ?? 0) - 1;
+      const next = { ...c };
+      if (q <= 0) delete next[name];
+      else next[name] = q;
+      return next;
+    });
+  const clearCart = () => setCart({});
+
+  const cartItems = Object.entries(cart).map(([n, q]) => {
+    const dish = menu.find((m) => m.n === n)!;
+    return { name: n, qty: q, price: Number(dish.p), line: Number(dish.p) * q };
+  });
+  const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
+  const cartTotal = cartItems.reduce((s, i) => s + i.line, 0);
+
+  const sendOrderOnWhatsApp = () => {
+    if (cartCount === 0) return;
+    if (!customerName.trim() || !customerPhone.trim()) {
+      setConfirm({ msg: "Merci d'ajouter votre nom et téléphone pour valider la commande.", err: true });
+      return;
+    }
+    const ref = "YM" + Date.now().toString().slice(-6);
+    const now = new Date();
+    const stamp = now.toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
+    const lines = cartItems
+      .map((i) => `• ${i.qty}× ${i.name} — ${i.line} DT`)
+      .join("%0A");
+    const modeLbl = orderMode === "pickup" ? "À emporter" : "Sur table (au café)";
+    const msg =
+      `🧾 *YUME — Reçu de commande*%0A` +
+      `Réf: ${ref}%0A` +
+      `Date: ${stamp}%0A%0A` +
+      `👤 Client: ${customerName.trim()}%0A` +
+      `📞 Tél: ${customerPhone.trim()}%0A` +
+      `📍 Mode: ${modeLbl}%0A%0A` +
+      `*Articles:*%0A${lines}%0A%0A` +
+      `*Total: ${cartTotal} DT*%0A%0A` +
+      `Merci de confirmer la commande et le délai 🙏`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
+    setConfirm({ msg: `Commande ${ref} envoyée sur WhatsApp. Nous confirmons dans un instant.` });
+    clearCart();
+    setCartOpen(false);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
