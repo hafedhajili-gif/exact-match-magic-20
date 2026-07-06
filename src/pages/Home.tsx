@@ -601,6 +601,39 @@ const CSS = `
 .yume-root .dish .tg{display:inline-block;margin-top:.7rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);font-weight:800}
 .yume-root .dish .order-btn{margin-top:1rem;display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(52,210,127,.35);background:rgba(52,210,127,.08);color:var(--matcha);font-family:var(--font-b);font-weight:700;font-size:.8rem;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
 .yume-root .dish .order-btn:hover{background:rgba(52,210,127,.16);border-color:var(--matcha);transform:translateY(-2px)}
+.yume-root .dish .qty-row{margin-top:1rem}
+.yume-root .qty-ctrl{display:inline-flex;align-items:center;gap:.6rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:.25rem .35rem}
+.yume-root .qty-ctrl button{width:28px;height:28px;border-radius:999px;border:0;background:rgba(124,58,237,.25);color:#fff;font-weight:800;cursor:pointer;font-size:1rem;line-height:1;display:grid;place-items:center;transition:background .2s}
+.yume-root .qty-ctrl button:hover{background:var(--violet)}
+.yume-root .qty-ctrl span{min-width:22px;text-align:center;font-weight:800;font-family:var(--font-d)}
+.yume-root .cart-fab{position:fixed;bottom:1.4rem;right:1.4rem;z-index:60;border:0;cursor:pointer;padding:.95rem 1.3rem;border-radius:999px;background:linear-gradient(135deg,var(--matcha),#1d8f52);color:#fff;font-family:var(--font-b);font-weight:800;font-size:.95rem;display:inline-flex;align-items:center;gap:.55rem;box-shadow:0 18px 40px rgba(52,210,127,.4);animation:yume-pulse 2.4s ease-in-out infinite}
+.yume-root .cart-fab span{background:rgba(0,0,0,.28);padding:.1rem .55rem;border-radius:999px;font-size:.8rem}
+.yume-root .cart-scrim{position:fixed;inset:0;z-index:70;background:rgba(6,3,14,.72);backdrop-filter:blur(6px);display:flex;justify-content:flex-end;animation:fadein .2s ease}
+.yume-root .cart-drawer{width:min(420px,100%);height:100%;background:#0e0820;border-left:1px solid var(--line);display:flex;flex-direction:column;padding:1.4rem;overflow-y:auto;animation:slidein .28s cubic-bezier(.2,.7,.2,1)}
+.yume-root .cart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.yume-root .cart-head h3{font-family:var(--font-d);font-size:1.4rem;margin:0}
+.yume-root .cart-close{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:36px;height:36px;border-radius:999px;font-size:1.3rem;cursor:pointer;line-height:1}
+.yume-root .cart-empty{color:var(--muted);text-align:center;padding:2rem 0}
+.yume-root .cart-list{list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:.7rem}
+.yume-root .cart-list li{display:grid;grid-template-columns:1fr auto auto;gap:.7rem;align-items:center;padding:.75rem;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+.yume-root .ci-info{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.yume-root .ci-name{font-weight:700;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.yume-root .ci-price{color:var(--muted);font-size:.75rem}
+.yume-root .ci-line{font-family:var(--font-d);color:var(--gold);font-weight:800;min-width:60px;text-align:right}
+.yume-root .cart-total{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);margin-bottom:1rem}
+.yume-root .cart-total b{font-family:var(--font-d);font-size:1.4rem;color:var(--matcha)}
+.yume-root .cart-form{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem}
+.yume-root .cart-form .field label{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.35rem;font-weight:700}
+.yume-root .cart-form .field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem;color:#fff;font-family:var(--font-b);font-size:.92rem;outline:none;transition:border-color .2s}
+.yume-root .cart-form .field input:focus{border-color:var(--violet)}
+.yume-root .mode-pills{display:flex;gap:.5rem}
+.yume-root .mode-pills .pill{flex:1;padding:.7rem;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;transition:all .2s}
+.yume-root .mode-pills .pill.on{background:rgba(124,58,237,.2);border-color:var(--violet);color:#fff}
+.yume-root .wa-send{width:100%;justify-content:center;background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 14px 38px rgba(37,211,102,.35)}
+.yume-root .cart-clear{margin-top:.7rem;background:transparent;border:1px solid var(--line);color:var(--muted);padding:.65rem;border-radius:12px;cursor:pointer;font-family:var(--font-b);width:100%}
+.yume-root .cart-clear:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+@keyframes slidein{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
 .yume-root .menu-foot{color:var(--muted);font-size:.8rem;margin-top:1.4rem;font-style:italic}
 .yume-root .faq{display:flex;flex-direction:column;gap:.7rem}
 .yume-root .qa{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
