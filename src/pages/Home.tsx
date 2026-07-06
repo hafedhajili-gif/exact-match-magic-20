@@ -324,16 +324,26 @@ export default function Home() {
                 </div>
                 <div className="ds">{m.d}</div>
                 {m.t && <span className="tg">{m.t}</span>}
-                <button type="button" className="order-btn" onClick={() => orderOnWhatsApp(m.n)}>
-                  Commander sur WhatsApp →
-                </button>
+                <div className="qty-row">
+                  {cart[m.n] ? (
+                    <div className="qty-ctrl">
+                      <button type="button" onClick={() => removeFromCart(m.n)} aria-label="moins">−</button>
+                      <span>{cart[m.n]}</span>
+                      <button type="button" onClick={() => addToCart(m.n)} aria-label="plus">+</button>
+                    </div>
+                  ) : (
+                    <button type="button" className="order-btn" onClick={() => addToCart(m.n)}>
+                      + Ajouter à la commande
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
           <p className="menu-foot">Prices in TND, illustrative pre-launch.</p>
           <div className="reveal" style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
-            <button type="button" className="cta" onClick={() => orderOnWhatsApp()}>
-              Passer une commande sur WhatsApp
+            <button type="button" className="cta" onClick={() => setCartOpen(true)} disabled={cartCount === 0}>
+              Voir ma commande {cartCount > 0 ? `(${cartCount} · ${cartTotal} DT)` : ""}
             </button>
           </div>
         </div>
