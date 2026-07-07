@@ -456,8 +456,8 @@ export default function Home() {
       </footer>
 
       {cartCount > 0 && !cartOpen && (
-        <button type="button" className="cart-fab" onClick={() => setCartOpen(true)} aria-label="Voir la commande">
-          🛒 <span>{cartCount}</span> · {cartTotal} DT
+        <button type="button" className="cart-fab" onClick={() => setCartOpen(true)} aria-label="View my order">
+          🛒 <span>{cartCount}</span> · {cartTotal} TND
         </button>
       )}
 
@@ -465,45 +465,68 @@ export default function Home() {
         <div className="cart-scrim" onClick={() => setCartOpen(false)}>
           <aside className="cart-drawer" onClick={(e) => e.stopPropagation()}>
             <div className="cart-head">
-              <h3>Ma commande</h3>
-              <button type="button" className="cart-close" onClick={() => setCartOpen(false)} aria-label="Fermer">×</button>
+              <h3>Your order</h3>
+              <button type="button" className="cart-close" onClick={() => setCartOpen(false)} aria-label="Close">×</button>
             </div>
             {cartItems.length === 0 ? (
-              <p className="cart-empty">Votre commande est vide. Ajoutez des articles depuis le menu.</p>
+              <p className="cart-empty">Your cart is empty. Add items from the menu.</p>
             ) : (
               <>
                 <ul className="cart-list">
                   {cartItems.map((i) => (
-                    <li key={i.name}>
-                      <div className="ci-info">
-                        <span className="ci-name">{i.name}</span>
-                        <span className="ci-price">{i.price} DT</span>
+                    <li key={i.name} className="ci-row">
+                      <div className="ci-top">
+                        <div className="ci-info">
+                          <span className="ci-name">{i.name}</span>
+                          <span className="ci-price">{i.price} TND each</span>
+                        </div>
+                        <div className="qty-ctrl">
+                          <button type="button" onClick={() => removeFromCart(i.name)} aria-label="decrease">−</button>
+                          <span>{i.qty}</span>
+                          <button type="button" onClick={() => addToCart(i.name)} aria-label="increase">+</button>
+                        </div>
+                        <span className="ci-line">{i.line} TND</span>
                       </div>
-                      <div className="qty-ctrl">
-                        <button type="button" onClick={() => removeFromCart(i.name)}>−</button>
-                        <span>{i.qty}</span>
-                        <button type="button" onClick={() => addToCart(i.name)}>+</button>
-                      </div>
-                      <span className="ci-line">{i.line} DT</span>
+                      <input
+                        className="ci-note"
+                        type="text"
+                        placeholder="Item notes (optional)"
+                        maxLength={120}
+                        value={i.note}
+                        onChange={(e) => setItemNote(i.name, e.target.value)}
+                      />
                     </li>
                   ))}
                 </ul>
-                <div className="cart-total"><span>Total</span><b>{cartTotal} DT</b></div>
+                <div className="cart-total"><span>Total</span><b>{cartTotal} TND</b></div>
                 <div className="cart-form">
-                  <div className="field"><label>Nom complet</label><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Votre nom" /></div>
-                  <div className="field"><label>Téléphone</label><input value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} type="tel" placeholder="+216 ..." /></div>
+                  <div className="field"><label>Full name</label><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Your name" /></div>
+                  <div className="field"><label>Phone</label><input value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} type="tel" placeholder="+216 ..." /></div>
                   <div className="field">
-                    <label>Mode</label>
+                    <label>Order type</label>
                     <div className="mode-pills">
-                      <button type="button" className={"pill" + (orderMode === "table" ? " on" : "")} onClick={() => setOrderMode("table")}>Sur table</button>
-                      <button type="button" className={"pill" + (orderMode === "pickup" ? " on" : "")} onClick={() => setOrderMode("pickup")}>À emporter</button>
+                      <button type="button" className={"pill" + (orderMode === "table" ? " on" : "")} onClick={() => setOrderMode("table")}>On-site</button>
+                      <button type="button" className={"pill" + (orderMode === "pickup" ? " on" : "")} onClick={() => setOrderMode("pickup")}>Pickup</button>
                     </div>
+                  </div>
+                  {orderMode === "pickup" && (
+                    <div className="field">
+                      <label>Pickup time</label>
+                      <input type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
+                    </div>
+                  )}
+                  <div className="field">
+                    <label>Special request (optional)</label>
+                    <textarea rows={2} maxLength={300} value={orderNote} onChange={(e) => setOrderNote(e.target.value)} placeholder="Allergies, occasion, message…" />
                   </div>
                 </div>
                 <button type="button" className="cta wa-send" onClick={sendOrderOnWhatsApp}>
-                  📲 Envoyer le reçu sur WhatsApp
+                  📲 Send Order via WhatsApp
                 </button>
-                <button type="button" className="cart-clear" onClick={clearCart}>Vider la commande</button>
+                <button type="button" className="cart-clear" onClick={clearCart}>Clear order</button>
+                {confirm && (
+                  <div className={"confirm show" + (confirm.err ? " err" : "")} style={{ marginTop: ".8rem" }}>{confirm.msg}</div>
+                )}
               </>
             )}
           </aside>
