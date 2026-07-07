@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Reviews from "@/components/Reviews";
 import sakuraImg from "@/assets/themes/yume-sakura-coast.jpg";
 import tokyoImg from "@/assets/themes/yume-tokyo-neon.jpg";
 import zenImg from "@/assets/themes/yume-zen-forest.jpg";
@@ -144,7 +145,7 @@ export default function Home() {
     const msg = `Bonjour YUME 👋%0A%0ARéservation:%0A• Nom: ${name}%0A• Téléphone: ${phone}%0A• Date: ${date} à ${time}%0A• Invités: ${guests}%0A• Monde: ${chosenWorld}${notes ? `%0A• Notes: ${notes}` : ""}`;
     window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
     setConfirm({
-      msg: `Merci ${name} — votre table ${chosenWorld} pour ${guests} le ${date} à ${time} est demandée. Nous confirmons par WhatsApp.`,
+      msg: `Your reservation request has been sent. YUME will confirm it shortly via WhatsApp.`,
     });
   };
 
@@ -163,6 +164,7 @@ export default function Home() {
             <a href="#story">Story</a>
             <a href="#worlds">Worlds</a>
             <a href="#menu">Menu</a>
+            <a href="#reviews">Reviews</a>
             <a href="#faq">FAQ</a>
           </nav>
           <button className="cta sm" onClick={() => goTo("#reserve")}>Reserve a table</button>
@@ -365,6 +367,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Reviews />
 
       <section className="sec" id="reserve" ref={reserveRef as never}>
         <div className="shell">
