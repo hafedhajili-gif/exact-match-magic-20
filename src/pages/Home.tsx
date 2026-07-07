@@ -145,7 +145,7 @@ export default function Home() {
     const msg = `Bonjour YUME 👋%0A%0ARéservation:%0A• Nom: ${name}%0A• Téléphone: ${phone}%0A• Date: ${date} à ${time}%0A• Invités: ${guests}%0A• Monde: ${chosenWorld}${notes ? `%0A• Notes: ${notes}` : ""}`;
     window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
     setConfirm({
-      msg: `Merci ${name} — votre table ${chosenWorld} pour ${guests} le ${date} à ${time} est demandée. Nous confirmons par WhatsApp.`,
+      msg: `Your reservation request has been sent. YUME will confirm it shortly via WhatsApp.`,
     });
   };
 
