@@ -164,6 +164,7 @@ export default function Home() {
             <a href="#story">Story</a>
             <a href="#worlds">Worlds</a>
             <a href="#menu">Menu</a>
+            <a href="#reviews">Reviews</a>
             <a href="#faq">FAQ</a>
           </nav>
           <button className="cta sm" onClick={() => goTo("#reserve")}>Reserve a table</button>
