@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Reviews from "@/components/Reviews";
 import sakuraImg from "@/assets/themes/yume-sakura-coast.jpg";
 import tokyoImg from "@/assets/themes/yume-tokyo-neon.jpg";
 import zenImg from "@/assets/themes/yume-zen-forest.jpg";
