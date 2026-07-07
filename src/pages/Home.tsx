@@ -41,58 +41,89 @@ export default function Home() {
   const [cat, setCat] = useState("All");
   const [chosenWorld, setChosenWorld] = useState(worlds[0].n);
   const [confirm, setConfirm] = useState<{ msg: string; err?: boolean } | null>(null);
-  const [cart, setCart] = useState<Record<string, number>>({});
+  const [cart, setCart] = useState<Record<string, { qty: number; note: string }>>(() => {
+    try {
+      const raw = localStorage.getItem("yume.cart.v2");
+      if (raw) return JSON.parse(raw);
+    } catch {}
+    return {};
+  });
   const [cartOpen, setCartOpen] = useState(false);
-  const [customerName, setCustomerName] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [orderMode, setOrderMode] = useState<"pickup" | "table">("table");
+  const [customerName, setCustomerName] = useState(() => localStorage.getItem("yume.cust.name") ?? "");
+  const [customerPhone, setCustomerPhone] = useState(() => localStorage.getItem("yume.cust.phone") ?? "");
+  const [orderMode, setOrderMode] = useState<"pickup" | "table">(
+    () => (localStorage.getItem("yume.cust.mode") as "pickup" | "table") || "table",
+  );
+  const [pickupTime, setPickupTime] = useState(() => localStorage.getItem("yume.cust.pickup") ?? "");
+  const [orderNote, setOrderNote] = useState("");
   const reserveRef = useRef<HTMLElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
 
-  const addToCart = (name: string) => setCart((c) => ({ ...c, [name]: (c[name] ?? 0) + 1 }));
+  useEffect(() => {
+    try { localStorage.setItem("yume.cart.v2", JSON.stringify(cart)); } catch {}
+  }, [cart]);
+  useEffect(() => { localStorage.setItem("yume.cust.name", customerName); }, [customerName]);
+  useEffect(() => { localStorage.setItem("yume.cust.phone", customerPhone); }, [customerPhone]);
+  useEffect(() => { localStorage.setItem("yume.cust.mode", orderMode); }, [orderMode]);
+  useEffect(() => { localStorage.setItem("yume.cust.pickup", pickupTime); }, [pickupTime]);
+
+  const addToCart = (name: string) =>
+    setCart((c) => ({ ...c, [name]: { qty: (c[name]?.qty ?? 0) + 1, note: c[name]?.note ?? "" } }));
   const removeFromCart = (name: string) =>
     setCart((c) => {
-      const q = (c[name] ?? 0) - 1;
+      const q = (c[name]?.qty ?? 0) - 1;
       const next = { ...c };
       if (q <= 0) delete next[name];
-      else next[name] = q;
+      else next[name] = { qty: q, note: c[name]?.note ?? "" };
       return next;
     });
+  const setItemNote = (name: string, note: string) =>
+    setCart((c) => (c[name] ? { ...c, [name]: { ...c[name], note } } : c));
   const clearCart = () => setCart({});
 
-  const cartItems = Object.entries(cart).map(([n, q]) => {
+  const cartItems = Object.entries(cart).map(([n, v]) => {
     const dish = menu.find((m) => m.n === n)!;
-    return { name: n, qty: q, price: Number(dish.p), line: Number(dish.p) * q };
+    return { name: n, qty: v.qty, note: v.note, price: Number(dish.p), line: Number(dish.p) * v.qty };
   });
   const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
   const cartTotal = cartItems.reduce((s, i) => s + i.line, 0);
 
   const sendOrderOnWhatsApp = () => {
-    if (cartCount === 0) return;
-    if (!customerName.trim() || !customerPhone.trim()) {
-      setConfirm({ msg: "Merci d'ajouter votre nom et téléphone pour valider la commande.", err: true });
+    if (cartCount === 0) {
+      setConfirm({ msg: "Please add at least one item before sending your order.", err: true });
       return;
     }
-    const ref = "YM" + Date.now().toString().slice(-6);
-    const now = new Date();
-    const stamp = now.toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
+    if (!customerName.trim() || !customerPhone.trim()) {
+      setConfirm({ msg: "Please add your name and phone number to send the order.", err: true });
+      return;
+    }
+    if (orderMode === "pickup" && !pickupTime) {
+      setConfirm({ msg: "Please choose a pickup time.", err: true });
+      return;
+    }
+    const modeLbl = orderMode === "pickup" ? "Pickup" : "On-site";
     const lines = cartItems
-      .map((i) => `• ${i.qty}× ${i.name} — ${i.line} DT`)
-      .join("%0A");
-    const modeLbl = orderMode === "pickup" ? "À emporter" : "Sur table (au café)";
-    const msg =
-      `🧾 *YUME — Reçu de commande*%0A` +
-      `Réf: ${ref}%0A` +
-      `Date: ${stamp}%0A%0A` +
-      `👤 Client: ${customerName.trim()}%0A` +
-      `📞 Tél: ${customerPhone.trim()}%0A` +
-      `📍 Mode: ${modeLbl}%0A%0A` +
-      `*Articles:*%0A${lines}%0A%0A` +
-      `*Total: ${cartTotal} DT*%0A%0A` +
-      `Merci de confirmer la commande et le délai 🙏`;
-    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
-    setConfirm({ msg: `Commande ${ref} envoyée sur WhatsApp. Nous confirmons dans un instant.` });
+      .map(
+        (i, idx) =>
+          `${idx + 1}. ${i.name} x ${i.qty} — ${i.line} TND` +
+          (i.note.trim() ? `\n   Notes: ${i.note.trim()}` : ""),
+      )
+      .join("\n");
+    const raw =
+      `Hello YUME, I would like to place an order.\n\n` +
+      `Customer:\n` +
+      `Name: ${customerName.trim()}\n` +
+      `Phone: ${customerPhone.trim()}\n` +
+      `Order type: ${modeLbl}\n` +
+      (orderMode === "pickup" ? `Pickup time: ${pickupTime}\n` : ``) +
+      `\nOrder details:\n${lines}\n\n` +
+      `Total: ${cartTotal} TND\n\n` +
+      (orderNote.trim() ? `Special request:\n${orderNote.trim()}\n\n` : ``) +
+      `Please confirm my order. Thank you.`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(raw)}`, "_blank");
+    setConfirm({ msg: "Your order has been prepared and sent via WhatsApp. YUME will confirm it shortly." });
     clearCart();
+    setOrderNote("");
     setCartOpen(false);
   };
 
@@ -329,13 +360,13 @@ export default function Home() {
                 <div className="qty-row">
                   {cart[m.n] ? (
                     <div className="qty-ctrl">
-                      <button type="button" onClick={() => removeFromCart(m.n)} aria-label="moins">−</button>
-                      <span>{cart[m.n]}</span>
-                      <button type="button" onClick={() => addToCart(m.n)} aria-label="plus">+</button>
+                      <button type="button" onClick={() => removeFromCart(m.n)} aria-label="decrease">−</button>
+                      <span>{cart[m.n].qty}</span>
+                      <button type="button" onClick={() => addToCart(m.n)} aria-label="increase">+</button>
                     </div>
                   ) : (
                     <button type="button" className="order-btn" onClick={() => addToCart(m.n)}>
-                      + Ajouter à la commande
+                      + Add to Order
                     </button>
                   )}
                 </div>
@@ -345,7 +376,7 @@ export default function Home() {
           <p className="menu-foot">Prices in TND, illustrative pre-launch.</p>
           <div className="reveal" style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
             <button type="button" className="cta" onClick={() => setCartOpen(true)} disabled={cartCount === 0}>
-              Voir ma commande {cartCount > 0 ? `(${cartCount} · ${cartTotal} DT)` : ""}
+              View my order {cartCount > 0 ? `(${cartCount} · ${cartTotal} TND)` : ""}
             </button>
           </div>
         </div>
@@ -425,8 +456,8 @@ export default function Home() {
       </footer>
 
       {cartCount > 0 && !cartOpen && (
-        <button type="button" className="cart-fab" onClick={() => setCartOpen(true)} aria-label="Voir la commande">
-          🛒 <span>{cartCount}</span> · {cartTotal} DT
+        <button type="button" className="cart-fab" onClick={() => setCartOpen(true)} aria-label="View my order">
+          🛒 <span>{cartCount}</span> · {cartTotal} TND
         </button>
       )}
 
@@ -434,45 +465,68 @@ export default function Home() {
         <div className="cart-scrim" onClick={() => setCartOpen(false)}>
           <aside className="cart-drawer" onClick={(e) => e.stopPropagation()}>
             <div className="cart-head">
-              <h3>Ma commande</h3>
-              <button type="button" className="cart-close" onClick={() => setCartOpen(false)} aria-label="Fermer">×</button>
+              <h3>Your order</h3>
+              <button type="button" className="cart-close" onClick={() => setCartOpen(false)} aria-label="Close">×</button>
             </div>
             {cartItems.length === 0 ? (
-              <p className="cart-empty">Votre commande est vide. Ajoutez des articles depuis le menu.</p>
+              <p className="cart-empty">Your cart is empty. Add items from the menu.</p>
             ) : (
               <>
                 <ul className="cart-list">
                   {cartItems.map((i) => (
-                    <li key={i.name}>
-                      <div className="ci-info">
-                        <span className="ci-name">{i.name}</span>
-                        <span className="ci-price">{i.price} DT</span>
+                    <li key={i.name} className="ci-row">
+                      <div className="ci-top">
+                        <div className="ci-info">
+                          <span className="ci-name">{i.name}</span>
+                          <span className="ci-price">{i.price} TND each</span>
+                        </div>
+                        <div className="qty-ctrl">
+                          <button type="button" onClick={() => removeFromCart(i.name)} aria-label="decrease">−</button>
+                          <span>{i.qty}</span>
+                          <button type="button" onClick={() => addToCart(i.name)} aria-label="increase">+</button>
+                        </div>
+                        <span className="ci-line">{i.line} TND</span>
                       </div>
-                      <div className="qty-ctrl">
-                        <button type="button" onClick={() => removeFromCart(i.name)}>−</button>
-                        <span>{i.qty}</span>
-                        <button type="button" onClick={() => addToCart(i.name)}>+</button>
-                      </div>
-                      <span className="ci-line">{i.line} DT</span>
+                      <input
+                        className="ci-note"
+                        type="text"
+                        placeholder="Item notes (optional)"
+                        maxLength={120}
+                        value={i.note}
+                        onChange={(e) => setItemNote(i.name, e.target.value)}
+                      />
                     </li>
                   ))}
                 </ul>
-                <div className="cart-total"><span>Total</span><b>{cartTotal} DT</b></div>
+                <div className="cart-total"><span>Total</span><b>{cartTotal} TND</b></div>
                 <div className="cart-form">
-                  <div className="field"><label>Nom complet</label><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Votre nom" /></div>
-                  <div className="field"><label>Téléphone</label><input value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} type="tel" placeholder="+216 ..." /></div>
+                  <div className="field"><label>Full name</label><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Your name" /></div>
+                  <div className="field"><label>Phone</label><input value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} type="tel" placeholder="+216 ..." /></div>
                   <div className="field">
-                    <label>Mode</label>
+                    <label>Order type</label>
                     <div className="mode-pills">
-                      <button type="button" className={"pill" + (orderMode === "table" ? " on" : "")} onClick={() => setOrderMode("table")}>Sur table</button>
-                      <button type="button" className={"pill" + (orderMode === "pickup" ? " on" : "")} onClick={() => setOrderMode("pickup")}>À emporter</button>
+                      <button type="button" className={"pill" + (orderMode === "table" ? " on" : "")} onClick={() => setOrderMode("table")}>On-site</button>
+                      <button type="button" className={"pill" + (orderMode === "pickup" ? " on" : "")} onClick={() => setOrderMode("pickup")}>Pickup</button>
                     </div>
+                  </div>
+                  {orderMode === "pickup" && (
+                    <div className="field">
+                      <label>Pickup time</label>
+                      <input type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
+                    </div>
+                  )}
+                  <div className="field">
+                    <label>Special request (optional)</label>
+                    <textarea rows={2} maxLength={300} value={orderNote} onChange={(e) => setOrderNote(e.target.value)} placeholder="Allergies, occasion, message…" />
                   </div>
                 </div>
                 <button type="button" className="cta wa-send" onClick={sendOrderOnWhatsApp}>
-                  📲 Envoyer le reçu sur WhatsApp
+                  📲 Send Order via WhatsApp
                 </button>
-                <button type="button" className="cart-clear" onClick={clearCart}>Vider la commande</button>
+                <button type="button" className="cart-clear" onClick={clearCart}>Clear order</button>
+                {confirm && (
+                  <div className={"confirm show" + (confirm.err ? " err" : "")} style={{ marginTop: ".8rem" }}>{confirm.msg}</div>
+                )}
               </>
             )}
           </aside>
@@ -619,7 +673,10 @@ const CSS = `
 .yume-root .cart-close{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:36px;height:36px;border-radius:999px;font-size:1.3rem;cursor:pointer;line-height:1}
 .yume-root .cart-empty{color:var(--muted);text-align:center;padding:2rem 0}
 .yume-root .cart-list{list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:.7rem}
-.yume-root .cart-list li{display:grid;grid-template-columns:1fr auto auto;gap:.7rem;align-items:center;padding:.75rem;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+.yume-root .cart-list li{display:flex;flex-direction:column;gap:.5rem;padding:.75rem;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+.yume-root .ci-top{display:grid;grid-template-columns:1fr auto auto;gap:.7rem;align-items:center}
+.yume-root .ci-note{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding:.55rem .75rem;color:#fff;font-family:var(--font-b);font-size:.85rem;outline:none;transition:border-color .2s}
+.yume-root .ci-note:focus{border-color:var(--violet)}
 .yume-root .ci-info{display:flex;flex-direction:column;gap:.15rem;min-width:0}
 .yume-root .ci-name{font-weight:700;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .yume-root .ci-price{color:var(--muted);font-size:.75rem}
@@ -629,7 +686,8 @@ const CSS = `
 .yume-root .cart-form{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem}
 .yume-root .cart-form .field label{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.35rem;font-weight:700}
 .yume-root .cart-form .field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem;color:#fff;font-family:var(--font-b);font-size:.92rem;outline:none;transition:border-color .2s}
-.yume-root .cart-form .field input:focus{border-color:var(--violet)}
+.yume-root .cart-form .field input:focus,.yume-root .cart-form .field textarea:focus{border-color:var(--violet)}
+.yume-root .cart-form .field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem;color:#fff;font-family:var(--font-b);font-size:.92rem;outline:none;transition:border-color .2s;resize:vertical;min-height:60px}
 .yume-root .mode-pills{display:flex;gap:.5rem}
 .yume-root .mode-pills .pill{flex:1;padding:.7rem;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;transition:all .2s}
 .yume-root .mode-pills .pill.on{background:rgba(124,58,237,.2);border-color:var(--violet);color:#fff}
