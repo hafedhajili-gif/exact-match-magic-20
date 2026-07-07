@@ -673,7 +673,10 @@ const CSS = `
 .yume-root .cart-close{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:36px;height:36px;border-radius:999px;font-size:1.3rem;cursor:pointer;line-height:1}
 .yume-root .cart-empty{color:var(--muted);text-align:center;padding:2rem 0}
 .yume-root .cart-list{list-style:none;padding:0;margin:0 0 1rem;display:flex;flex-direction:column;gap:.7rem}
-.yume-root .cart-list li{display:grid;grid-template-columns:1fr auto auto;gap:.7rem;align-items:center;padding:.75rem;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+.yume-root .cart-list li{display:flex;flex-direction:column;gap:.5rem;padding:.75rem;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+.yume-root .ci-top{display:grid;grid-template-columns:1fr auto auto;gap:.7rem;align-items:center}
+.yume-root .ci-note{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding:.55rem .75rem;color:#fff;font-family:var(--font-b);font-size:.85rem;outline:none;transition:border-color .2s}
+.yume-root .ci-note:focus{border-color:var(--violet)}
 .yume-root .ci-info{display:flex;flex-direction:column;gap:.15rem;min-width:0}
 .yume-root .ci-name{font-weight:700;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .yume-root .ci-price{color:var(--muted);font-size:.75rem}
@@ -683,7 +686,8 @@ const CSS = `
 .yume-root .cart-form{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem}
 .yume-root .cart-form .field label{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.35rem;font-weight:700}
 .yume-root .cart-form .field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem;color:#fff;font-family:var(--font-b);font-size:.92rem;outline:none;transition:border-color .2s}
-.yume-root .cart-form .field input:focus{border-color:var(--violet)}
+.yume-root .cart-form .field input:focus,.yume-root .cart-form .field textarea:focus{border-color:var(--violet)}
+.yume-root .cart-form .field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem;color:#fff;font-family:var(--font-b);font-size:.92rem;outline:none;transition:border-color .2s;resize:vertical;min-height:60px}
 .yume-root .mode-pills{display:flex;gap:.5rem}
 .yume-root .mode-pills .pill{flex:1;padding:.7rem;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;transition:all .2s}
 .yume-root .mode-pills .pill.on{background:rgba(124,58,237,.2);border-color:var(--violet);color:#fff}
