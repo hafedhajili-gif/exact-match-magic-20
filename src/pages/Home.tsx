@@ -376,7 +376,7 @@ export default function Home() {
           <p className="menu-foot">Prices in TND, illustrative pre-launch.</p>
           <div className="reveal" style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
             <button type="button" className="cta" onClick={() => setCartOpen(true)} disabled={cartCount === 0}>
-              Voir ma commande {cartCount > 0 ? `(${cartCount} · ${cartTotal} DT)` : ""}
+              View my order {cartCount > 0 ? `(${cartCount} · ${cartTotal} TND)` : ""}
             </button>
           </div>
         </div>
