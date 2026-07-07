@@ -360,13 +360,13 @@ export default function Home() {
                 <div className="qty-row">
                   {cart[m.n] ? (
                     <div className="qty-ctrl">
-                      <button type="button" onClick={() => removeFromCart(m.n)} aria-label="moins">−</button>
-                      <span>{cart[m.n]}</span>
-                      <button type="button" onClick={() => addToCart(m.n)} aria-label="plus">+</button>
+                      <button type="button" onClick={() => removeFromCart(m.n)} aria-label="decrease">−</button>
+                      <span>{cart[m.n].qty}</span>
+                      <button type="button" onClick={() => addToCart(m.n)} aria-label="increase">+</button>
                     </div>
                   ) : (
                     <button type="button" className="order-btn" onClick={() => addToCart(m.n)}>
-                      + Ajouter à la commande
+                      + Add to Order
                     </button>
                   )}
                 </div>
