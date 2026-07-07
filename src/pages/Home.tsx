@@ -369,6 +369,12 @@ export default function Home() {
       </section>
 
       <section className="sec" id="reserve" ref={reserveRef as never}>
+
+      </section>
+
+      <Reviews />
+
+      <section className="sec" id="reserve-real" ref={reserveRef as never}>
         <div className="shell">
           <div className="banner reveal">
             <span className="eyebrow eyebrow-center">One page. One goal.</span>
