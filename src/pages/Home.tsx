@@ -186,6 +186,18 @@ export default function Home() {
     <div className="yume-root">
       <style>{CSS}</style>
 
+      <div className="cs-banner" role="status" aria-live="polite">
+        <div className="shell cs-row">
+          <span className="cs-dot" aria-hidden />
+          <span className="cs-txt">
+            <b>Coming soon</b> — YUME opens in Sousse, 2026. Reservations open now.
+          </span>
+          <a className="cs-cta" href="#reserve" onClick={(e) => { e.preventDefault(); goTo("#reserve"); }}>
+            Reserve →
+          </a>
+        </div>
+      </div>
+
       <header id="head" className={scrolled ? "on" : ""}>
         <div className="shell navrow">
           <a className="brand" href="#top">
@@ -570,6 +582,14 @@ const CSS = `
 .yume-root a{color:inherit;text-decoration:none}
 .yume-root img{max-width:100%;display:block}
 .yume-root ::selection{background:rgba(124,58,237,.4)}
+.yume-root .cs-banner{position:relative;z-index:60;background:linear-gradient(90deg,rgba(139,92,246,.22),rgba(52,210,127,.18),rgba(242,91,181,.22));border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px);font-family:var(--font-b);font-size:.82rem;letter-spacing:.02em}
+.yume-root .cs-row{display:flex;align-items:center;justify-content:center;gap:.75rem;padding:.55rem 1rem;flex-wrap:wrap;text-align:center}
+.yume-root .cs-dot{width:8px;height:8px;border-radius:50%;background:var(--matcha);box-shadow:0 0 0 0 rgba(52,210,127,.6);animation:yume-pulse 2s ease-in-out infinite;flex-shrink:0}
+.yume-root .cs-txt{color:rgba(255,255,255,.9)}
+.yume-root .cs-txt b{color:#fff;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;margin-right:.35rem}
+.yume-root .cs-cta{color:#fff;font-weight:700;padding:.28rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.25);transition:background .2s,border-color .2s}
+.yume-root .cs-cta:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.45)}
+@media(max-width:520px){.yume-root .cs-banner{font-size:.75rem}.yume-root .cs-row{gap:.5rem;padding:.5rem .75rem}}
 .yume-root .shell{width:min(100% - 2.6rem,1180px);margin-inline:auto}
 .yume-root .tight{width:min(100% - 2.6rem,920px);margin-inline:auto}
 .yume-root .cta{display:inline-flex;align-items:center;gap:.55rem;border:0;cursor:pointer;font-family:var(--font-b);font-weight:700;padding:1rem 1.7rem;border-radius:999px;font-size:.98rem;background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;box-shadow:0 14px 38px rgba(124,58,237,.35);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;white-space:nowrap}
