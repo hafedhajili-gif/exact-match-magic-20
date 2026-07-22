@@ -186,6 +186,18 @@ export default function Home() {
     <div className="yume-root">
       <style>{CSS}</style>
 
+      <div className="cs-banner" role="status" aria-live="polite">
+        <div className="shell cs-row">
+          <span className="cs-dot" aria-hidden />
+          <span className="cs-txt">
+            <b>Coming soon</b> — YUME opens in Sousse, 2026. Reservations open now.
+          </span>
+          <a className="cs-cta" href="#reserve" onClick={(e) => { e.preventDefault(); goTo("#reserve"); }}>
+            Reserve →
+          </a>
+        </div>
+      </div>
+
       <header id="head" className={scrolled ? "on" : ""}>
         <div className="shell navrow">
           <a className="brand" href="#top">
