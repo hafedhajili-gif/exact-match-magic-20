@@ -332,6 +332,8 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
 <div class="spotlight" id="spot" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 
+<div class="scroll-prog" id="scrollProg" aria-hidden="true"></div>
+<div class="cs-bar" role="status"><span class="cs-dot"></span><span><b>Coming soon</b> — YUME ouvre bientôt à Sousse. Réservations ouvertes.</span><a href="#reserve" data-go="#reserve">Réserver →</a></div>
 <header id="head">
   <div class="shell navrow">
     <a class="brand" href="#top"><img src="assets/yume-logo.png" alt="YUME logo" />YUME</a>
@@ -340,6 +342,8 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
       <a href="#worlds">Mondes</a>
       <a href="#vote">Vote</a>
       <a href="#menu">Menu</a>
+      <a href="#experiences">Expériences</a>
+      <a href="#reviews">Avis</a>
       <a href="#visit">Visite</a>
     </nav>
     <button class="cta sm" data-go="#reserve">Réserver</button>
@@ -355,6 +359,8 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
     <a href="#worlds" data-close>Mondes</a>
     <a href="#vote" data-close>Vote communautaire</a>
     <a href="#menu" data-close>Menu</a>
+    <a href="#experiences" data-close>Expériences</a>
+    <a href="#reviews" data-close>Avis</a>
     <a href="#visit" data-close>Visite</a>
     <button class="cta" data-go="#reserve" style="margin-top:1rem;justify-content:center">Réserver</button>
   </div>
@@ -479,6 +485,28 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
   </div>
 </section>
 
+<!-- ============ EXPERIENCES ============ -->
+<section class="zone" id="experiences">
+  <div class="shell">
+    <div class="zone-head reveal">
+      <span class="eyebrow" style="color:var(--pink)"><span class="d" style="background:var(--pink)"></span>Expériences</span>
+      <h2>Un lieu, mille moments.</h2>
+      <p>Du matcha du matin au team-building du soir — YUME se transforme pour chaque occasion.</p>
+    </div>
+    <div class="xp-grid">
+      <article class="xp xp-big reveal tilt"><img src="assets/experiences/immersive-room.jpg" alt="Salle immersive YUME avec murs LED sakura" loading="lazy" width="1280" height="800" decoding="async"><div class="xp-ov"><span class="xp-k">夢</span><h3>La salle immersive</h3><p>4 murs LED 8K, son 3D — vous êtes dans le monde, pas devant.</p></div></article>
+      <article class="xp reveal tilt"><img src="assets/experiences/matcha-ceremony.jpg" alt="Cérémonie du matcha" loading="lazy" width="1024" height="1024" decoding="async"><div class="xp-ov"><span class="xp-k">茶</span><h3>Matcha Lab</h3><p>Matcha cérémonial fouetté minute.</p></div></article>
+      <article class="xp reveal tilt"><img src="assets/experiences/celebration-night.jpg" alt="Anniversaire entre amis" loading="lazy" width="1024" height="1024" decoding="async"><div class="xp-ov"><span class="xp-k">祝</span><h3>Anniversaires & soirées</h3><p>Choisissez votre monde, on s'occupe du reste.</p></div></article>
+      <article class="xp reveal tilt"><img src="assets/experiences/corporate-session.jpg" alt="Réunion d'entreprise" loading="lazy" width="1024" height="1024" decoding="async"><div class="xp-ov"><span class="xp-k">会</span><h3>Corporate</h3><p>Réunions, lancements et team-building jusqu'à 52 pers.</p></div></article>
+    </div>
+    <div class="xp-steps reveal">
+      <div><b>01</b><span>Réservez & choisissez votre monde</span></div>
+      <div><b>02</b><span>Commandez depuis le menu digital</span></div>
+      <div><b>03</b><span>Entrez dans le rêve — filmez, partagez</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ MENU — warm appetite zone ============ -->
 <section class="zone zone-ink3" id="menu">
   <div class="shell">
@@ -496,6 +524,28 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
     </div>
     <div class="mgrid" id="mgrid"></div>
     <p class="menu-note">Prix en DT. 100% Halal · Process HACCP · Cold Kitchen — pas de cuisine chaude.</p>
+  </div>
+</section>
+
+
+<!-- ============ REVIEWS ============ -->
+<section class="zone zone-ink2" id="reviews">
+  <div class="shell">
+    <div class="zone-head center reveal">
+      <span class="eyebrow" style="color:var(--gold);justify-content:center;display:flex"><span class="d" style="background:var(--gold)"></span>Avis clients</span>
+      <h2>Ils sont entrés dans le rêve.</h2>
+      <p style="margin-inline:auto">Laissez votre avis — il apparaît instantanément.</p>
+    </div>
+    <div class="rv-wrap">
+      <form class="rv-form card reveal" id="rvForm">
+        <div class="field"><label for="rvName">Votre nom</label><input id="rvName" maxlength="80" required /></div>
+        <div class="field"><label>Note</label><div class="rv-stars" id="rvStars"></div></div>
+        <div class="field"><label for="rvText">Votre avis <small id="rvCount">0/300</small></label><textarea id="rvText" rows="3" maxlength="300" required></textarea></div>
+        <button class="cta" type="submit" style="width:100%;justify-content:center">Publier mon avis</button>
+        <div class="confirm" id="rvMsg"></div>
+      </form>
+      <div class="rv-list" id="rvList"><p class="rv-empty">Chargement des avis…</p></div>
+    </div>
   </div>
 </section>
 
@@ -555,7 +605,7 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
       <div class="info-list card">
         <div class="ln"><div class="ic">📍</div><div><b>Adresse</b><span>Sousse, Tunisie — lieu exact dévoilé à l'ouverture</span></div></div>
         <div class="ln"><div class="ic">⏰</div><div><b>Horaires</b><span>Tous les jours · 9h00 → 23h00</span></div></div>
-        <div class="ln"><div class="ic">📞</div><div><b>Contact</b><span>+216 — — — · hello@yume.tn</span></div></div>
+        <div class="ln"><div class="ic">📞</div><div><b>Contact</b><span>+216 96 506 693 · WhatsApp</span></div></div>
         <div class="ln"><div class="ic">📷</div><div><b>Suivez-nous</b><span>@yume.sousse — chaque monde, en coulisses</span></div></div>
       </div>
     </div>
@@ -570,7 +620,7 @@ footer{border-top:1px solid var(--line);padding:3rem 0}
         <p style="opacity:.7;font-size:.88rem">Le premier café phygital immersif de Tunisie. Dream. Taste. Enter.</p>
       </div>
       <div class="foot-col"><h4>Page</h4><a href="#concept">Concept</a><a href="#worlds">Mondes</a><a href="#vote">Vote</a><a href="#menu">Menu</a></div>
-      <div class="foot-col"><h4>Visite</h4><p>Sousse, Tunisie</p><p>Tous les jours · 9h–23h</p><p>+216 — — —</p></div>
+      <div class="foot-col"><h4>Visite</h4><p>Sousse, Tunisie</p><p>Tous les jours · 9h–23h</p><p><a href="https://wa.me/21696506693" target="_blank" rel="noopener">+216 96 506 693</a></p></div>
       <div class="foot-col"><h4>Suivez</h4><a href="#">Instagram</a><a href="#">TikTok</a></div>
     </div>
     <div class="copy">© <span id="yr"></span> YUME — Sousse, Tunisie. Premier café phygital immersif.</div>
@@ -807,6 +857,7 @@ renderVotes(); renderVoteStats();
 /* ===================================================================
    MENU — signature grid + filter tabs + search
    =================================================================== */
+window.YUME_MENU = menu;
 var sigGrid = document.getElementById('sigGrid');
 menu.filter(function(m){return m.sig;}).forEach(function(m){
   var el=document.createElement('div'); el.className='sig card';
@@ -869,8 +920,11 @@ document.getElementById('submitBtn').addEventListener('click', function(){
     c.textContent='Merci de renseigner votre nom, téléphone, date et heure pour confirmer.';
     return;
   }
+  var email=document.getElementById('email').value.trim(), notes=document.getElementById('notes').value.trim();
+  var txt='Bonjour YUME 👋\n\nNouvelle réservation :\n• Nom : '+name+'\n• Téléphone : '+phone+(email?'\n• Email : '+email:'')+'\n• Date : '+date+' à '+time+'\n• Invités : '+guests+'\n• Monde : '+wsel.value+(notes?'\n• Notes : '+notes:'')+'\n\nMerci de confirmer ma réservation.';
+  window.open('https://wa.me/21696506693?text='+encodeURIComponent(txt),'_blank');
   c.className='confirm show';
-  c.textContent='Merci, '+name+' ✦ Votre table « '+wsel.value+' » pour '+guests+' personne(s) le '+date+' à '+time+' est demandée — nous confirmons par téléphone. (Formulaire démo — aucune donnée envoyée.)';
+  c.textContent='Merci, '+name+' ✦ Votre demande de réservation a été envoyée sur WhatsApp. YUME vous confirme très vite.';
 });
 
 /* ===================================================================
@@ -925,6 +979,8 @@ document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 document.getElementById('yr').textContent = new Date().getFullYear();
 })();
 </script>
+<link rel="stylesheet" href="/yume-upgrade.css" />
+<script src="/yume-upgrade.js" defer></script>
 </body>
 </html>
 
